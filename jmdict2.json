@@ -1,0 +1,2239 @@
+{
+  "partsOfSpeech" : {
+    "adj-i" : "adjective", 
+    "adj-na" : "adjectival nouns or quasi-adjectives", 
+    "adj-no" : "nouns which may take the genitive case particle 'no'", 
+    "adj-pn" : "pre-noun adjectival", 
+    "adj-t" : "'taru' adjective", 
+    "adj-f" : "noun or verb acting prenominally", 
+    "adj" : "unclassified adjective", 
+    "adv" : "adverb", 
+    "adv-n" : "adverbial noun", 
+    "adv-to" : "adverb taking the 'to' particle", 
+    "aux" : "auxiliary", 
+    "aux-v" : "auxiliary verb", 
+    "aux-adj" : "auxiliary adjective", 
+    "conj" : "conjunction", 
+    "ctr" : "counter", 
+    "exp" : "expression (phrase, clause, etc.)", 
+    "int" : "interjection", 
+    "iv" : "irregular verb", 
+    "n" : "noun (common)", 
+    "n-adv" : "adverbial noun", 
+    "n-pref" : "noun, used as a prefix", 
+    "n-suf" : "noun, used as a suffix", 
+    "n-t" : "noun (temporal)", 
+    "num" : "numeric", 
+    "pn" : "pronoun", 
+    "pref" : "prefix", 
+    "prt" : "particle", 
+    "suf" : "suffix", 
+    "v1" : "ichidan verb, 'ru' verb", 
+    "v2a-s" : "nidan verb with 'u' ending (archaic)", 
+    "v4h" : "yodan verb with 'hu'/'fu' ending (archaic)", 
+    "v4r" : "yodan verb with 'ru' ending (archaic)", 
+    "v5" : "godan verb (unclassified)", 
+    "v5aru" : "godan verb, -aru special class", 
+    "v5b" : "godan verb with 'bu' ending", 
+    "v5g" : "godan verb with 'gu' ending", 
+    "v5k" : "godan verb with 'ku' ending", 
+    "v5k-s" : "godan verb, 'iku'/'yuku' special class", 
+    "v5m" : "godan verb with 'mu' ending", 
+    "v5n" : "godan verb with 'nu' ending", 
+    "v5r" : "godan verb with 'ru' ending", 
+    "v5r-i" : "godan verb with 'ru' ending (irregular verb)", 
+    "v5s" : "godan verb with 'su' ending", 
+    "v5t" : "godan verb with 'tsu' ending", 
+    "v5u" : "godan verb with 'u' ending", 
+    "v5u-s" : "godan verb with 'u' ending (special class)", 
+    "v5uru" : "godan verb, 'uru' old class verb (old form of 'eru')", 
+    "v5z" : "godan verb with 'zu' ending", 
+    "vz" : "ichidan verb, 'zuru' verb (alternative form of 'jiru' verbs)", 
+    "vi" : "intransitive verb", 
+    "vk" : "'kuru' verb, special class", 
+    "vn" : "irregular 'nu' verb", 
+    "vs" : "noun or participle which takes the aux. verb 'suru'", 
+    "vs-c" : "'su' verb, precursor to the modern 'suru'", 
+    "vs-i" : "'suru' verb, irregular", 
+    "vs-s" : "'suru' verb, special class", 
+    "vt" : "transitive verb"
+  }, 
+  "words" : [ {
+    "id" : 1000410, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "あどけない", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adj-i" ], 
+      "gloss" : [ "innocent", "cherubic" ]
+    } ]
+  }, {
+    "id" : 1000420, 
+    "kanji" : [ {
+      "common" : true, 
+      "text" : "彼の", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "あの", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "かの", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adj-pn" ], 
+      "gloss" : [ "that (someone or something distant from both speaker and listener, or situation unfamiliar to both speaker and listener)" ]
+    } ]
+  }, {
+    "id" : 1000430, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "あのう", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : true, 
+      "text" : "あの", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "あのー", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "int" ], 
+      "gloss" : [ "say", "well", "errr ..." ]
+    } ]
+  }, {
+    "id" : 1000440, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "あの人", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "彼の人", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "あのひと", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "pn", "adj-no" ], 
+      "gloss" : [ "he", "she", "that person" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "you" ]
+    } ]
+  }, {
+    "id" : 1000450, 
+    "kanji" : [ {
+      "common" : true, 
+      "text" : "あの方", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "彼の方", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "あのかた", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "pn", "adj-no" ], 
+      "gloss" : [ "that gentleman (lady)", "he", "she" ]
+    } ]
+  }, {
+    "id" : 1000460, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "溢れる", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "あぶれる", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "v1", "vi" ], 
+      "gloss" : [ "to fail (in getting a job)", "to miss out (at fishing, hunting, etc.)" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "to be left out", "to be crowded out" ]
+    } ]
+  }, {
+    "id" : 1000470, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "あべこべ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adj-na", "n" ], 
+      "gloss" : [ "contrary", "opposite", "inverse" ]
+    } ]
+  }, {
+    "id" : 1000480, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "阿呆陀羅", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "あほんだら", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "あほだら", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "fool", "oaf", "airhead" ]
+    } ]
+  }, {
+    "id" : 1000490, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "甘子", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "天魚", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "雨子", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "あまご", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "アマゴ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "land-locked variety of red-spotted masu trout (Oncorhynchus masou ishikawae)", "amago" ]
+    } ]
+  }, {
+    "id" : 1000500, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "あやす", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "v5s", "vt" ], 
+      "gloss" : [ "to cuddle", "to comfort", "to rock", "to soothe", "to dandle", "to humor", "to humour", "to lull" ]
+    } ]
+  }, {
+    "id" : 1000510, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "あやふや", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adj-na", "n" ], 
+      "gloss" : [ "uncertain", "vague", "ambiguous" ]
+    } ]
+  }, {
+    "id" : 1000520, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "あら", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "int" ], 
+      "gloss" : [ "oh", "ah" ]
+    } ]
+  }, {
+    "id" : 1000525, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "𩺊", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "あら", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "アラ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "saw-edged perch (Niphon spinosus)" ]
+    } ]
+  }, {
+    "id" : 1000580, 
+    "kanji" : [ {
+      "common" : true, 
+      "text" : "彼", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "あれ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "あ", 
+      "info" : [ "ok" ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "that (indicating something distant from both speaker and listener (in space, time or psychologically), or something understood without naming it directly)" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "that person (used to refer to one's equals or inferiors)" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "over there" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "down there (i.e. one's genitals)" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "period", "menses" ]
+    }, {
+      "pos" : [ "int" ], 
+      "gloss" : [ "hey (expression of surprise, suspicion, etc.)", "huh?", "eh?" ]
+    }, {
+      "pos" : [ "n" ], 
+      "gloss" : [ "that (something mentioned before which is distant psychologically or in terms of time)" ]
+    } ]
+  }, {
+    "id" : 1000590, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "あんな", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adj-pn" ], 
+      "gloss" : [ "such (about something or someone distant from both speaker and listener, or about a situation unfamiliar to both speaker and listener)", "so", "that", "sort of" ]
+    } ]
+  }, {
+    "id" : 1000600, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "いい加減にしなさい", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いいかげんにしなさい", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "exp" ], 
+      "gloss" : [ "shape up!", "act properly!" ]
+    } ]
+  }, {
+    "id" : 1000610, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "いい年をして", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いいとしをして", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "exp" ], 
+      "gloss" : [ "(in spite of) being old enough to know better" ]
+    } ]
+  }, {
+    "id" : 1000620, 
+    "kanji" : [ {
+      "common" : true, 
+      "text" : "否々", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "否否", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "いやいや", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "いえいえ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "int" ], 
+      "gloss" : [ "no!", "no no!", "no, not at all" ]
+    } ]
+  }, {
+    "id" : 1000630, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "如何わしい", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いかがわしい", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adj-i" ], 
+      "gloss" : [ "suspicious", "dubious", "unreliable" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "indecent", "unseemly" ]
+    } ]
+  }, {
+    "id" : 1000640, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いかす", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "イカす", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "v5s", "vi" ], 
+      "gloss" : [ "to be smart", "to be cool", "to be sharp", "to be stylish" ]
+    } ]
+  }, {
+    "id" : 1000650, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "いかなる場合でも", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いかなるばあいでも", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "exp" ], 
+      "gloss" : [ "in any case", "whatever the case may be" ]
+    } ]
+  }, {
+    "id" : 1000660, 
+    "kanji" : [ {
+      "common" : true, 
+      "text" : "如何にも", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "いかにも", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adv", "int" ], 
+      "gloss" : [ "indeed", "really", "phrase indicating agreement" ]
+    } ]
+  }, {
+    "id" : 1000710, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "幾つも", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いくつも", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adj-no" ], 
+      "gloss" : [ "many", "great number of" ]
+    } ]
+  }, {
+    "id" : 1000730, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "行けない", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "いけない", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "exp" ], 
+      "gloss" : [ "wrong", "not good", "of no use" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "hopeless", "past hope" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "must not do" ]
+    } ]
+  }, {
+    "id" : 1000740, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いごっそう", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "stubborn person", "strong-minded person", "obstinate person" ]
+    } ]
+  }, {
+    "id" : 1000750, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いざ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adv", "int" ], 
+      "gloss" : [ "now", "come (now)", "well" ]
+    } ]
+  }, {
+    "id" : 1000760, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "いざこざ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "trouble", "quarrel", "difficulties", "complication", "tangle" ]
+    } ]
+  }, {
+    "id" : 1000770, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いじいじ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adv", "adv-to", "vs" ], 
+      "gloss" : [ "hesitantly", "timidly", "diffidently" ]
+    } ]
+  }, {
+    "id" : 1000780, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いじける", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "v1", "vi" ], 
+      "gloss" : [ "to grow timid (e.g. from an inferiority complex)", "to lose one's nerve" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "to become perverse", "to become contrary" ]
+    } ]
+  }, {
+    "id" : 1000790, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いじましい", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adj-i" ], 
+      "gloss" : [ "piddling", "paltry" ]
+    } ]
+  }, {
+    "id" : 1000800, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いじらしい", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adj-i" ], 
+      "gloss" : [ "innocent", "lovable", "sweet", "pitiful", "pathetic" ]
+    } ]
+  }, {
+    "id" : 1000810, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "いじり回す", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "弄り回す", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "弄りまわす", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いじりまわす", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "v5s" ], 
+      "gloss" : [ "to tinker with", "to fumble with", "to twist up" ]
+    } ]
+  }, {
+    "id" : 1000820, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "いそいそ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adv", "n", "vs", "adv-to" ], 
+      "gloss" : [ "cheerfully", "excitedly" ]
+    } ]
+  }, {
+    "id" : 1000830, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いちゃいちゃ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adv", "n", "vs" ], 
+      "gloss" : [ "flirt", "make out" ]
+    } ]
+  }, {
+    "id" : 1000840, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いちゃつく", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "v5k", "vi" ], 
+      "gloss" : [ "to flirt with", "to dally" ]
+    } ]
+  }, {
+    "id" : 1000860, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "何時もより", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いつもより", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adv" ], 
+      "gloss" : [ "more than usual" ]
+    } ]
+  }, {
+    "id" : 1000870, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "いとも簡単に", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いともかんたんに", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adv" ], 
+      "gloss" : [ "very easily" ]
+    } ]
+  }, {
+    "id" : 1000880, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "鯔背", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いなせ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adj-na" ], 
+      "gloss" : [ "gallant", "dashing", "smart" ]
+    } ]
+  }, {
+    "id" : 1000885, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "嘶く", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いななく", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "v5k", "vi" ], 
+      "gloss" : [ "to neigh" ]
+    } ]
+  }, {
+    "id" : 1000890, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "嘶き", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いななき", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "neigh", "whinny", "bray" ]
+    } ]
+  }, {
+    "id" : 1000900, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いびる", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "v5r", "vt" ], 
+      "gloss" : [ "to pick on", "to tease" ]
+    } ]
+  }, {
+    "id" : 1000910, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "嫌に", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "厭に", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "いやに", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adv" ], 
+      "gloss" : [ "awfully", "terribly" ]
+    } ]
+  }, {
+    "id" : 1000920, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "いらっしゃい", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "いらしゃい", 
+      "info" : [ "ik" ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "int", "n" ], 
+      "gloss" : [ "come", "go", "stay" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "welcome!" ]
+    } ]
+  }, {
+    "id" : 1000930, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "いらっしゃいませ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "いらしゃいませ", 
+      "info" : [ "ik" ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "いっらしゃいませ", 
+      "info" : [ "ik" ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "exp" ], 
+      "gloss" : [ "welcome (in shops, etc.)" ]
+    } ]
+  }, {
+    "id" : 1000940, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "いらっしゃる", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "v5aru", "vi" ], 
+      "gloss" : [ "to come", "to go", "to be (somewhere)" ]
+    }, {
+      "pos" : [ "aux-v" ], 
+      "gloss" : [ "is (doing)", "are (doing)" ]
+    } ]
+  }, {
+    "id" : 1000960, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "うじうじ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adv", "n", "vs" ], 
+      "gloss" : [ "irresolute", "hesitant" ]
+    } ]
+  }, {
+    "id" : 1000970, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "うじゃうじゃ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adv", "n", "vs" ], 
+      "gloss" : [ "in swarms", "in clusters" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "tediously", "slowly" ]
+    } ]
+  }, {
+    "id" : 1000980, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "うずうず", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adv", "adv-to", "vs" ], 
+      "gloss" : [ "sorely tempted", "itching to do something", "eager" ]
+    } ]
+  }, {
+    "id" : 1000990, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "うぞうぞ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adv" ], 
+      "gloss" : [ "irrepressibly aroused (esp. sexually)", "stimulated" ]
+    } ]
+  }, {
+    "id" : 1001000, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "うだうだ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adv" ], 
+      "gloss" : [ "idle", "long-winded and meaningless" ]
+    } ]
+  }, {
+    "id" : 1001010, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "うっかり", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adv", "n", "vs" ], 
+      "gloss" : [ "carelessly", "thoughtlessly", "inadvertently" ]
+    } ]
+  }, {
+    "id" : 1001020, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "うっとりさせる", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "v1" ], 
+      "gloss" : [ "to enchant", "to enrapture", "to enthrall (enthral)", "to charm" ]
+    } ]
+  }, {
+    "id" : 1001030, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "うとうと", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "うとっと", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adv", "n", "vs", "adv-to" ], 
+      "gloss" : [ "falling in a doze", "dozing" ]
+    } ]
+  }, {
+    "id" : 1001040, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "うねうね", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adv", "n", "vs" ], 
+      "gloss" : [ "winding", "meandering", "zigzag", "sinuous", "tortuous" ]
+    } ]
+  }, {
+    "id" : 1001050, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "畝ねり", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "うねり", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "wave motion", "undulation", "winding", "heaving sea", "swell", "roller" ]
+    } ]
+  }, {
+    "id" : 1001060, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "うろうろ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "うそうそ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adv", "adv-to", "vs" ], 
+      "gloss" : [ "loiteringly", "aimless wandering", "restlessly" ]
+    } ]
+  }, {
+    "id" : 1001070, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "狼狽える", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "うろたえる", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "v1", "vi" ], 
+      "gloss" : [ "to be flustered", "to lose one's presence of mind" ]
+    } ]
+  }, {
+    "id" : 1001090, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "うん", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "int" ], 
+      "gloss" : [ "yes", "yeah", "uh huh" ]
+    } ]
+  }, {
+    "id" : 1001100, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "うんこ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n", "vs" ], 
+      "gloss" : [ "poop", "faeces", "feces" ]
+    } ]
+  }, {
+    "id" : 1001110, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "うんざり", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adv", "n", "vs" ], 
+      "gloss" : [ "tedious", "boring", "being fed up with" ]
+    } ]
+  }, {
+    "id" : 1001120, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "うんち", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n", "vs" ], 
+      "gloss" : [ "poop", "faeces", "feces" ]
+    } ]
+  }, {
+    "id" : 1001130, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "海鷂魚", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "鱝", 
+      "info" : [ "oK" ]
+    }, {
+      "common" : false, 
+      "text" : "鱏", 
+      "info" : [ "oK" ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "えい", 
+      "info" : [ "gikun" ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "エイ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "ray (fish)", "stingray" ]
+    } ]
+  }, {
+    "id" : 1001140, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "ええ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "えー", 
+      "info" : [ "ik" ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "int" ], 
+      "gloss" : [ "yes", "that is correct", "right" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "um", "errr" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "huh?" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "grrr", "gah", "Must I?" ]
+    }, {
+      "pos" : [ "adj-f" ], 
+      "gloss" : [ "good" ]
+    } ]
+  }, {
+    "id" : 1001150, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "えっと", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "えーと", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "えーっと", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "ええと", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "ええっと", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "int" ], 
+      "gloss" : [ "let me see", "well", "errr ...", "uhh ..." ]
+    } ]
+  }, {
+    "id" : 1001160, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "えげつない", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adj-i" ], 
+      "gloss" : [ "dirty", "vulgar", "nasty" ]
+    } ]
+  }, {
+    "id" : 1001170, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "斉魚", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "えつ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "エツ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "Japanese grenadier anchovy (Coilia nasus)" ]
+    } ]
+  }, {
+    "id" : 1001180, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "お出でになる", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "御出でになる", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おいでになる", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "exp", "v5r" ], 
+      "gloss" : [ "to be" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "to come" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "to go" ]
+    } ]
+  }, {
+    "id" : 1001190, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おいでやす", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "exp" ], 
+      "gloss" : [ "welcome (in shops, etc.)" ]
+    } ]
+  }, {
+    "id" : 1001200, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おおい", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "おーい", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "おい", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "int" ], 
+      "gloss" : [ "hey!", "oi!", "ahoy!" ]
+    }, {
+      "pos" : [ "pn" ], 
+      "gloss" : [ "I", "me" ]
+    } ]
+  }, {
+    "id" : 1001220, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おけさ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "style of Japanese folk song associated with Niigata Prefecture" ]
+    } ]
+  }, {
+    "id" : 1001230, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "おけさ節", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おけさぶし", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "style of Japanese folk song associated with Niigata Prefecture" ]
+    } ]
+  }, {
+    "id" : 1001240, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おこしやす", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "exp" ], 
+      "gloss" : [ "welcome (in shops, etc.)" ]
+    } ]
+  }, {
+    "id" : 1001250, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おざなりになって", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "exp" ], 
+      "gloss" : [ "to say commonplace things" ]
+    } ]
+  }, {
+    "id" : 1001260, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "おしっこ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n", "vs" ], 
+      "gloss" : [ "wee-wee", "pee-pee", "number one" ]
+    } ]
+  }, {
+    "id" : 1001280, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おしゃぶり", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "teething ring", "pacifier", "dummy" ]
+    } ]
+  }, {
+    "id" : 1001290, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "悍ましい", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おぞましい", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adj-i" ], 
+      "gloss" : [ "disgusting", "repulsive" ]
+    } ]
+  }, {
+    "id" : 1001300, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おたおた", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adv", "n", "vs" ], 
+      "gloss" : [ "(shocked) speechless", "flustered", "flurried" ]
+    }, {
+      "pos" : [ "exp" ], 
+      "gloss" : [ "help" ]
+    } ]
+  }, {
+    "id" : 1001310, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おちんちん", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "penis" ]
+    } ]
+  }, {
+    "id" : 1001330, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おっかない", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adj-i" ], 
+      "gloss" : [ "frightening", "scary" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "extreme", "exaggerated", "huge" ]
+    } ]
+  }, {
+    "id" : 1001340, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "落っこちる", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おっこちる", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "v1", "vi" ], 
+      "gloss" : [ "to fall down", "to drop" ]
+    } ]
+  }, {
+    "id" : 1001350, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "おっさん", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "middle-aged man" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "Buddhist priest" ]
+    } ]
+  }, {
+    "id" : 1001360, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おっちょこちょい", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adj-na", "n" ], 
+      "gloss" : [ "careless person", "scatterbrain", "birdbrain" ]
+    } ]
+  }, {
+    "id" : 1001370, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "おっぱい", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "オッパイ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "breasts", "boobies", "tits" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "breast milk" ]
+    } ]
+  }, {
+    "id" : 1001390, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "御田", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "おでん", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "oden", "dish of various ingredients, e.g. egg, daikon, potato, chikuwa, konnyaku, etc. stewed in soy-flavored dashi" ]
+    } ]
+  }, {
+    "id" : 1001400, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "おどおど", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adv", "adv-to", "vs" ], 
+      "gloss" : [ "coweringly", "hesitantly" ]
+    } ]
+  }, {
+    "id" : 1001410, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "お鍋", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "御鍋", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おなべ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "pot" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "typical name for a female servant in the Edo-period" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "working at night" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "female with symptoms of gender identity disorder (i.e. a transvestite)" ]
+    } ]
+  }, {
+    "id" : 1001420, 
+    "kanji" : [ {
+      "common" : true, 
+      "text" : "屁", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "おなら", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "へ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "wind", "gas", "fart" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "something worthless", "something not worth considering" ]
+    } ]
+  }, {
+    "id" : 1001430, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おばこ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "young girl", "daughter", "unmarried girl" ]
+    } ]
+  }, {
+    "id" : 1001440, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おべっか", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "flattery" ]
+    } ]
+  }, {
+    "id" : 1001450, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おべんちゃら", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "(excessive) flattery", "smarminess", "fawning" ]
+    } ]
+  }, {
+    "id" : 1001480, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "お負けに", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "御負けに", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おまけに", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "conj", "exp" ], 
+      "gloss" : [ "to make matters worse", "besides", "what's more", "in addition", "on top of that" ]
+    } ]
+  }, {
+    "id" : 1001490, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "お呪い", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "御呪い", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おまじない", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "good luck charm" ]
+    }, {
+      "pos" : [ "exp" ], 
+      "gloss" : [ "uttered when using magic", "abracadabra", "presto" ]
+    } ]
+  }, {
+    "id" : 1001500, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おまんこ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "おめこ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "vulva", "vagina", "female genitalia" ]
+    }, {
+      "pos" : [ "vs" ], 
+      "gloss" : [ "to have sexual intercourse", "to screw" ]
+    } ]
+  }, {
+    "id" : 1001510, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "御襁褓気触れ", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "お襁褓気触れ", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "オムツ気触れ", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おむつかぶれ", 
+      "info" : [  ], 
+      "appliesTo" : [ "御襁褓気触れ", "お襁褓気触れ" ]
+    }, {
+      "common" : false, 
+      "text" : "オムツかぶれ", 
+      "info" : [  ], 
+      "appliesTo" : [ "オムツ気触れ" ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "diaper rash", "nappy rash" ]
+    } ]
+  }, {
+    "id" : 1001520, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "お粧し", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "御粧し", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おめかし", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n", "vs" ], 
+      "gloss" : [ "dressing up" ]
+    } ]
+  }, {
+    "id" : 1001540, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "お目出度うご座います", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "御目出度う御座います", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "おめでとうございます", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "exp" ], 
+      "gloss" : [ "congratulations" ]
+    } ]
+  }, {
+    "id" : 1001560, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "おや", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "conj", "int", "n" ], 
+      "gloss" : [ "oh!", "oh?", "my!" ]
+    } ]
+  }, {
+    "id" : 1001570, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おやおや", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "int" ], 
+      "gloss" : [ "my goodness!", "oh my!", "oh dear!" ]
+    } ]
+  }, {
+    "id" : 1001580, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "おろおろ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "オロオロ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adv", "adv-to", "vs" ], 
+      "gloss" : [ "nervous", "flustered", "in a dither", "all shook up" ]
+    } ]
+  }, {
+    "id" : 1001600, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おろちょろ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n", "vs" ], 
+      "gloss" : [ "lounging about" ]
+    } ]
+  }, {
+    "id" : 1001610, 
+    "kanji" : [  ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おデブさん", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "chubby person" ]
+    } ]
+  }, {
+    "id" : 1001620, 
+    "kanji" : [ {
+      "common" : true, 
+      "text" : "お握り", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "御握り", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "おにぎり", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "rice ball (often triangular, sometimes with a filling and wrapped in nori)" ]
+    } ]
+  }, {
+    "id" : 1001640, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "お蔭", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "御蔭", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "お陰", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "御陰", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おかげ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "grace (of God)", "benevolence (of Buddha)", "blessing" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "assistance", "help", "aid" ]
+    }, {
+      "pos" : [  ], 
+      "gloss" : [ "effects", "influence" ]
+    } ]
+  }, {
+    "id" : 1001650, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "お蔭様", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "お蔭さま", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "御蔭様", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おかげさま", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "(somebody's) backing", "assistance", "thanks to (somebody)" ]
+    } ]
+  }, {
+    "id" : 1001660, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "お下げ", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "御下げ", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おさげ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "wearing one's hair in braids" ]
+    } ]
+  }, {
+    "id" : 1001670, 
+    "kanji" : [ {
+      "common" : true, 
+      "text" : "お化け", 
+      "info" : [  ]
+    }, {
+      "common" : true, 
+      "text" : "御化け", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "おばけ", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "goblin", "apparition", "monster", "ghost" ]
+    } ]
+  }, {
+    "id" : 1001680, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "お化け屋敷", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "おばけ屋敷", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "御化け屋敷", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おばけやしき", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "haunted house" ]
+    } ]
+  }, {
+    "id" : 1001690, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "お嫁さん", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "およめさん", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "bride" ]
+    } ]
+  }, {
+    "id" : 1001710, 
+    "kanji" : [ {
+      "common" : true, 
+      "text" : "お菓子", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "御菓子", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "おかし", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "confections", "sweets", "candy" ]
+    } ]
+  }, {
+    "id" : 1001720, 
+    "kanji" : [ {
+      "common" : true, 
+      "text" : "お願いします", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "御願いします", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "おねがいします", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "exp" ], 
+      "gloss" : [ "please" ]
+    } ]
+  }, {
+    "id" : 1001730, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "お願いいたします", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "お願い致します", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おねがいいたします", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "exp" ], 
+      "gloss" : [ "please" ]
+    } ]
+  }, {
+    "id" : 1001740, 
+    "kanji" : [ {
+      "common" : true, 
+      "text" : "お帰りなさい", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "御帰りなさい", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "おかえりなさい", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "int" ], 
+      "gloss" : [ "welcome home" ]
+    } ]
+  }, {
+    "id" : 1001750, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "お気の毒", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おきのどく", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "adj-na" ], 
+      "gloss" : [ "pitiful", "pity" ]
+    } ]
+  }, {
+    "id" : 1001760, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "お客さん", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "御客さん", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おきゃくさん", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "guest", "visitor", "customer" ]
+    } ]
+  }, {
+    "id" : 1001770, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "お客さま", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "お客様", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "御客様", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おきゃくさま", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "guest", "visitor", "customer" ]
+    } ]
+  }, {
+    "id" : 1001780, 
+    "kanji" : [ {
+      "common" : true, 
+      "text" : "お休みなさい", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "御休みなさい", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : true, 
+      "text" : "おやすみなさい", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "exp" ], 
+      "gloss" : [ "good night" ]
+    } ]
+  }, {
+    "id" : 1001790, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "お宮", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おみや", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "Shinto shrine" ]
+    } ]
+  }, {
+    "id" : 1001800, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "お宮参り", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "御宮参り", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おみやまいり", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n" ], 
+      "gloss" : [ "shrine visit" ]
+    } ]
+  }, {
+    "id" : 1001810, 
+    "kanji" : [ {
+      "common" : false, 
+      "text" : "お供", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "御供", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "お伴", 
+      "info" : [  ]
+    }, {
+      "common" : false, 
+      "text" : "御伴", 
+      "info" : [  ]
+    } ], 
+    "kana" : [ {
+      "common" : false, 
+      "text" : "おとも", 
+      "info" : [  ], 
+      "appliesTo" : [  ]
+    } ], 
+    "sense" : [ {
+      "pos" : [ "n", "vs" ], 
+      "gloss" : [ "attendant", "companion" ]
+    } ]
+  } ]
+}
