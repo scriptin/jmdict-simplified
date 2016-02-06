@@ -58,6 +58,22 @@ declare function local:transform-sense($elem as node()) as node() {
       { for $pos in $elem/pos
         return <item type="string"> { tags:convert-entity($pos/text()) } </item> }
     </pair>
+    <pair name="appliesToKanji" type="array">
+      {
+        if (not($elem/stagk))
+          then <item type="string"> { "*" } </item>
+        else for $restr in $elem/stagk
+          return <item type="string"> { $restr/text() } </item>
+      }
+    </pair>
+    <pair name="appliesToKana" type="array">
+      {
+        if (not($elem/stagr))
+          then <item type="string"> { "*" } </item>
+        else for $restr in $elem/stagr
+          return <item type="string"> { $restr/text() } </item>
+      }
+    </pair>
     <pair name="gloss" type="array">
       { for $gloss in $elem/gloss
         return <item type="string"> { $gloss/text() } </item> }
