@@ -40,8 +40,14 @@ declare function local:transform-kana($elem as node()) as node() {
         return <item type="string"> { tags:convert-entity($info/text()) } </item> }
     </pair>
     <pair name="appliesTo" type="array">
-      { for $restr in $elem/re_restr
-        return <item type="string"> { $restr/text() } </item> }
+      {
+        if ($elem/re_nokanji)
+          then ()
+        else if (count($elem/re_restr) = 0)
+          then <item type="string"> { "*" } </item>
+        else for $restr in $elem/re_restr
+          return <item type="string"> { $restr/text() } </item>
+      }
     </pair>
   </item>
 };
