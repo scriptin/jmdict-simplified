@@ -41,14 +41,12 @@ declare function local:transform-kana($elem as node()) as node() {
         return <item type="string"> { tags:convert-entity($info/text()) } </item> }
     </pair>
     <pair name="appliesTo" type="array">
-      {
-        if ($elem/re_nokanji)
-          then ()
+      { if ($elem/re_nokanji)
+        then ()
         else if (count($elem/re_restr) = 0)
-          then <item type="string"> { "*" } </item>
+        then <item type="string"> { "*" } </item>
         else for $restr in $elem/re_restr
-          return <item type="string"> { $restr/text() } </item>
-      }
+          return <item type="string"> { $restr/text() } </item> }
     </pair>
   </item>
 };
@@ -73,20 +71,16 @@ declare function local:transform-sense($elem as node()) as node() {
         return <item type="string"> { tags:convert-entity($pos/text()) } </item> }
     </pair>
     <pair name="appliesToKanji" type="array">
-      {
-        if (not($elem/stagk))
-          then <item type="string"> { "*" } </item>
+      { if (not($elem/stagk))
+        then <item type="string"> { "*" } </item>
         else for $restr in $elem/stagk
-          return <item type="string"> { $restr/text() } </item>
-      }
+          return <item type="string"> { $restr/text() } </item> }
     </pair>
     <pair name="appliesToKana" type="array">
-      {
-        if (not($elem/stagr))
-          then <item type="string"> { "*" } </item>
+      { if (not($elem/stagr))
+        then <item type="string"> { "*" } </item>
         else for $restr in $elem/stagr
-          return <item type="string"> { $restr/text() } </item>
-      }
+          return <item type="string"> { $restr/text() } </item> }
     </pair>
     <pair name="xref" type="array">
       { for $xref in $elem/xref
