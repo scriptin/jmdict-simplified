@@ -131,6 +131,10 @@ declare function local:transform-sense($elem as node()) as node() {
       { for $gloss in $elem/gloss
         return local:tranform-gloss($gloss) }
     </pair>
+    <pair name="info" type="array">
+      { for $info in $elem/s_inf
+        return <item type="string"> { $info/text() } </item> }
+    </pair>
   </item>
 };
 
