@@ -10,9 +10,15 @@
 
 **Result**: see [jmdict_eng.json.tgz](jmdict_eng.json.tgz) or [jmdict_eng.json.zip](jmdict_eng.json.zip) (only English translations)
 
-## Requirements (to run conversion scrips)
+## Running the conversion script
 
-Bash and [Zorba](http://zorba.28.io/)
+Requirements: Bash and [Zorba](http://zorba.28.io/)
+
+Simply run:
+
+    ./convert-dictionary.sh
+
+This will produce a JSON file, which has to be packed for storing in this repo.
 
 ## Format
 
