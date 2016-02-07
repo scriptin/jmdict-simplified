@@ -160,10 +160,10 @@ declare function local:transform-word($word as node()) as node() {
 
 jx:xml-to-json(
   <json type="object">
+    { $tags:tags }
     <pair name="words" type="array">
-      { for $word in $doc/JMdict/entry[position() >= 0 and position() < 2000]
+      { for $word in $doc/JMdict/entry
         return local:transform-word($word) }
     </pair>
-    { $tags:tags }
   </json>
 )
