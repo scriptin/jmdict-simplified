@@ -40,7 +40,7 @@ declare function local:transform-kana($elem as node()) as node() {
       { for $info in $elem/re_inf
         return <item type="string"> { tags:convert-entity($info/text()) } </item> }
     </pair>
-    <pair name="appliesTo" type="array">
+    <pair name="appliesToKanji" type="array">
       { if ($elem/re_nokanji)
         then ()
         else if (count($elem/re_restr) = 0)
@@ -66,7 +66,7 @@ declare function local:transform-xref($xref as node()) as node() {
 
 declare function local:transform-sense($elem as node()) as node() {
   <item type="object">
-    <pair name="pos" type="array">
+    <pair name="partsOfSpeech" type="array">
       { for $pos in $elem/pos
         return <item type="string"> { tags:convert-entity($pos/text()) } </item> }
     </pair>
