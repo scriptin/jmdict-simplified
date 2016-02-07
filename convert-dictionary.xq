@@ -1,6 +1,7 @@
 xquery version "3.0";
 
 import module namespace jx = "http://zorba.io/modules/json-xml";
+import module namespace string = "http://zorba.io/modules/string";
 import module namespace tags = "tags" at "tags.xq";
 
 declare variable $doc external;
@@ -52,6 +53,19 @@ declare function local:transform-kana($elem as node()) as node() {
   </item>
 };
 
+declare function local:transform-xref-part($xref-part as xs:string) as node() {
+  if (number($xref-part))
+  then <item type="number"> { number($xref-part) } </item>
+  else <item type="string"> { $xref-part } </item>
+};
+
+declare function local:transform-xref($xref as node()) as node() {
+  <item type="array">
+    { for $xref-part in string:split($xref, "・")
+      return local:transform-xref-part($xref-part) }
+  </item>
+};
+
 declare function local:transform-sense($elem as node()) as node() {
   <item type="object">
     <pair name="pos" type="array">
@@ -73,6 +87,10 @@ declare function local:transform-sense($elem as node()) as node() {
         else for $restr in $elem/stagr
           return <item type="string"> { $restr/text() } </item>
       }
+    </pair>
+    <pair name="xref" type="array">
+      { for $xref in $elem/xref
+        return local:transform-xref($xref) }
     </pair>
     <pair name="gloss" type="array">
       { for $gloss in $elem/gloss
