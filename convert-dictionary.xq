@@ -115,25 +115,25 @@ declare function local:transform-sense($elem as node()) as node() {
       { for $field in $elem/field
         return <item type="string"> { tags:convert-entity($field/text()) } </item> }
     </pair>
+    <pair name="dialect" type="array">
+      { for $dial in $elem/dial
+        return <item type="string"> { tags:convert-entity($dial/text()) } </item> }
+    </pair>
     <pair name="misc" type="array">
       { for $misc in $elem/misc
         return <item type="string"> { tags:convert-entity($misc/text()) } </item> }
+    </pair>
+    <pair name="info" type="array">
+      { for $info in $elem/s_inf
+        return <item type="string"> { $info/text() } </item> }
     </pair>
     <pair name="languageSource" type="array">
       { for $lsource in $elem/lsource
         return local:transform-lsource($lsource) }
     </pair>
-    <pair name="dialect" type="array">
-      { for $dial in $elem/dial
-        return <item type="string"> { tags:convert-entity($dial/text()) } </item> }
-    </pair>
     <pair name="gloss" type="array">
       { for $gloss in $elem/gloss
         return local:tranform-gloss($gloss) }
-    </pair>
-    <pair name="info" type="array">
-      { for $info in $elem/s_inf
-        return <item type="string"> { $info/text() } </item> }
     </pair>
   </item>
 };
