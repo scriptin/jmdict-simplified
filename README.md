@@ -10,6 +10,10 @@
 
 **Result**: see [jmdict_eng.json.tgz](jmdict_eng.json.tgz) or [jmdict_eng.json.zip](jmdict_eng.json.zip) (only English translations)
 
+## Requirements (to run conversion scrips)
+
+Bash and [Zorba](http://zorba.28.io/)
+
 ## Format
 
 ### Custom types
