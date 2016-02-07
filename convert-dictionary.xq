@@ -86,6 +86,10 @@ declare function local:transform-sense($elem as node()) as node() {
       { for $xref in $elem/xref
         return local:transform-xref($xref) }
     </pair>
+    <pair name="antonyms" type="array">
+      { for $ant in $elem/ant
+        return local:transform-xref($ant) }
+    </pair>
     <pair name="gloss" type="array">
       { for $gloss in $elem/gloss
         return <item type="string"> { $gloss/text() } </item> }
