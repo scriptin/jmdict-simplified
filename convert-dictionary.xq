@@ -113,6 +113,10 @@ declare function local:transform-sense($elem as node()) as node() {
       { for $lsource in $elem/lsource
         return local:transform-lsource($lsource) }
     </pair>
+    <pair name="dialect" type="array">
+      { for $dial in $elem/dial
+        return <item type="string"> { tags:convert-entity($dial/text()) } </item> }
+    </pair>
     <pair name="gloss" type="array">
       { for $gloss in $elem/gloss
         return <item type="string"> { $gloss/text() } </item> }
