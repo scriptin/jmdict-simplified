@@ -64,6 +64,17 @@ declare function local:transform-xref($xref as node()) as node() {
   </item>
 };
 
+declare function local:transform-lsource($lsource as node()) as node() {
+  <item type="object">
+    <pair name="lang" type="string"> { $lsource/@xml:lang/string() } </pair>
+    <pair name="full" type="boolean"> { ($lsource/@ls_type/string() = "full") } </pair>
+    <pair name="wasei" type="boolean"> { ($lsource/@ls_wasei/string() = "y") } </pair>
+    { if ($lsource/text())
+      then <pair name="text" type="string"> { $lsource/text() } </pair>
+      else <pair name="text" type="null" /> }
+  </item>
+};
+
 declare function local:transform-sense($elem as node()) as node() {
   <item type="object">
     <pair name="partsOfSpeech" type="array">
@@ -98,6 +109,10 @@ declare function local:transform-sense($elem as node()) as node() {
       { for $misc in $elem/misc
         return <item type="string"> { tags:convert-entity($misc/text()) } </item> }
     </pair>
+    <pair name="languageSource" type="array">
+      { for $lsource in $elem/lsource
+        return local:transform-lsource($lsource) }
+    </pair>
     <pair name="gloss" type="array">
       { for $gloss in $elem/gloss
         return <item type="string"> { $gloss/text() } </item> }
@@ -128,7 +143,7 @@ declare function local:transform-word($word as node()) as node() {
 jx:xml-to-json(
   <json type="object">
     <pair name="words" type="array">
-      { for $word in $doc/JMdict/entry[position() > 30 and position() < 150]
+      { for $word in $doc/JMdict/entry[position() >= 0 and position() < 2000]
         return local:transform-word($word) }
     </pair>
     { $tags:tags }
