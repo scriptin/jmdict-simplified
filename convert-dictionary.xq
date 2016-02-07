@@ -82,7 +82,7 @@ declare function local:transform-sense($elem as node()) as node() {
         else for $restr in $elem/stagr
           return <item type="string"> { $restr/text() } </item> }
     </pair>
-    <pair name="xref" type="array">
+    <pair name="related" type="array">
       { for $xref in $elem/xref
         return local:transform-xref($xref) }
     </pair>
