@@ -90,6 +90,14 @@ declare function local:transform-sense($elem as node()) as node() {
       { for $ant in $elem/ant
         return local:transform-xref($ant) }
     </pair>
+    <pair name="field" type="array">
+      { for $field in $elem/field
+        return <item type="string"> { tags:convert-entity($field/text()) } </item> }
+    </pair>
+    <pair name="misc" type="array">
+      { for $misc in $elem/misc
+        return <item type="string"> { tags:convert-entity($misc/text()) } </item> }
+    </pair>
     <pair name="gloss" type="array">
       { for $gloss in $elem/gloss
         return <item type="string"> { $gloss/text() } </item> }
