@@ -62,3 +62,9 @@ Notes:
 1. All fields in all objects are always present, none ever omitted
 2. Array fields are never `null`, only empty
 3. The only place which allows `null` values is `sense->languageSource->text` field in word element
+
+## License
+
+**JMDict_e.zip** (base file): Standard Japanese-English reference with over 158,000 entries. Maintained by the Electronic Dictionary Research and Development Group, used in conformance with the Group's [licence](http://www.edrdg.org/edrdg/licence.html). Project started in 1991 by [Jim Breen](http://www.csse.monash.edu.au/~jwb/).
+
+Other files: [CC-BY-SA-4.0](http://creativecommons.org/licenses/by-sa/4.0/)
