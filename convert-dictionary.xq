@@ -78,9 +78,6 @@ declare function local:transform-lsource($lsource as node()) as node() {
 declare function local:tranform-gloss($gloss as node()) as node() {
   <item type="object">
     <pair name="lang" type="string"> { $gloss/@xml:lang/string() } </pair>
-    { if ($gloss/@g_gend)
-      then <pair name="gender" type="string"> { $gloss/@g_gend/string() } </pair>
-      else <pair name="gender" type="null"/> }
     <pair name="text" type="string"> { $gloss/text() } </pair>
   </item>
 };
