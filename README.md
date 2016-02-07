@@ -37,11 +37,11 @@
         - `common` (boolean) := same as for kanji
         - `text` (string) := kana-only writing, may only accidentally contain middle-dot and other punctuation-like characters
         - `tags` (array of tags) := same as for kanji
-        - `appliesToKanji` (array of strings) := list of kanji writings (within this word!) which this kana version applies to
+        - `appliesToKanji` (array of strings) := list of kanji writings (within this word!) which this kana version applies to. `"*"` means "all", empty array means "none"
     - `sense` (array of objects) := senses (translations + some related data) for this words
         - `partOfSpeech` (array of tags) := all parts of speech for this sense
-        - `appliesToKanji` (array of strings) := list of kanji (within this word!) which this sense applies to
-        - `appliesToKana` (array of strings) := list of kana (within this word!) which this sense applies to
+        - `appliesToKanji` (array of strings) := list of kanji (within this word!) which this sense applies to. `"*"` means "all", empty array means "none"
+        - `appliesToKana` (array of strings) := list of kana (within this word!) which this sense applies to. `"*"` means "all", empty array means "none"
         - `related` (array of xrefs) := xrefs to related words
         - `antonym` (array of xrefs) := xrefs to antonyms of this word
         - `field` (array of tags) := fields of application
@@ -65,6 +65,6 @@ Notes:
 
 ## License
 
-**JMDict_e.zip** (base file): Standard Japanese-English reference with over 158,000 entries. Maintained by the Electronic Dictionary Research and Development Group, used in conformance with the Group's [licence](http://www.edrdg.org/edrdg/licence.html). Project started in 1991 by [Jim Breen](http://www.csse.monash.edu.au/~jwb/).
+**JMdict_e.xml** (base file): Standard Japanese-English reference with over 158,000 entries. Maintained by the Electronic Dictionary Research and Development Group, used in conformance with the Group's [licence](http://www.edrdg.org/edrdg/licence.html). Project started in 1991 by [Jim Breen](http://www.csse.monash.edu.au/~jwb/).
 
 Other files: [CC-BY-SA-4.0](http://creativecommons.org/licenses/by-sa/4.0/)
