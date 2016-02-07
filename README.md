@@ -8,7 +8,7 @@
 2. More clarity (mostly in naming conventions)
 3. Less custom things
 
-**Result**: see [jmdict_eng.json][] (only English translations)
+**Result**: see [jmdict_eng.json.tgz][] or [jmdict_eng.json.zip][] (only English translations)
 
 ## Format
 
