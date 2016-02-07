@@ -77,7 +77,7 @@ declare function local:transform-lsource($lsource as node()) as node() {
 
 declare function local:transform-sense($elem as node()) as node() {
   <item type="object">
-    <pair name="partsOfSpeech" type="array">
+    <pair name="partOfSpeech" type="array">
       { for $pos in $elem/pos
         return <item type="string"> { tags:convert-entity($pos/text()) } </item> }
     </pair>
@@ -97,7 +97,7 @@ declare function local:transform-sense($elem as node()) as node() {
       { for $xref in $elem/xref
         return local:transform-xref($xref) }
     </pair>
-    <pair name="antonyms" type="array">
+    <pair name="antonym" type="array">
       { for $ant in $elem/ant
         return local:transform-xref($ant) }
     </pair>
