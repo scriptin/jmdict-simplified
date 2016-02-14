@@ -20,7 +20,7 @@ JA-EN, common`*` words only:
 - [build/jmdict_eng_common.json.tgz](build/jmdict_eng_common.json.tgz)
 - [build/jmdict_eng_common.json.zip](build/jmdict_eng_common.json.zip)
 
-`*` - words are considered common if `/k_ele/ke_pri` or `/r_ele/re_pri` elements in original file contain onw of these markers: "news1", "ichi1", "spec1", "spec2", "gai1"
+`*` - words are considered common if `/k_ele/ke_pri` or `/r_ele/re_pri` elements in original file contain one of these markers: "news1", "ichi1", "spec1", "spec2", "gai1"
 
 ## Running the conversion script
 
