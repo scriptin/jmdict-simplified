@@ -8,7 +8,19 @@
 2. More clarity (mostly in naming conventions)
 3. Less custom things
 
-**Result**: see [jmdict_eng.json.tgz](jmdict_eng.json.tgz) or [jmdict_eng.json.zip](jmdict_eng.json.zip) (only English translations)
+**Result**:
+
+JA-EN:
+
+- [build/jmdict_eng.json.tgz](build/jmdict_eng.json.tgz)
+- [build/jmdict_eng.json.zip](build/jmdict_eng.json.zip)
+
+JA-EN, common`*` words only:
+
+- [build/jmdict_eng_common.json.tgz](build/jmdict_eng_common.json.tgz)
+- [build/jmdict_eng_common.json.zip](build/jmdict_eng_common.json.zip)
+
+`*` - words are considered common if `/k_ele/ke_pri` or `/r_ele/re_pri` elements in original file contain onw of these markers: "news1", "ichi1", "spec1", "spec2", "gai1"
 
 ## Running the conversion script
 
@@ -16,7 +28,7 @@ Requirements: Bash and [Zorba](http://zorba.28.io/)
 
 Simply run:
 
-    ./convert-dictionary.sh
+    ./build.sh
 
 This will produce a JSON file, which has to be packed for storing in this repo.
 
