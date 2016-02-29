@@ -61,7 +61,7 @@ This will produce a JSON file, which has to be packed for storing in this repo.
         - `tags` (array of tags) := same as for kanji
         - `appliesToKanji` (array of strings) := list of kanji writings within this word which this kana version applies to. `"*"` means "all", empty array means "none"
     - `sense` (array of objects) := senses (translations + some related data) for this words
-        - `partOfSpeech` (array of tags) := all parts of speech for this sense
+        - `partOfSpeech` (array of tags) := all parts of speech for this sense. Unlike the original dictionary file, this field is never empty/missing. In the original file, part-of-speech from earlier sense elements may apply to following elements, in which case latter don't have defined part-of-speech
         - `appliesToKanji` (array of strings) := list of kanji writings within this word which this sense applies to. `"*"` means "all", empty array means "none"
         - `appliesToKana` (array of strings) := list of kana writings within this word which this sense applies to. `"*"` means "all", empty array means "none"
         - `related` (array of xrefs) := xrefs to related words
