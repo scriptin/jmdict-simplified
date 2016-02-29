@@ -80,10 +80,26 @@ declare function transform:tranform-gloss($gloss as node()) as node() {
   </item>
 };
 
-declare function transform:sense($elem as node()) as node() {
-  <item type="object">
+(:
+  Part-of-speech elements may not be present on certain sense elements:
+
+  > In general where there are multiple senses
+  > in an entry, the part-of-speech of an earlier sense will apply to
+  > later senses unless there is a new part-of-speech indicated.
+
+  (from the DOCTYPE of original dictionary file)
+
+  To deal with this issue, this function accepts a subsequence of elements,
+  starting from the first one, of length N, where N is the index of an element
+  which is going to be transformed by this function. Other elements are used
+  only to search for part-of-speech, if it's missing on the Nth element.
+:)
+declare function transform:sense($elems as node()*) as node() {
+  let $elem := $elems[last()]
+  let $last-pos := $elems[not(empty(*:pos))][last()]/pos
+  return <item type="object">
     <pair name="partOfSpeech" type="array">
-      { for $pos in $elem/pos
+      { for $pos in $last-pos
         return <item type="string"> { tags:convert-entity($pos/text()) } </item> }
     </pair>
     <pair name="appliesToKanji" type="array">
@@ -147,8 +163,8 @@ declare function transform:word($word as node()) as node() {
         return transform:kana($e) }
     </pair>
     <pair name="sense" type="array">
-      { for $e in $word/sense
-        return transform:sense($e) }
+      { for $idx in (1 to count($word/sense))
+        return transform:sense(subsequence($word/sense, 1, $idx)) }
     </pair>
   </item>
 };
