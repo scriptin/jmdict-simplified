@@ -15,12 +15,12 @@ JA-EN:
 - [build/jmdict_eng.json.tgz](build/jmdict_eng.json.tgz)
 - [build/jmdict_eng.json.zip](build/jmdict_eng.json.zip)
 
-JA-EN, common`*` words only:
+JA-EN, common`*` kanji/kana entries only:
 
 - [build/jmdict_eng_common.json.tgz](build/jmdict_eng_common.json.tgz)
 - [build/jmdict_eng_common.json.zip](build/jmdict_eng_common.json.zip)
 
-`*` - words are considered common if `/k_ele/ke_pri` or `/r_ele/re_pri` elements in original file contain one of these markers: "news1", "ichi1", "spec1", "spec2", "gai1"
+`*` - entries are considered common if `/k_ele/ke_pri` or `/r_ele/re_pri` elements in original file contain one of these markers: "news1", "ichi1", "spec1", "spec2", "gai1"
 
 ## Running the conversion script
 
@@ -84,9 +84,3 @@ Notes:
 1. All fields in all objects are always present, none ever omitted
 2. Array fields are never `null`, only empty
 3. The only place which allows `null` values is `sense->languageSource->text` field in word element
-
-## License
-
-**JMdict_e.xml** (base file): Standard Japanese-English reference with over 158,000 entries. Maintained by the Electronic Dictionary Research and Development Group, used in conformance with the Group's [licence](http://www.edrdg.org/edrdg/licence.html). Project started in 1991 by [Jim Breen](http://www.csse.monash.edu.au/~jwb/).
-
-Other files: [CC-BY-SA-4.0](http://creativecommons.org/licenses/by-sa/4.0/)
