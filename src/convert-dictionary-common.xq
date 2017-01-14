@@ -8,6 +8,8 @@ declare variable $doc external;
 
 jx:xml-to-json(
   <json type="object">
+    { transform:extract-date($doc) }
+    { transform:extract-revisions($doc) }
     { $tags:tags }
     <pair name="words" type="array">
       { for $word in $doc/JMdict/entry

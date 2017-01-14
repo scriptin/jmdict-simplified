@@ -4,6 +4,28 @@ module namespace transform = "transform";
 import module namespace string = "http://zorba.io/modules/string";
 import module namespace tags = "tags" at "tags.xq";
 
+(:
+  Extract a creation date from a comment with following format: "JMdict created: YYYY-MM-DD".
+:)
+declare function transform:extract-date($doc as node()) as node() {
+  let $version-comment := string($doc//comment()[contains(., 'JMdict created')][1])
+  return <pair name="jmdict-date" type="string">
+    { normalize-space(substring-after($version-comment, ':')) }
+  </pair>
+};
+
+(:
+  Extract revision numbers, as they appear in comments before DOCTYPE.
+  Strictly speaking, these are version numbers of JMDict, but they are not mentioned in official documentation.
+:)
+declare function transform:extract-revisions($doc as node()) as node() {
+  <pair name="jmdict-revisions" type="array">
+    { for $rev in $doc//comment()[matches(., 'Rev \d+\.\d+')]
+      let $first-line := substring-before(string($rev), '&#10;')
+      return <item type="string"> { normalize-space(substring-after($first-line, 'Rev')) } </item> }
+  </pair>
+};
+
 declare function transform:is-common($pri-elems as node()*) as xs:boolean {
   let $common-indicators := ("news1", "ichi1", "spec1", "spec2", "gai1")
   return if (exists($pri-elems[text() = $common-indicators]))
