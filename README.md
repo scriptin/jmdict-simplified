@@ -28,7 +28,9 @@ Requirements: Bash and [Zorba](http://zorba.28.io/)
 
 Simply run:
 
-    ./build.sh
+    ./build.sh VERSION
+
+where `VERSION` is a semantic version, you may leave it empty for testing or pass any string in case you're doing a custom build. It is not validated.
 
 This will produce a JSON file, which has to be packed for storing in this repo.
 
@@ -48,6 +50,7 @@ This will produce a JSON file, which has to be packed for storing in this repo.
 
 ### Root JSON object
 
+- `version` (string) := [Semantic version](http://semver.org/) of this project
 - `jmdict-date` (string) := Creation date of JMDict file, as it appears in a comment with format "JMdict created: YYYY-MM-DD" in the original XML file header
 - `jmdict-revisions` (array of string) := Revisions of JMDict file, as they appear in comments before DOCTYPE in the original XML file header. These only contain actual version (e.g., "1.08"), not a full comment. Original comments also mention changes made, but this is omitted in the resulting JSON files
 - `tags` (object) := all tags: parts of speech, names of dialects, fields of application, etc. All those things are expressed as XML entities in the original file. Keys of this objects are tags per se, values are descriptions, slightly modified from the original file
