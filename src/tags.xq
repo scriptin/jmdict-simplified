@@ -179,7 +179,7 @@ declare function tags:convert-entity($text as xs:string) as xs:string? {
 };
 
 declare variable $tags:tags := <pair name="tags" type="object">
-  <pair name="MA" type="string">artial arts term</pair>
+  <pair name="MA" type="string">martial arts term</pair>
   <pair name="X" type="string">rude or X-rated term</pair>
   <pair name="abbr" type="string">abbreviation</pair>
   <pair name="adj-i" type="string">adjective (keiyoushi)</pair>
