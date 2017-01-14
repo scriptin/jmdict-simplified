@@ -5,9 +5,11 @@ import module namespace transform = "transform" at "transform.xq";
 import module namespace tags = "tags" at "tags.xq";
 
 declare variable $doc external;
+declare variable $version external;
 
 jx:xml-to-json(
   <json type="object">
+    <pair name="version" type="string"> { $version } </pair>
     { transform:extract-date($doc) }
     { transform:extract-revisions($doc) }
     { $tags:tags }
