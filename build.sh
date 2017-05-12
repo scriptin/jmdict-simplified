@@ -1,26 +1,31 @@
 #!/bin/bash
 
 doc=JMdict_e.xml
-version=$1
+target=$1
+version=$2
 src=src
 build=build
 
+function create_achives() {
+  name=$1
+  tar --directory $build -czf $build/$name.json.tgz $name.json \
+  && zip --junk-paths $build/$name.json.zip $build/$name.json
+}
+
+full=jmdict_eng
 echo "Processing a full EN version" \
 && zorba -i \
   -e doc=$doc \
   -e version:=$version \
-  $src/convert-dictionary.xq > $build/jmdict_eng.json \
-&& echo "Preparing archives" \
-&& tar --directory $build -czf $build/jmdict_eng.json.tgz jmdict_eng.json \
-&& zip --junk-paths $build/jmdict_eng.json.zip $build/jmdict_eng.json
+  $src/convert-dictionary.xq > $build/$full.json \
+&& [ "$target" == "archives" ] && echo "Preparing archives" && create_achives $full
 
+common=jmdict_eng_common
 echo "Processing EN version with common words only" \
 && zorba -i \
   -e doc=$doc \
   -e version:=$version \
-  $src/convert-dictionary-common.xq > $build/jmdict_eng_common.json \
-&& echo "Preparing archives" \
-&& tar --directory $build -czf $build/jmdict_eng_common.json.tgz jmdict_eng_common.json \
-&& zip --junk-paths $build/jmdict_eng_common.json.zip $build/jmdict_eng_common.json
+  $src/convert-dictionary-common.xq > $build/$common.json \
+&& [ "$target" == "archives" ] && echo "Preparing archives" && create_achives $common
 
 echo "Done"

@@ -26,9 +26,13 @@ JA-EN, common`*` kanji/kana entries only:
 
 Requirements: Bash and [Zorba](https://github.com/zorba-processor/zorba)
 
-Simply run:
+For development:
 
-    ./build.sh VERSION
+    ./build.sh dev VERSION
+
+For production (will update the distribution archives):
+
+    ./build.sh archives VERSION
 
 where `VERSION` is a semantic version, you may leave it empty for testing or pass any string in case you're doing a custom build. It is not validated.
 
