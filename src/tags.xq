@@ -1,6 +1,8 @@
 xquery version "3.0";
 module namespace tags = "tags";
 
+(: This file is generated, do not edit manually! :)
+
 declare function tags:convert-entity($word-id as xs:string, $text as xs:string) as xs:string? {
   switch($text)
   case "martial arts term" return "MA"
@@ -175,12 +177,12 @@ declare function tags:convert-entity($word-id as xs:string, $text as xs:string) 
   case "zoology term" return "zool"
   case "jocular, humorous term" return "joc"
   case "anatomical term" return "anat"
-  default return error(xs:QName('broken-tag'), concat("Unknown tag '", $text, "' on entity ", $word-id))
+  default return error(xs:QName("unknown-tag"), concat("Unknown tag '", $text, "' on entity ", $word-id))
 };
 
 declare variable $tags:tags := <pair name="tags" type="object">
   <pair name="MA" type="string">martial arts term</pair>
-  <pair name="X" type="string">rude or X-rated term</pair>
+  <pair name="X" type="string">rude or X-rated term (not displayed in educational software)</pair>
   <pair name="abbr" type="string">abbreviation</pair>
   <pair name="adj-i" type="string">adjective (keiyoushi)</pair>
   <pair name="adj-ix" type="string">adjective (keiyoushi) - yoi/ii class</pair>
@@ -196,7 +198,7 @@ declare variable $tags:tags := <pair name="tags" type="object">
   <pair name="aux" type="string">auxiliary</pair>
   <pair name="aux-v" type="string">auxiliary verb</pair>
   <pair name="aux-adj" type="string">auxiliary adjective</pair>
-  <pair name="Buddh" type="string">buddhist term</pair>
+  <pair name="Buddh" type="string">Buddhist term</pair>
   <pair name="chem" type="string">chemistry term</pair>
   <pair name="chn" type="string">children&apos;s language</pair>
   <pair name="col" type="string">colloquialism</pair>
@@ -254,34 +256,34 @@ declare variable $tags:tags := <pair name="tags" type="object">
   <pair name="uk" type="string">word usually written using kana alone</pair>
   <pair name="unc" type="string">unclassified</pair>
   <pair name="yoji" type="string">yojijukugo</pair>
-  <pair name="v1" type="string">ichidan verb</pair>
-  <pair name="v1-s" type="string">ichidan verb - &apos;kureru&apos; special class</pair>
-  <pair name="v2a-s" type="string">nidan verb with &apos;u&apos; ending (archaic)</pair>
-  <pair name="v4h" type="string">yodan verb with &apos;hu/fu&apos; ending (archaic)</pair>
-  <pair name="v4r" type="string">yodan verb with &apos;ru&apos; ending (archaic)</pair>
-  <pair name="v5aru" type="string">godan verb - &apos;aru&apos; special class</pair>
-  <pair name="v5b" type="string">godan verb with &apos;bu&apos; ending</pair>
-  <pair name="v5g" type="string">godan verb with &apos;gu&apos; ending</pair>
-  <pair name="v5k" type="string">godan verb with &apos;ku&apos; ending</pair>
-  <pair name="v5k-s" type="string">godan verb - &apos;iku/yuku&apos; special class</pair>
-  <pair name="v5m" type="string">godan verb with &apos;mu&apos; ending</pair>
-  <pair name="v5n" type="string">godan verb with &apos;nu&apos; ending</pair>
-  <pair name="v5r" type="string">godan verb with &apos;ru&apos; ending</pair>
-  <pair name="v5r-i" type="string">godan verb with &apos;ru&apos; ending (irregular verb)</pair>
-  <pair name="v5s" type="string">godan verb with &apos;su&apos; ending</pair>
-  <pair name="v5t" type="string">godan verb with &apos;tsu&apos; ending</pair>
-  <pair name="v5u" type="string">godan verb with &apos;u&apos; ending</pair>
-  <pair name="v5u-s" type="string">godan verb with &apos;u&apos; ending (special class)</pair>
-  <pair name="v5uru" type="string">godan verb - &apos;uru&apos; old class verb (old form of &apos;eru&apos;)</pair>
-  <pair name="vz" type="string">ichidan verb - &apos;zuru&apos; verb (alternative form of &apos;jiru&apos; verbs)</pair>
+  <pair name="v1" type="string">Ichidan verb</pair>
+  <pair name="v1-s" type="string">Ichidan verb - kureru special class</pair>
+  <pair name="v2a-s" type="string">Nidan verb with &apos;u&apos; ending (archaic)</pair>
+  <pair name="v4h" type="string">Yodan verb with &apos;hu/fu&apos; ending (archaic)</pair>
+  <pair name="v4r" type="string">Yodan verb with &apos;ru&apos; ending (archaic)</pair>
+  <pair name="v5aru" type="string">Godan verb - -aru special class</pair>
+  <pair name="v5b" type="string">Godan verb with &apos;bu&apos; ending</pair>
+  <pair name="v5g" type="string">Godan verb with &apos;gu&apos; ending</pair>
+  <pair name="v5k" type="string">Godan verb with &apos;ku&apos; ending</pair>
+  <pair name="v5k-s" type="string">Godan verb - Iku/Yuku special class</pair>
+  <pair name="v5m" type="string">Godan verb with &apos;mu&apos; ending</pair>
+  <pair name="v5n" type="string">Godan verb with &apos;nu&apos; ending</pair>
+  <pair name="v5r" type="string">Godan verb with &apos;ru&apos; ending</pair>
+  <pair name="v5r-i" type="string">Godan verb with &apos;ru&apos; ending (irregular verb)</pair>
+  <pair name="v5s" type="string">Godan verb with &apos;su&apos; ending</pair>
+  <pair name="v5t" type="string">Godan verb with &apos;tsu&apos; ending</pair>
+  <pair name="v5u" type="string">Godan verb with &apos;u&apos; ending</pair>
+  <pair name="v5u-s" type="string">Godan verb with &apos;u&apos; ending (special class)</pair>
+  <pair name="v5uru" type="string">Godan verb - Uru old class verb (old form of Eru)</pair>
+  <pair name="vz" type="string">Ichidan verb - zuru verb (alternative form of -jiru verbs)</pair>
   <pair name="vi" type="string">intransitive verb</pair>
-  <pair name="vk" type="string">&apos;kuru&apos; verb - special class</pair>
-  <pair name="vn" type="string">irregular &apos;nu&apos; verb</pair>
-  <pair name="vr" type="string">irregular &apos;ru&apos; verb, plain form ends with &apos;ri&apos;</pair>
-  <pair name="vs" type="string">noun or participle which takes the aux. verb &apos;suru&apos;</pair>
-  <pair name="vs-c" type="string">&apos;su&apos; verb - precursor to the modern &apos;suru&apos;</pair>
-  <pair name="vs-s" type="string">&apos;suru&apos; verb - special class</pair>
-  <pair name="vs-i" type="string">&apos;suru&apos; verb - irregular</pair>
+  <pair name="vk" type="string">Kuru verb - special class</pair>
+  <pair name="vn" type="string">irregular nu verb</pair>
+  <pair name="vr" type="string">irregular ru verb, plain form ends with -ri</pair>
+  <pair name="vs" type="string">noun or participle which takes the aux. verb suru</pair>
+  <pair name="vs-c" type="string">su verb - precursor to the modern suru</pair>
+  <pair name="vs-s" type="string">suru verb - special class</pair>
+  <pair name="vs-i" type="string">suru verb - irregular</pair>
   <pair name="kyb" type="string">Kyoto-ben</pair>
   <pair name="osb" type="string">Osaka-ben</pair>
   <pair name="ksb" type="string">Kansai-ben</pair>
@@ -301,35 +303,35 @@ declare variable $tags:tags := <pair name="tags" type="object">
   <pair name="adj-nari" type="string">archaic/formal form of na-adjective</pair>
   <pair name="n-pr" type="string">proper noun</pair>
   <pair name="v-unspec" type="string">verb unspecified</pair>
-  <pair name="v4k" type="string">yodan verb with &apos;ku&apos; ending (archaic)</pair>
-  <pair name="v4g" type="string">yodan verb with &apos;gu&apos; ending (archaic)</pair>
-  <pair name="v4s" type="string">yodan verb with &apos;su&apos; ending (archaic)</pair>
-  <pair name="v4t" type="string">yodan verb with &apos;tsu&apos; ending (archaic)</pair>
-  <pair name="v4n" type="string">yodan verb with &apos;nu&apos; ending (archaic)</pair>
-  <pair name="v4b" type="string">yodan verb with &apos;bu&apos; ending (archaic)</pair>
-  <pair name="v4m" type="string">yodan verb with &apos;mu&apos; ending (archaic)</pair>
-  <pair name="v2k-k" type="string">nidan verb (upper class) with &apos;ku&apos; ending (archaic)</pair>
-  <pair name="v2g-k" type="string">nidan verb (upper class) with &apos;gu&apos; ending (archaic)</pair>
-  <pair name="v2t-k" type="string">nidan verb (upper class) with &apos;tsu&apos; ending (archaic)</pair>
-  <pair name="v2d-k" type="string">nidan verb (upper class) with &apos;dzu&apos; ending (archaic)</pair>
-  <pair name="v2h-k" type="string">nidan verb (upper class) with &apos;hu/fu&apos; ending (archaic)</pair>
-  <pair name="v2b-k" type="string">nidan verb (upper class) with &apos;bu&apos; ending (archaic)</pair>
-  <pair name="v2m-k" type="string">nidan verb (upper class) with &apos;mu&apos; ending (archaic)</pair>
-  <pair name="v2y-k" type="string">nidan verb (upper class) with &apos;yu&apos; ending (archaic)</pair>
-  <pair name="v2r-k" type="string">nidan verb (upper class) with &apos;ru&apos; ending (archaic)</pair>
-  <pair name="v2k-s" type="string">nidan verb (lower class) with &apos;ku&apos; ending (archaic)</pair>
-  <pair name="v2g-s" type="string">nidan verb (lower class) with &apos;gu&apos; ending (archaic)</pair>
-  <pair name="v2s-s" type="string">nidan verb (lower class) with &apos;su&apos; ending (archaic)</pair>
-  <pair name="v2z-s" type="string">nidan verb (lower class) with &apos;zu&apos; ending (archaic)</pair>
-  <pair name="v2t-s" type="string">nidan verb (lower class) with &apos;tsu&apos; ending (archaic)</pair>
-  <pair name="v2d-s" type="string">nidan verb (lower class) with &apos;dzu&apos; ending (archaic)</pair>
-  <pair name="v2n-s" type="string">nidan verb (lower class) with &apos;nu&apos; ending (archaic)</pair>
-  <pair name="v2h-s" type="string">nidan verb (lower class) with &apos;hu/fu&apos; ending (archaic)</pair>
-  <pair name="v2b-s" type="string">nidan verb (lower class) with &apos;bu&apos; ending (archaic)</pair>
-  <pair name="v2m-s" type="string">nidan verb (lower class) with &apos;mu&apos; ending (archaic)</pair>
-  <pair name="v2y-s" type="string">nidan verb (lower class) with &apos;yu&apos; ending (archaic)</pair>
-  <pair name="v2r-s" type="string">nidan verb (lower class) with &apos;ru&apos; ending (archaic)</pair>
-  <pair name="v2w-s" type="string">nidan verb (lower class) with &apos;u&apos; ending and &apos;we&apos; conjugation (archaic)</pair>
+  <pair name="v4k" type="string">Yodan verb with &apos;ku&apos; ending (archaic)</pair>
+  <pair name="v4g" type="string">Yodan verb with &apos;gu&apos; ending (archaic)</pair>
+  <pair name="v4s" type="string">Yodan verb with &apos;su&apos; ending (archaic)</pair>
+  <pair name="v4t" type="string">Yodan verb with &apos;tsu&apos; ending (archaic)</pair>
+  <pair name="v4n" type="string">Yodan verb with &apos;nu&apos; ending (archaic)</pair>
+  <pair name="v4b" type="string">Yodan verb with &apos;bu&apos; ending (archaic)</pair>
+  <pair name="v4m" type="string">Yodan verb with &apos;mu&apos; ending (archaic)</pair>
+  <pair name="v2k-k" type="string">Nidan verb (upper class) with &apos;ku&apos; ending (archaic)</pair>
+  <pair name="v2g-k" type="string">Nidan verb (upper class) with &apos;gu&apos; ending (archaic)</pair>
+  <pair name="v2t-k" type="string">Nidan verb (upper class) with &apos;tsu&apos; ending (archaic)</pair>
+  <pair name="v2d-k" type="string">Nidan verb (upper class) with &apos;dzu&apos; ending (archaic)</pair>
+  <pair name="v2h-k" type="string">Nidan verb (upper class) with &apos;hu/fu&apos; ending (archaic)</pair>
+  <pair name="v2b-k" type="string">Nidan verb (upper class) with &apos;bu&apos; ending (archaic)</pair>
+  <pair name="v2m-k" type="string">Nidan verb (upper class) with &apos;mu&apos; ending (archaic)</pair>
+  <pair name="v2y-k" type="string">Nidan verb (upper class) with &apos;yu&apos; ending (archaic)</pair>
+  <pair name="v2r-k" type="string">Nidan verb (upper class) with &apos;ru&apos; ending (archaic)</pair>
+  <pair name="v2k-s" type="string">Nidan verb (lower class) with &apos;ku&apos; ending (archaic)</pair>
+  <pair name="v2g-s" type="string">Nidan verb (lower class) with &apos;gu&apos; ending (archaic)</pair>
+  <pair name="v2s-s" type="string">Nidan verb (lower class) with &apos;su&apos; ending (archaic)</pair>
+  <pair name="v2z-s" type="string">Nidan verb (lower class) with &apos;zu&apos; ending (archaic)</pair>
+  <pair name="v2t-s" type="string">Nidan verb (lower class) with &apos;tsu&apos; ending (archaic)</pair>
+  <pair name="v2d-s" type="string">Nidan verb (lower class) with &apos;dzu&apos; ending (archaic)</pair>
+  <pair name="v2n-s" type="string">Nidan verb (lower class) with &apos;nu&apos; ending (archaic)</pair>
+  <pair name="v2h-s" type="string">Nidan verb (lower class) with &apos;hu/fu&apos; ending (archaic)</pair>
+  <pair name="v2b-s" type="string">Nidan verb (lower class) with &apos;bu&apos; ending (archaic)</pair>
+  <pair name="v2m-s" type="string">Nidan verb (lower class) with &apos;mu&apos; ending (archaic)</pair>
+  <pair name="v2y-s" type="string">Nidan verb (lower class) with &apos;yu&apos; ending (archaic)</pair>
+  <pair name="v2r-s" type="string">Nidan verb (lower class) with &apos;ru&apos; ending (archaic)</pair>
+  <pair name="v2w-s" type="string">Nidan verb (lower class) with &apos;u&apos; ending and &apos;we&apos; conjugation (archaic)</pair>
   <pair name="archit" type="string">architecture term</pair>
   <pair name="astron" type="string">astronomy, etc. term</pair>
   <pair name="baseb" type="string">baseball term</pair>
