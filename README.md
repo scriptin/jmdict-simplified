@@ -24,7 +24,7 @@ JA-EN, common`*` kanji/kana entries only:
 
 ## Running the conversion script
 
-Requirements: Bash and [Zorba](http://zorba.28.io/)
+Requirements: Bash and [Zorba](https://github.com/zorba-processor/zorba)
 
 Simply run:
 
