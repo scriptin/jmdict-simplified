@@ -33,7 +33,7 @@ declare function transform:is-common($pri-elems as node()*) as xs:boolean {
          else false()
 };
 
-declare function transform:kanji($elem as node()) as node() {
+declare function transform:kanji($word-id as xs:string, $elem as node()) as node() {
   <item type="object">
     <pair name="common" type="boolean">
       { transform:is-common($elem/ke_pri) }
@@ -43,12 +43,12 @@ declare function transform:kanji($elem as node()) as node() {
     </pair>
     <pair name="tags" type="array">
       { for $info in $elem/ke_inf
-        return <item type="string"> { tags:convert-entity($info/text()) } </item> }
+        return <item type="string"> { tags:convert-entity($word-id, $info/text()) } </item> }
     </pair>
   </item>
 };
 
-declare function transform:kana($elem as node()) as node() {
+declare function transform:kana($word-id as xs:string, $elem as node()) as node() {
   <item type="object">
     <pair name="common" type="boolean">
       { transform:is-common($elem/re_pri) }
@@ -58,7 +58,7 @@ declare function transform:kana($elem as node()) as node() {
     </pair>
     <pair name="tags" type="array">
       { for $info in $elem/re_inf
-        return <item type="string"> { tags:convert-entity($info/text()) } </item> }
+        return <item type="string"> { tags:convert-entity($word-id, $info/text()) } </item> }
     </pair>
     <pair name="appliesToKanji" type="array">
       { if ($elem/re_nokanji)
@@ -116,13 +116,13 @@ declare function transform:tranform-gloss($gloss as node()) as node() {
   which is going to be transformed by this function. Other elements are used
   only to search for part-of-speech, if it's missing on the Nth element.
 :)
-declare function transform:sense($elems as node()*) as node() {
+declare function transform:sense($word-id as xs:string, $elems as node()*) as node() {
   let $elem := $elems[last()]
   let $last-pos := $elems[not(empty(*:pos))][last()]/pos
   return <item type="object">
     <pair name="partOfSpeech" type="array">
       { for $pos in $last-pos
-        return <item type="string"> { tags:convert-entity($pos/text()) } </item> }
+        return <item type="string"> { tags:convert-entity($word-id, $pos/text()) } </item> }
     </pair>
     <pair name="appliesToKanji" type="array">
       { if (not($elem/stagk))
@@ -146,15 +146,15 @@ declare function transform:sense($elems as node()*) as node() {
     </pair>
     <pair name="field" type="array">
       { for $field in $elem/field
-        return <item type="string"> { tags:convert-entity($field/text()) } </item> }
+        return <item type="string"> { tags:convert-entity($word-id, $field/text()) } </item> }
     </pair>
     <pair name="dialect" type="array">
       { for $dial in $elem/dial
-        return <item type="string"> { tags:convert-entity($dial/text()) } </item> }
+        return <item type="string"> { tags:convert-entity($word-id, $dial/text()) } </item> }
     </pair>
     <pair name="misc" type="array">
       { for $misc in $elem/misc
-        return <item type="string"> { tags:convert-entity($misc/text()) } </item> }
+        return <item type="string"> { tags:convert-entity($word-id, $misc/text()) } </item> }
     </pair>
     <pair name="info" type="array">
       { for $info in $elem/s_inf
@@ -172,21 +172,22 @@ declare function transform:sense($elems as node()*) as node() {
 };
 
 declare function transform:word($word as node()) as node() {
-  <item type="object">
+  let $word-id := $word/ent_seq/text()
+  return <item type="object">
     <pair name="id" type="number">
-      { $word/ent_seq/text() }
+      { $word-id }
     </pair>
     <pair name="kanji" type="array">
       { for $e in $word/k_ele
-        return transform:kanji($e) }
+        return transform:kanji($word-id, $e) }
     </pair>
     <pair name="kana" type="array">
       { for $e in $word/r_ele
-        return transform:kana($e) }
+        return transform:kana($word-id, $e) }
     </pair>
     <pair name="sense" type="array">
       { for $idx in (1 to count($word/sense))
-        return transform:sense(subsequence($word/sense, 1, $idx)) }
+        return transform:sense($word-id, subsequence($word/sense, 1, $idx)) }
     </pair>
   </item>
 };

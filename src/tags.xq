@@ -1,7 +1,7 @@
 xquery version "3.0";
 module namespace tags = "tags";
 
-declare function tags:convert-entity($text as xs:string) as xs:string? {
+declare function tags:convert-entity($word-id as xs:string, $text as xs:string) as xs:string? {
   switch($text)
   case "martial arts term" return "MA"
   case "rude or X-rated term (not displayed in educational software)" return "X"
@@ -175,7 +175,7 @@ declare function tags:convert-entity($text as xs:string) as xs:string? {
   case "zoology term" return "zool"
   case "jocular, humorous term" return "joc"
   case "anatomical term" return "anat"
-  default return error(xs:QName('broken-tag'), concat("Unknown tag '", $text, "'"))
+  default return error(xs:QName('broken-tag'), concat("Unknown tag '", $text, "' on entity ", $word-id))
 };
 
 declare variable $tags:tags := <pair name="tags" type="object">
