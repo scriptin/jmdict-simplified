@@ -175,7 +175,7 @@ declare function tags:convert-entity($text as xs:string) as xs:string? {
   case "zoology term" return "zool"
   case "jocular, humorous term" return "joc"
   case "anatomical term" return "anat"
-  default return "?"
+  default return error(xs:QName('broken-tag'), concat("Unknown tag '", $text, "'"))
 };
 
 declare variable $tags:tags := <pair name="tags" type="object">
@@ -351,5 +351,4 @@ declare variable $tags:tags := <pair name="tags" type="object">
   <pair name="zool" type="string">zoology term</pair>
   <pair name="joc" type="string">jocular, humorous term</pair>
   <pair name="anat" type="string">anatomical term</pair>
-  <pair name="?" type="string">unknown tag</pair>
 </pair>;
