@@ -3,7 +3,18 @@ module namespace tags = "tags";
 
 (: This file is generated, do not edit manually! :)
 
+declare function tags:deduplicate($text as xs:string) as xs:string? {
+  let $len := string-length($text) div 2
+  let $fst := substring($text, 1, $len)
+  let $snd := substring($text, $len+1)
+  return if ($fst = $snd) then $fst else $text
+};
+
 declare function tags:convert-entity($word-id as xs:string, $text as xs:string) as xs:string? {
+  tags:convert-entity-normalized($word-id, tags:deduplicate(normalize-space($text)))
+};
+
+declare function tags:convert-entity-normalized($word-id as xs:string, $text as xs:string) as xs:string? {
   switch($text)
   case "martial arts term" return "MA"
   case "rude or X-rated term (not displayed in educational software)" return "X"
