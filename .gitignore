@@ -1,1 +1,2 @@
-jmdict*.json
+build/*
+!build/.keep
