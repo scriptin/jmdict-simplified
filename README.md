@@ -8,19 +8,9 @@
 2. More clarity (mostly in naming conventions)
 3. Less custom things
 
-**Result**:
+Grab results here: **[Latest release](https://github.com/scriptin/jmdict-simplified/releases/latest)**
 
-JA-EN:
-
-- [build/jmdict_eng.json.tgz](build/jmdict_eng.json.tgz)
-- [build/jmdict_eng.json.zip](build/jmdict_eng.json.zip)
-
-JA-EN, common`*` kanji/kana entries only:
-
-- [build/jmdict_eng_common.json.tgz](build/jmdict_eng_common.json.tgz)
-- [build/jmdict_eng_common.json.zip](build/jmdict_eng_common.json.zip)
-
-`*` - entries are considered common if `/k_ele/ke_pri` or `/r_ele/re_pri` elements in original file contain one of these markers: "news1", "ichi1", "spec1", "spec2", "gai1"
+Note: There are two versions of the dictionary: full and "common"-only. Dictionary entries are considered common if `/k_ele/ke_pri` or `/r_ele/re_pri` elements in original file contain one of these markers: "news1", "ichi1", "spec1", "spec2", "gai1". Common-only distributions are much smaller.
 
 ## Running the conversion script
 
