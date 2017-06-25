@@ -1,3 +1,8 @@
+# Version 1.1.1
+
+- #3: Fixed duplicated XML entities text bug
+- #4: Removed binary files from the repository
+
 # Version 1.1
 
 - #2: Add 'jmdict-date' and 'jmdict-revisions' fields
