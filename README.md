@@ -16,6 +16,10 @@ Note: There are two versions of the dictionary: full and "common"-only. Dictiona
 
 Requirements: Bash and [Zorba](https://github.com/zorba-processor/zorba)
 
+First, download the source file:
+
+    ./download.sh # Will create 'JMdict_e.xml' in the root directory
+
 For development:
 
     ./build.sh dev VERSION
