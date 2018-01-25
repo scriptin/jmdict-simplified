@@ -1,7 +1,17 @@
 #!/bin/bash
 
-infile=JMdict_e.xml
-outfile=src/jmdict/tags.xq
+type=$1
+
+if [[ "$type" == "jmdict" ]]; then
+  infile=JMdict_e.xml
+  outfile=src/jmdict/tags.xq
+elif [[ "$type" == "jmnedict" ]]; then
+  infile=JMnedict.xml
+  outfile=src/jmnedict/tags.xq
+else
+  echo "Unknown type \"$type\", please use \"jmdict\" or \"jmnedict\""
+  exit 1
+fi
 
 echo "xquery version \"3.0\";"                                                                            > $outfile
 echo "module namespace tags = \"tags\";"                                                                 >> $outfile
