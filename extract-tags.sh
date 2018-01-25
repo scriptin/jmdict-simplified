@@ -1,12 +1,12 @@
 #!/bin/bash
 
 infile=JMdict_e.xml
-outfile=src/tags.xq
+outfile=src/jmdict/tags.xq
 
 echo "xquery version \"3.0\";"                                                                            > $outfile
 echo "module namespace tags = \"tags\";"                                                                 >> $outfile
 echo ""                                                                                                  >> $outfile
-echo "import module namespace tags-utils = \"tags-utils\" at \"tags-utils.xq\";"                         >> $outfile
+echo "import module namespace tags-utils = \"tags-utils\" at \"../tags-utils.xq\";"                      >> $outfile
 echo ""                                                                                                  >> $outfile
 echo "(: This file is generated, do not edit manually! :)"                                               >> $outfile
 echo ""                                                                                                  >> $outfile

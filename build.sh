@@ -3,7 +3,7 @@
 doc=JMdict_e.xml
 target=$1
 version=$2
-src=src
+src=src/jmdict
 build=build
 
 function create_achives() {

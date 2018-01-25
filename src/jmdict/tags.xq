@@ -1,7 +1,7 @@
 xquery version "3.0";
 module namespace tags = "tags";
 
-import module namespace tags-utils = "tags-utils" at "tags-utils.xq";
+import module namespace tags-utils = "tags-utils" at "../tags-utils.xq";
 
 (: This file is generated, do not edit manually! :)
 
