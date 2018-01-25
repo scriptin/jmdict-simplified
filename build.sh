@@ -18,7 +18,7 @@ echo "Processing a full EN version" \
   -e doc=$doc \
   -e version:=$version \
   $src/convert-dictionary.xq > $build/$full.json \
-&& [ "$target" == "archives" ] && echo "Preparing archives" && create_achives $full
+&& [[ "$target" == "archives" ]] && echo "Preparing archives" && create_achives $full
 
 common=jmdict_eng_common
 echo "Processing EN version with common words only" \
@@ -26,6 +26,6 @@ echo "Processing EN version with common words only" \
   -e doc=$doc \
   -e version:=$version \
   $src/convert-dictionary-common.xq > $build/$common.json \
-&& [ "$target" == "archives" ] && echo "Preparing archives" && create_achives $common
+&& [[ "$target" == "archives" ]] && echo "Preparing archives" && create_achives $common
 
 echo "Done"
