@@ -55,6 +55,36 @@ fi
 ## Utils ##
 ###########
 
+function extract_tags() {
+  infile=$1
+  outfile=$2
+  echo "xquery version \"3.0\";"                                                                            > $outfile
+  echo "module namespace tags = \"tags\";"                                                                 >> $outfile
+  echo ""                                                                                                  >> $outfile
+  echo "import module namespace tags-utils = \"tags-utils\" at \"../tags-utils.xq\";"                      >> $outfile
+  echo ""                                                                                                  >> $outfile
+  echo "(: This file is generated, do not edit manually! :)"                                               >> $outfile
+  echo ""                                                                                                  >> $outfile
+  echo "declare function tags:convert-entity(\$word-id as xs:string, \$text as xs:string) as xs:string? {" >> $outfile
+  echo "  tags:convert(\$word-id, tags-utils:deduplicate(normalize-space(\$text)))"                        >> $outfile
+  echo "};"                                                                                                >> $outfile
+  echo ""                                                                                                  >> $outfile
+  echo "declare function tags:convert(\$word-id as xs:string, \$text as xs:string) as xs:string? {"        >> $outfile
+  echo "  switch(\$text)"                                                                                  >> $outfile
+  cat $infile | grep ENTITY | sed -e 's/^<!ENTITY\s\+\(.\+\)\s\+"\(.\+\)">$/  case \"\2\" return \"\1\"/g' >> $outfile
+  echo "  default return error("                                                                           >> $outfile
+  echo "    xs:QName(\"unknown-tag\"),"                                                                    >> $outfile
+  echo "    concat(\"Unknown tag '\", \$text, \"' on entity \", \$word-id)"                                >> $outfile
+  echo "  )"                                                                                               >> $outfile
+  echo "};"                                                                                                >> $outfile
+  echo ""                                                                                                  >> $outfile
+  echo "declare variable \$tags:tags := <pair name=\"tags\" type=\"object\">"                              >> $outfile
+  cat $infile | grep ENTITY \
+    | sed -e 's/^<!ENTITY\s\+\(.\+\)\s\+"\(.\+\)">$/  <pair name=\"\1\" type=\"string\">\2<\/pair>/g' \
+    | sed -e "s/\`/\&apos;/g" | sed -e "s/'/\&apos;/g"                                                     >> $outfile
+  echo "</pair>;"                                                                                          >> $outfile
+}
+
 function create_achives() {
   name=$1
   tar --directory $build -czf $build/$name.json.tgz $name.json \
@@ -76,8 +106,11 @@ if [[ "$type" == "jmdict" ]] || [[ "$type" == "all" ]]; then
   doc=JMdict_e.xml
   src=src/jmdict
 
+  echo "  -> Extracting tags"
+  extract_tags $doc $src/tags.xq
+
   full=jmdict_eng
-  echo "  -> English version, full"
+  echo "  -> Converting English version, full"
   zorba --indent \
     --external-variable doc=$doc \
     --external-variable version:=$version \
@@ -85,7 +118,7 @@ if [[ "$type" == "jmdict" ]] || [[ "$type" == "all" ]]; then
   && [[ "$archive" == "archive" ]] && echo "    -> Preparing archives" && create_achives $full
 
   common=jmdict_eng_common
-  echo "  -> English version, common words only"
+  echo "  -> Converting English version, common words only"
   zorba --indent \
     --external-variable doc=$doc \
     --external-variable version:=$version \
@@ -104,6 +137,9 @@ if [[ "$type" == "jmnedict" ]] || [[ "$type" == "all" ]]; then
 
   doc=JMnedict.xml
   src=src/jmnedict
+
+  echo "  -> Extracting tags"
+  extract_tags $doc $src/tags.xq
 
   echo "  -> TODO"
 
