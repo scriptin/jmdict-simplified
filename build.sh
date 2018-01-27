@@ -12,14 +12,14 @@ version=$3
 ## Constants ##
 ###############
 
-jmdict_xml=JMdict_e.xml
-jmnedict_xml=JMnedict.xml
+# Build directory
+build=build
+
+jmdict_xml=$build/JMdict_e.xml
+jmnedict_xml=$build/JMnedict.xml
 
 jmdict_full=jmdict_eng
 jmdict_common=jmdict_eng_common
-
-# Build directory
-build=build
 
 # Semver testing: https://github.com/fsaintjacques/semver-tool
 semver_regex="^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(\-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?(\+[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$"
