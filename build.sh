@@ -16,10 +16,11 @@ version=$3
 build=build
 
 jmdict_xml=$build/JMdict_e.xml
-jmnedict_xml=$build/JMnedict.xml
-
 jmdict_full=jmdict_eng
 jmdict_common=jmdict_eng_common
+
+jmnedict_xml=$build/JMnedict.xml
+jmnedict_full=jmnedict
 
 # Semver testing: https://github.com/fsaintjacques/semver-tool
 semver_regex="^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(\-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?(\+[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$"
@@ -160,7 +161,11 @@ if [[ "$command" == "convert" ]]; then
     echo "  -> Extracting tags"
     extract_tags $doc $src/tags.xq
 
-    echo "  -> TODO"
+    echo "  -> Converting"
+    zorba --indent \
+      --external-variable doc=$doc \
+      --external-variable version:=$version \
+      $src/convert-dictionary.xq > $build/$jmnedict_full.json
 
   fi
 
@@ -182,7 +187,7 @@ if [[ "$command" == "archive" ]]; then
   create_achives $jmdict_common
 
   echo "-> Creating archives for JMnedict"
-  echo "  -> TODO"
+  create_achives $jmnedict_full
 
   echo "-> Done"
   exit 0
