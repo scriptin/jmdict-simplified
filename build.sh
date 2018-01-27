@@ -4,19 +4,19 @@
 ## Input arguments ##
 #####################
 
-type=$1
-version=$2
-archive=$3
+command=$1
+dict=$2
+version=$3
 
 ###############
 ## Constants ##
 ###############
 
-help=$'Usage examples:
-> ./build.sh jmdict 1.2.3 -- build only JMdict, version 1.2.3
-> ./build.sh jmnedict 1.2.3 -- build only JMnedict, version 1.2.3
-> ./build.sh all 1.2.3 archive  -- build all, version 1.2.3, and create archives
-'
+jmdict_xml=JMdict_e.xml
+jmnedict_xml=JMnedict.xml
+
+jmdict_full=jmdict_eng
+jmdict_common=jmdict_eng_common
 
 # Build directory
 build=build
@@ -24,36 +24,38 @@ build=build
 # Semver testing: https://github.com/fsaintjacques/semver-tool
 semver_regex="^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(\-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?(\+[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$"
 
+help=$'Usage examples:
+> ./build.sh help -- show this help message
+> ./build.sh download -- download source dictionary files
+> ./build.sh convert jmdict 1.2.3 -- convert only JMdict, version 1.2.3
+> ./build.sh convert jmnedict 1.2.3 -- convert only JMnedict, version 1.2.3
+> ./build.sh convert all 1.2.3 -- convert all, version 1.2.3
+> ./build.sh archive -- create distribution archives
+'
+
 ################
 ## Validation ##
 ################
 
-if [[ "$type" == "help" ]] || [[ "$type" == "--help" ]] || [[ "$type" == "-h" ]] || [[ "$type" == "-?" ]]; then
-  echo "$help"
-  exit 0
-fi
-
-if [[ "$type" != "jmdict" ]] && [[ "$type" != "jmnedict" ]] && [[ "$type" != "all" ]]; then
-  echo "Error: Unknown type \"$type\", please use \"jmdict\", \"jmnedict\", or \"all\""
-  echo "$help"
+if [[ "$command" != "help" ]] && [[ "$command" != "download" ]] && [[ "$command" != "convert" ]] && [[ "$command" != "archive" ]]; then
+  echo "Error: Unknown command \"$command\", please use \"help\", \"download\", \"convert\", or \"archive\""
   exit 1
 fi
 
-if [[ ! "$version" =~ $semver_regex ]]; then
-  echo "Error: Version \"$version\" does not match the semver scheme 'X.Y.Z(-PRERELEASE)(+BUILD)', see <https://semver.org/>"
-  echo "$help"
-  exit 1
+if [[ "$command" == "convert" ]]; then
+  if [[ "$dict" != "jmdict" ]] && [[ "$dict" != "jmnedict" ]] && [[ "$dict" != "all" ]]; then
+    echo "Error: Unknown dictionary \"$dict\", please use \"jmdict\", \"jmnedict\", or \"all\""
+    exit 1
+  fi
+  if [[ ! "$version" =~ $semver_regex ]]; then
+    echo "Error: Version \"$version\" does not match the scheme 'X.Y.Z(-PRERELEASE)(+BUILD)', see <https://semver.org/>"
+    exit 1
+  fi
 fi
 
-if [[ "$archive" != "archive" ]] && [[ ! -z "$archive" ]]; then
-  echo "Error: The last argument must be either \"archive\" or omitted"
-  echo "$help"
-  exit 1
-fi
-
-###########
-## Utils ##
-###########
+###############
+## Functions ##
+###############
 
 function extract_tags() {
   infile=$1
@@ -91,58 +93,97 @@ function create_achives() {
   && zip --junk-paths $build/$name.json.zip $build/$name.json
 }
 
-# Note:
-# Operator ":=" is intentional in zorba's arguments "--external-variable"
-# Operator "=" is used for files only
+##########
+## Help ##
+##########
 
-############
-## JMdict ##
-############
-
-if [[ "$type" == "jmdict" ]] || [[ "$type" == "all" ]]; then
-
-  echo "-> Processing JMdict"
-
-  doc=JMdict_e.xml
-  src=src/jmdict
-
-  echo "  -> Extracting tags"
-  extract_tags $doc $src/tags.xq
-
-  full=jmdict_eng
-  echo "  -> Converting English version, full"
-  zorba --indent \
-    --external-variable doc=$doc \
-    --external-variable version:=$version \
-    $src/convert-dictionary.xq > $build/$full.json \
-  && [[ "$archive" == "archive" ]] && echo "    -> Preparing archives" && create_achives $full
-
-  common=jmdict_eng_common
-  echo "  -> Converting English version, common words only"
-  zorba --indent \
-    --external-variable doc=$doc \
-    --external-variable version:=$version \
-    $src/convert-dictionary-common.xq > $build/$common.json \
-  && [[ "$archive" == "archive" ]] && echo "    -> Preparing archives" && create_achives $common
-
+if [[ "$command" == "help" ]]; then
+  echo "$help"
+  exit 0
 fi
 
 ##############
-## JMnedict ##
+## Download ##
 ##############
 
-if [[ "$type" == "jmnedict" ]] || [[ "$type" == "all" ]]; then
+if [[ "$command" == "download" ]]; then
+  echo "-> Downloading JMdict"
+  curl ftp://ftp.monash.edu.au/pub/nihongo/JMdict_e.gz | gunzip > $jmdict_xml
+  echo "-> Downloading JMnedict"
+  curl http://ftp.monash.edu/pub/nihongo/JMnedict.xml.gz | gunzip > $jmnedict_xml
+  echo "-> Done"
+  exit 0
+fi
 
-  echo "-> Processing JMnedict"
+#############
+## Convert ##
+#############
 
-  doc=JMnedict.xml
-  src=src/jmnedict
+if [[ "$command" == "convert" ]]; then
 
-  echo "  -> Extracting tags"
-  extract_tags $doc $src/tags.xq
+  # JMdict
+  if [[ "$dict" == "jmdict" ]] || [[ "$dict" == "all" ]]; then
 
+    echo "-> Converting JMdict"
+
+    doc=$jmdict_xml
+    src=src/jmdict
+
+    echo "  -> Extracting tags"
+    extract_tags $doc $src/tags.xq
+
+    # Note:
+    # Operator ":=" is intentional in zorba's arguments "--external-variable"
+    # Operator "=" is used for files only
+    echo "  -> Converting English version, full"
+    zorba --indent \
+      --external-variable doc=$doc \
+      --external-variable version:=$version \
+      $src/convert-dictionary.xq > $build/$jmdict_full.json
+
+    echo "  -> Converting English version, common words only"
+    zorba --indent \
+      --external-variable doc=$doc \
+      --external-variable version:=$version \
+      $src/convert-dictionary-common.xq > $build/$jmdict_common.json
+
+  fi
+
+  # JMnedict
+  if [[ "$dict" == "jmnedict" ]] || [[ "$dict" == "all" ]]; then
+
+    echo "-> Converting JMnedict"
+
+    doc=$jmnedict_xml
+    src=src/jmnedict
+
+    echo "  -> Extracting tags"
+    extract_tags $doc $src/tags.xq
+
+    echo "  -> TODO"
+
+  fi
+
+  echo "-> Done"
+  exit 0
+fi
+
+#############
+## Archive ##
+#############
+
+if [[ "$command" == "archive" ]]; then
+  rm $build/*.{tgz,zip}
+
+  echo "-> Creating archives for JMdict"
+  echo "  -> Creating archives for English version, full"
+  create_achives $jmdict_full
+  echo "  -> Creating archives for English version, common words only"
+  create_achives $jmdict_common
+
+  echo "-> Creating archives for JMnedict"
   echo "  -> TODO"
 
+  echo "-> Done"
+  exit 0
 fi
-
-echo "-> Done"
