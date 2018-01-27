@@ -129,4 +129,4 @@ Original XML files, **JMdict_e.xml** and **JMnedict.xml** are property of the El
 
 All derived files are distributed under the same license, as the original license requires it.
 
-Source files of this project (excluding distribution archives containing JSON files) are available under [Creative Commons Attribution-ShareAlike License v4.0](http://creativecommons.org/licenses/by-sa/4.0/). See [LICENSE.md](LICENSE.md)
+Source files of this project (excluding distribution archives containing JSON files) are available under [Creative Commons Attribution-ShareAlike License v4.0](http://creativecommons.org/licenses/by-sa/4.0/). See [LICENSE.txt](LICENSE.txt)
