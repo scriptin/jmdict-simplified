@@ -32,7 +32,7 @@ Workflow:
 2. Run `./build.sh convert all 1.2.3` (use proper version, you can add modifiers like `-dev`) to convert XML files into JSON versions.
 3. Run `./build.sh archive` to create distribution archives once you're done. Make sure you set a proper version.
 
-## Format for JMdict
+## Format of JMdict
 
 ### Custom types
 
@@ -88,7 +88,7 @@ Notes:
 2. Array fields are never `null`, only empty
 3. The only place which allows `null` values is `sense->languageSource->text` field in word element
 
-## Format for JMnedict
+## Format of JMnedict
 
 ### Custom types
 
@@ -121,7 +121,7 @@ Differences from JMdict format:
 1. `jmnedict-date`+`jmnedict-revisions` vs. `jmdict-date`+`jmdict-revisions`
 2. `kanji` and `kana` have no `common` flag because in this dictionary priority data is missing (`ke_pri` and `re_pri` fields)
 3. `translation` instead of `gloss`
-4. `translation->translation->lang` seems to be always empty, that is because original file
+4. `translation->translation->lang` seems to be always empty because the original XML file has no data in corresponding attributes, even though documentation says otherwise
 
 ## License
 
