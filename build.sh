@@ -173,7 +173,7 @@ fi
 #############
 
 if [[ "$command" == "archive" ]]; then
-  rm $build/*.{tgz,zip}
+  rm -f $build/*.{tgz,zip}
 
   echo "-> Creating archives for JMdict"
   echo "  -> Creating archives for English version, full"
