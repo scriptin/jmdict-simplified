@@ -16,7 +16,7 @@ declare function transform:extract-date($doc as node()) as node() {
 
 (:
   Extract revision numbers, as they appear in comments before DOCTYPE.
-  Strictly speaking, these are version numbers of JMDict, but they are not mentioned in official documentation.
+  Strictly speaking, these are version numbers of JMdict, but they are not mentioned in official documentation.
 :)
 declare function transform:extract-revisions($doc as node()) as node() {
   <pair name="jmdict-revisions" type="array">
@@ -95,7 +95,7 @@ declare function transform:lsource($lsource as node()) as node() {
   </item>
 };
 
-declare function transform:tranform-gloss($gloss as node()) as node() {
+declare function transform:gloss($gloss as node()) as node() {
   <item type="object">
     <pair name="lang" type="string"> { $gloss/@xml:lang/string() } </pair>
     <pair name="text" type="string"> { $gloss/text() } </pair>
@@ -166,7 +166,7 @@ declare function transform:sense($word-id as xs:string, $elems as node()*) as no
     </pair>
     <pair name="gloss" type="array">
       { for $gloss in $elem/gloss
-        return transform:tranform-gloss($gloss) }
+        return transform:gloss($gloss) }
     </pair>
   </item>
 };
