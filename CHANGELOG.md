@@ -1,3 +1,11 @@
+# Version 1.2.0
+
+- #6: JMnedict included
+- Latest versions of both dictionaries
+- Improved build script
+- Updated docs
+- Many minor fixes
+
 # Version 1.1.1
 
 - #3: Fixed duplicated XML entities text bug
