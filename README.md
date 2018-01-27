@@ -1,6 +1,6 @@
-# JMdict simplified
+# JMdict and JMnedict, simplified!
 
-**Goal**: create a version of [JMdict](http://www.edrdg.org/jmdict/j_jmdict.html) in JSON format with more comprehensible structure.
+**Goal**: create a version of [JMdict](http://www.edrdg.org/jmdict/j_jmdict.html) and [JMnedict](http://www.edrdg.org/enamdict/enamdict_doc.html) in JSON format with more comprehensible structure.
 
 **Principles**:
 
@@ -10,29 +10,29 @@
 
 Grab results here: **[Latest release](https://github.com/scriptin/jmdict-simplified/releases/latest)**
 
-Note: There are two versions of the dictionary: full and "common"-only. Dictionary entries are considered common if `/k_ele/ke_pri` or `/r_ele/re_pri` elements in original file contain one of these markers: "news1", "ichi1", "spec1", "spec2", "gai1". Common-only distributions are much smaller.
+Note: There are two versions of the JMdict dictionary: full and "common"-only. Dictionary entries are considered common if `/k_ele/ke_pri` or `/r_ele/re_pri` elements in original file contain one of these markers: "news1", "ichi1", "spec1", "spec2", "gai1". Common-only distributions are much smaller. JMnedict has only one version.
 
-## Running the conversion script
+## Building
 
 Requirements: Bash and [Zorba](https://github.com/zorba-processor/zorba)
 
-First, download the source file:
+~~~
+Usage examples:
+> ./build.sh help -- show this help message
+> ./build.sh download -- download source dictionary files
+> ./build.sh convert jmdict 1.2.3 -- convert only JMdict, version 1.2.3
+> ./build.sh convert jmnedict 1.2.3 -- convert only JMnedict, version 1.2.3
+> ./build.sh convert all 1.2.3 -- convert all, version 1.2.3
+> ./build.sh archive -- create distribution archives
+~~~
 
-    ./download.sh # Will create 'JMdict_e.xml' in the root directory
+Workflow:
 
-For development:
+1. Run `./build.sh download` to download source XML files into a build directory.
+2. Run `./build.sh convert all 1.2.3` (use proper version, you can add modifiers like `-dev`) to convert XML files into JSON versions.
+3. Run `./build.sh archive` to create distribution archives once you're done. Make sure you set a proper version.
 
-    ./build.sh dev VERSION
-
-For production (will update the distribution archives):
-
-    ./build.sh archives VERSION
-
-where `VERSION` is a semantic version, you may leave it empty for testing or pass any string in case you're doing a custom build. It is not validated.
-
-This will produce a JSON file, which has to be packed for storing in this repo.
-
-## Format
+## Format for JMdict
 
 ### Custom types
 
@@ -49,8 +49,8 @@ This will produce a JSON file, which has to be packed for storing in this repo.
 ### Root JSON object
 
 - `version` (string) := [Semantic version](http://semver.org/) of this project
-- `jmdict-date` (string) := Creation date of JMDict file, as it appears in a comment with format "JMdict created: YYYY-MM-DD" in the original XML file header
-- `jmdict-revisions` (array of string) := Revisions of JMDict file, as they appear in comments before DOCTYPE in the original XML file header. These only contain actual version (e.g., "1.08"), not a full comment. Original comments also mention changes made, but this is omitted in the resulting JSON files
+- `jmdict-date` (string) := Creation date of JMdict file, as it appears in a comment with format "JMdict created: YYYY-MM-DD" in the original XML file header
+- `jmdict-revisions` (array of string) := Revisions of JMdict file, as they appear in comments before DOCTYPE in the original XML file header. These only contain actual version (e.g., "1.08"), not a full comment. Original comments also mention changes made, but this is omitted in the resulting JSON files
 - `tags` (object) := all tags: parts of speech, names of dialects, fields of application, etc. All those things are expressed as XML entities in the original file. Keys of this objects are tags per se, values are descriptions, slightly modified from the original file
 - `words` (array of objects) :=
     - `id` (number) := unique identifier
@@ -87,3 +87,46 @@ Notes:
 1. All fields in all objects are always present, none ever omitted
 2. Array fields are never `null`, only empty
 3. The only place which allows `null` values is `sense->languageSource->text` field in word element
+
+## Format for JMnedict
+
+### Custom types
+
+Same as for JMdict
+
+### Root JSON object
+
+- `version` (string) := [Semantic version](http://semver.org/) of this project
+- `jmnedict-date` (string) := Creation date of JMnedict file, as it appears in a comment with format "JMnedict created: YYYY-MM-DD" in the original XML file header
+- `jmnedict-revisions` (array of string) := Revisions of JMnedict file, as they appear in comments before DOCTYPE in the original XML file header. These only contain actual version (e.g., "1.08"), not a full comment. Original comments also mention changes made, but this is omitted in the resulting JSON files
+- `tags` (object) := all tags: parts of speech, names of dialects, fields of application, etc. All those things are expressed as XML entities in the original file. Keys of this objects are tags per se, values are descriptions, slightly modified from the original file
+- `words` (array of objects) :=
+    - `id` (number) := unique identifier
+    - `kanji` (array of objects) := kanji (and other non-kana) writings
+        - `text` (string) := any non-kana-only writing, may contain kanji, kana, and some other characters
+        - `tags` (array of tags) := tags applied to this writing
+    - `kana` (array of objects) := kana-only (with few exceptions) writings, typically considered as "readings", but these can be a word writings by themselves
+        - `text` (string) := kana-only writing, may only accidentally contain middle-dot and other punctuation-like characters
+        - `tags` (array of tags) := same as for kanji
+        - `appliesToKanji` (array of strings) := list of kanji writings within this word which this kana version applies to. `"*"` means "all", empty array means "none"
+    - `translation` (array of objects) := translations + some related data for this words
+        - `type` (array of tags) := name types, as specified in tags
+        - `related` (array of xrefs) := xrefs to related words
+        - `translation` (array of objects) := actual translations
+            - `lang` (string) := language code from the ISO 639-2 standard
+            - `text` (string) := a word or phrase
+
+Differences from JMdict format:
+
+1. `jmnedict-date`+`jmnedict-revisions` vs. `jmdict-date`+`jmdict-revisions`
+2. `kanji` and `kana` have no `common` flag because in this dictionary priority data is missing (`ke_pri` and `re_pri` fields)
+3. `translation` instead of `gloss`
+4. `translation->translation->lang` seems to be always empty, that is because original file
+
+## License
+
+Original XML files, **JMdict_e.xml** and **JMnedict.xml** are property of the Electronic Dictionary Research and Development Group, and are used in conformance with the Group's [licence](http://www.edrdg.org/edrdg/licence.html). Project started in 1991 by [Jim Breen](http://www.csse.monash.edu.au/~jwb/).
+
+All derived files are distributed under the same license, as the original license requires it.
+
+Source files of this project (excluding distribution archives containing JSON files) are available under [Creative Commons Attribution-ShareAlike License v4.0](http://creativecommons.org/licenses/by-sa/4.0/). See [LICENSE.md](LICENSE.md)
