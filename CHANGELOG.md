@@ -1,3 +1,7 @@
+# Version 2.0.0
+
+- #7: Rename fields: jm(ne)dict-date -> dictDate, jm(ne)dict-revisions -> dictRevisions
+
 # Version 1.2.0
 
 - #6: JMnedict included
