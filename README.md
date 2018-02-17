@@ -49,8 +49,8 @@ Workflow:
 ### Root JSON object
 
 - `version` (string) := [Semantic version](http://semver.org/) of this project
-- `jmdict-date` (string) := Creation date of JMdict file, as it appears in a comment with format "JMdict created: YYYY-MM-DD" in the original XML file header
-- `jmdict-revisions` (array of string) := Revisions of JMdict file, as they appear in comments before DOCTYPE in the original XML file header. These only contain actual version (e.g., "1.08"), not a full comment. Original comments also mention changes made, but this is omitted in the resulting JSON files
+- `dictDate` (string) := Creation date of JMdict file, as it appears in a comment with format "JMdict created: YYYY-MM-DD" in the original XML file header
+- `dictRevisions` (array of string) := Revisions of JMdict file, as they appear in comments before DOCTYPE in the original XML file header. These only contain actual version (e.g., "1.08"), not a full comment. Original comments also mention changes made, but this is omitted in the resulting JSON files
 - `tags` (object) := all tags: parts of speech, names of dialects, fields of application, etc. All those things are expressed as XML entities in the original file. Keys of this objects are tags per se, values are descriptions, slightly modified from the original file
 - `words` (array of objects) :=
     - `id` (number) := unique identifier
@@ -97,8 +97,8 @@ Same as for JMdict
 ### Root JSON object
 
 - `version` (string) := [Semantic version](http://semver.org/) of this project
-- `jmnedict-date` (string) := Creation date of JMnedict file, as it appears in a comment with format "JMnedict created: YYYY-MM-DD" in the original XML file header
-- `jmnedict-revisions` (array of string) := Revisions of JMnedict file, as they appear in comments before DOCTYPE in the original XML file header. These only contain actual version (e.g., "1.08"), not a full comment. Original comments also mention changes made, but this is omitted in the resulting JSON files
+- `dictDate` (string) := Creation date of JMnedict file, as it appears in a comment with format "JMnedict created: YYYY-MM-DD" in the original XML file header
+- `dictRevisions` (array of string) := Revisions of JMnedict file, as they appear in comments before DOCTYPE in the original XML file header. These only contain actual version (e.g., "1.08"), not a full comment. Original comments also mention changes made, but this is omitted in the resulting JSON files
 - `tags` (object) := all tags: parts of speech, names of dialects, fields of application, etc. All those things are expressed as XML entities in the original file. Keys of this objects are tags per se, values are descriptions, slightly modified from the original file
 - `words` (array of objects) :=
     - `id` (number) := unique identifier
@@ -118,10 +118,9 @@ Same as for JMdict
 
 Differences from JMdict format:
 
-1. `jmnedict-date`+`jmnedict-revisions` vs. `jmdict-date`+`jmdict-revisions`
-2. `kanji` and `kana` have no `common` flag because in this dictionary priority data is missing (`ke_pri` and `re_pri` fields)
-3. `translation` instead of `gloss`
-4. `translation->translation->lang` seems to be always empty because the original XML file has no data in corresponding attributes, even though documentation says otherwise
+1. `kanji` and `kana` have no `common` flag because in this dictionary priority data is missing (`ke_pri` and `re_pri` fields)
+2. `translation` instead of `gloss`
+3. `translation->translation->lang` seems to be always empty because the original XML file has no data in corresponding attributes, even though documentation says otherwise
 
 ## License
 

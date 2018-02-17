@@ -9,7 +9,7 @@ import module namespace tags = "tags" at "tags.xq";
 :)
 declare function transform:extract-date($doc as node()) as node() {
   let $version-comment := string($doc//comment()[contains(., 'JMdict created')][1])
-  return <pair name="jmdict-date" type="string">
+  return <pair name="dictDate" type="string">
     { normalize-space(substring-after($version-comment, ':')) }
   </pair>
 };
@@ -19,7 +19,7 @@ declare function transform:extract-date($doc as node()) as node() {
   Strictly speaking, these are version numbers of JMdict, but they are not mentioned in official documentation.
 :)
 declare function transform:extract-revisions($doc as node()) as node() {
-  <pair name="jmdict-revisions" type="array">
+  <pair name="dictRevisions" type="array">
     { for $rev in $doc//comment()[matches(., 'Rev \d+\.\d+')]
       let $first-line := substring-before(string($rev), '&#10;')
       return <item type="string"> { normalize-space(substring-after($first-line, 'Rev')) } </item> }
