@@ -1,5 +1,6 @@
 import de.undercouch.gradle.tasks.download.Download
 import java.io.FileOutputStream
+import kotlin.streams.toList
 
 plugins {
     id ("de.undercouch.download") version "3.4.3"
@@ -69,4 +70,70 @@ val jmnedictExtract: Task by tasks.creating {
  */
 val download: Task by tasks.creating {
     dependsOn(jmdictExtract, jmnedictExtract)
+}
+
+fun getTags(inputFilePath: String): List<Pair<String, String>> {
+    val regex = """<!ENTITY\s+(.+)\s+"([^"]+)">""".toRegex()
+    return file(inputFilePath).bufferedReader().lines()
+        .filter { it.matches(regex) }
+        .map { line ->
+            val groups = regex.find(line)!!.groupValues
+            Pair(groups[1], groups[2])
+        }
+        .toList()
+}
+
+fun generateTagsXQuery(tags: List<Pair<String, String>>): String {
+    val cases = tags.map { (tag, description) ->
+        "  case \"$description\" return \"$tag\""
+    }
+    val pairs = tags.map { (tag, description) ->
+        "  <pair name=\"$tag\" type=\"string\">${description.replace("[`']".toRegex(), "&apos;")}</pair>"
+    }
+    return """
+        |xquery version "3.0";
+        |module namespace tags = "tags";
+        |
+        |import module namespace tags-utils = "tags-utils" at "../tags-utils.xq";
+        |
+        |(: This file is generated, do not edit manually! :)
+        |
+        |declare function tags:convert-entity(${'$'}word-id as xs:string, ${'$'}text as xs:string) as xs:string? {
+        |  tags:convert(${'$'}word-id, tags-utils:deduplicate(normalize-space(${'$'}text)))
+        |};
+        |
+        |declare function tags:convert(${'$'}word-id as xs:string, ${'$'}text as xs:string) as xs:string? {
+        |  switch(${'$'}text)
+        |${cases.joinToString("\n")}
+        |  default return error(
+        |    xs:QName("unknown-tag"),
+        |    concat("Unknown tag '", ${'$'}text, "' on entity ", ${'$'}word-id)
+        |  )
+        |};
+        |
+        |declare variable ${'$'}tags:tags := <pair name="tags" type="object">
+        |${pairs.joinToString("\n")}
+        |</pair>;
+        |""".trimMargin()
+}
+
+val jmdictGenerateTags: Task by tasks.creating {
+    val jmdictPath: String by jmdictExtract.extra
+    doLast {
+        file("$projectDir/src/jmdict/tags.xq").writeText(generateTagsXQuery(getTags(jmdictPath)))
+    }
+}
+
+val jmnedictGenerateTags: Task by tasks.creating {
+    val jmnedictPath: String by jmnedictExtract.extra
+    doLast {
+        file("$projectDir/src/jmnedict/tags.xq").writeText(generateTagsXQuery(getTags(jmnedictPath)))
+    }
+}
+
+/**
+ * (Re)generate tags.xq for all dictionaries
+ */
+val generateTags: Task by tasks.creating {
+    dependsOn(jmdictGenerateTags, jmnedictGenerateTags)
 }
