@@ -114,7 +114,7 @@ declare function tags:convert($word-id as xs:string, $text as xs:string) as xs:s
   case "noun or participle which takes the aux. verb suru" return "vs"
   case "su verb - precursor to the modern suru" return "vs-c"
   case "suru verb - special class" return "vs-s"
-  case "suru verb - irregular" return "vs-i"
+  case "suru verb - included" return "vs-i"
   case "Kyoto-ben" return "kyb"
   case "Osaka-ben" return "osb"
   case "Kansai-ben" return "ksb"
@@ -294,7 +294,7 @@ declare variable $tags:tags := <pair name="tags" type="object">
   <pair name="vs" type="string">noun or participle which takes the aux. verb suru</pair>
   <pair name="vs-c" type="string">su verb - precursor to the modern suru</pair>
   <pair name="vs-s" type="string">suru verb - special class</pair>
-  <pair name="vs-i" type="string">suru verb - irregular</pair>
+  <pair name="vs-i" type="string">suru verb - included</pair>
   <pair name="kyb" type="string">Kyoto-ben</pair>
   <pair name="osb" type="string">Osaka-ben</pair>
   <pair name="ksb" type="string">Kansai-ben</pair>
