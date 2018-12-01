@@ -1,7 +1,7 @@
 xquery version "3.0";
 module namespace transform = "transform";
 
-import module namespace string = "http://zorba.io/modules/string";
+import module namespace j = "http://www.w3.org/2005/xpath-functions";
 import module namespace tags = "tags" at "tags.xq";
 
 (:
@@ -9,9 +9,9 @@ import module namespace tags = "tags" at "tags.xq";
 :)
 declare function transform:extract-date($doc as node()) as node() {
   let $version-comment := string($doc//comment()[contains(., 'JMnedict created')][1])
-  return <pair name="dictDate" type="string">
+  return <j:string key="dictDate">
     { normalize-space(substring-after($version-comment, ':')) }
-  </pair>
+  </j:string>
 };
 
 (:
@@ -19,11 +19,11 @@ declare function transform:extract-date($doc as node()) as node() {
   Strictly speaking, these are version numbers of JMnedict, but they are not mentioned in official documentation.
 :)
 declare function transform:extract-revisions($doc as node()) as node() {
-  <pair name="dictRevisions" type="array">
+  <j:array key="dictRevisions">
     { for $rev in $doc//comment()[matches(., 'Rev \d+\.\d+')]
       let $first-line := substring-before(string($rev), '&#10;')
-      return <item type="string"> { normalize-space(substring-after($first-line, 'Rev')) } </item> }
-  </pair>
+      return <j:string> { normalize-space(substring-after($first-line, 'Rev')) } </j:string> }
+  </j:array>
 };
 
 (:
@@ -31,15 +31,15 @@ declare function transform:extract-revisions($doc as node()) as node() {
   Try `grep ke_pri JMnedict.xml` to check.
 :)
 declare function transform:kanji($word-id as xs:string, $elem as node()) as node() {
-  <item type="object">
-    <pair name="text" type="string">
+  <j:map>
+    <j:string key="text">
       { $elem/keb/text() }
-    </pair>
-    <pair name="tags" type="array">
+    </j:string>
+    <j:array key="tags">
       { for $info in $elem/ke_inf
-        return <item type="string"> { tags:convert-entity($word-id, $info/text()) } </item> }
-    </pair>
-  </item>
+        return <j:string> { tags:convert-entity($word-id, $info/text()) } </j:string> }
+    </j:array>
+  </j:map>
 };
 
 (:
@@ -47,77 +47,77 @@ declare function transform:kanji($word-id as xs:string, $elem as node()) as node
   Try `grep re_pri JMnedict.xml` to check.
 :)
 declare function transform:kana($word-id as xs:string, $elem as node()) as node() {
-  <item type="object">
-    <pair name="text" type="string">
+  <j:map>
+    <j:string key="text">
       { $elem/reb/text() }
-    </pair>
-    <pair name="tags" type="array">
+    </j:string>
+    <j:array ket="tags">
       { for $info in $elem/re_inf
-        return <item type="string"> { tags:convert-entity($word-id, $info/text()) } </item> }
-    </pair>
-    <pair name="appliesToKanji" type="array">
+        return <j:string> { tags:convert-entity($word-id, $info/text()) } </j:string> }
+    </j:array>
+    <j:array key="appliesToKanji">
       { if (count($elem/re_restr) = 0)
-        then <item type="string"> { "*" } </item>
+        then <j:string> { "*" } </j:string>
         else for $restr in $elem/re_restr
-          return <item type="string"> { $restr/text() } </item> }
-    </pair>
-  </item>
+          return <j:string> { $restr/text() } </j:string> }
+    </j:array>
+  </j:map>
 };
 
 declare function transform:xref-part($xref-part as xs:string) as node() {
   if (number($xref-part))
-  then <item type="number"> { number($xref-part) } </item>
-  else <item type="string"> { $xref-part } </item>
+  then <j:number> { number($xref-part) } </j:number>
+  else <j:string> { $xref-part } </j:string>
 };
 
 declare function transform:xref($xref as node()) as node() {
-  <item type="array">
-    { for $xref-part in string:split($xref, "・")
+  <j:array>
+    { for $xref-part in tokenize($xref, "・")
       return transform:xref-part($xref-part) }
-  </item>
+  </j:array>
 };
 
 declare function transform:inner-translation($trans as node()) as node() {
-  <item type="object">
-    <pair name="lang" type="string"> { $trans/@xml:lang/string() } </pair>
-    <pair name="text" type="string"> { $trans/text() } </pair>
-  </item>
+  <j:map>
+    <j:string key="lang"> { $trans/@xml:lang/string() } </j:string>
+    <j:string key="text"> { $trans/text() } </j:string>
+  </j:map>
 };
 
 declare function transform:translation($word-id as xs:string, $elem as node()) as node() {
-  <item type="object">
-    <pair name="type" type="array">
+  <j:map>
+    <j:array key="type">
       { for $type in $elem/name_type
-        return <item type="string"> { tags:convert-entity($word-id, $type/text()) } </item> }
-    </pair>
-    <pair name="related" type="array">
+        return <j:string> { tags:convert-entity($word-id, $type/text()) } </j:string> }
+    </j:array>
+    <j:array key="related">
       { for $xref in $elem/xref
         return transform:xref($xref) }
-    </pair>
-    <pair name="translation" type="array">
+    </j:array>
+    <j:array key="translation">
       { for $trans in $elem/trans_det
         return transform:inner-translation($trans) }
-    </pair>
-  </item>
+    </j:array>
+  </j:map>
 };
 
 declare function transform:word($word as node()) as node() {
   let $word-id := $word/ent_seq/text()
-  return <item type="object">
-    <pair name="id" type="number">
+  return <j:map>
+    <j:string key="id">
       { $word-id }
-    </pair>
-    <pair name="kanji" type="array">
+    </j:string>
+    <j:array key="kanji">
       { for $e in $word/k_ele
         return transform:kanji($word-id, $e) }
-    </pair>
-    <pair name="kana" type="array">
+    </j:array>
+    <j:array key="kana">
       { for $e in $word/r_ele
         return transform:kana($word-id, $e) }
-    </pair>
-    <pair name="translation" type="array">
+    </j:array>
+    <j:array key="translation">
       { for $e in $word/trans
         return transform:translation($word-id, $e) }
-    </pair>
-  </item>
+    </j:array>
+  </j:map>
 };

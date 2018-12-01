@@ -1,7 +1,7 @@
 xquery version "3.0";
 module namespace transform = "transform";
 
-import module namespace string = "http://zorba.io/modules/string";
+import module namespace j = "http://www.w3.org/2005/xpath-functions";
 import module namespace tags = "tags" at "tags.xq";
 
 (:
@@ -9,9 +9,9 @@ import module namespace tags = "tags" at "tags.xq";
 :)
 declare function transform:extract-date($doc as node()) as node() {
   let $version-comment := string($doc//comment()[contains(., 'JMdict created')][1])
-  return <pair name="dictDate" type="string">
+  return <j:string key="dictDate">
     { normalize-space(substring-after($version-comment, ':')) }
-  </pair>
+  </j:string>
 };
 
 (:
@@ -19,11 +19,11 @@ declare function transform:extract-date($doc as node()) as node() {
   Strictly speaking, these are version numbers of JMdict, but they are not mentioned in official documentation.
 :)
 declare function transform:extract-revisions($doc as node()) as node() {
-  <pair name="dictRevisions" type="array">
+  <j:array key="dictRevisions">
     { for $rev in $doc//comment()[matches(., 'Rev \d+\.\d+')]
       let $first-line := substring-before(string($rev), '&#10;')
-      return <item type="string"> { normalize-space(substring-after($first-line, 'Rev')) } </item> }
-  </pair>
+      return <j:string> { normalize-space(substring-after($first-line, 'Rev')) } </j:string> }
+  </j:array>
 };
 
 declare function transform:is-common($pri-elems as node()*) as xs:boolean {
@@ -34,72 +34,72 @@ declare function transform:is-common($pri-elems as node()*) as xs:boolean {
 };
 
 declare function transform:kanji($word-id as xs:string, $elem as node()) as node() {
-  <item type="object">
-    <pair name="common" type="boolean">
+  <j:map>
+    <j:boolean key="common">
       { transform:is-common($elem/ke_pri) }
-    </pair>
-    <pair name="text" type="string">
+    </j:boolean>
+    <j:string key="text">
       { $elem/keb/text() }
-    </pair>
-    <pair name="tags" type="array">
+    </j:string>
+    <j:array key="tags">
       { for $info in $elem/ke_inf
-        return <item type="string"> { tags:convert-entity($word-id, $info/text()) } </item> }
-    </pair>
-  </item>
+        return <j:string> { tags:convert-entity($word-id, $info/text()) } </j:string> }
+    </j:array>
+  </j:map>
 };
 
 declare function transform:kana($word-id as xs:string, $elem as node()) as node() {
-  <item type="object">
-    <pair name="common" type="boolean">
+  <j:map>
+    <j:boolean key="common">
       { transform:is-common($elem/re_pri) }
-    </pair>
-    <pair name="text" type="string">
+    </j:boolean>
+    <j:string key="text">
       { $elem/reb/text() }
-    </pair>
-    <pair name="tags" type="array">
+    </j:string>
+    <j:array key="tags">
       { for $info in $elem/re_inf
-        return <item type="string"> { tags:convert-entity($word-id, $info/text()) } </item> }
-    </pair>
-    <pair name="appliesToKanji" type="array">
+        return <j:string> { tags:convert-entity($word-id, $info/text()) } </j:string> }
+    </j:array>
+    <j:array key="appliesToKanji">
       { if ($elem/re_nokanji)
         then ()
         else if (count($elem/re_restr) = 0)
-        then <item type="string"> { "*" } </item>
+        then <j:string> { "*" } </j:string>
         else for $restr in $elem/re_restr
-          return <item type="string"> { $restr/text() } </item> }
-    </pair>
-  </item>
+          return <j:string> { $restr/text() } </j:string> }
+    </j:array>
+  </j:map>
 };
 
 declare function transform:xref-part($xref-part as xs:string) as node() {
   if (number($xref-part))
-  then <item type="number"> { number($xref-part) } </item>
-  else <item type="string"> { $xref-part } </item>
+  then <j:number> { number($xref-part) } </j:number>
+  else <j:string> { $xref-part } </j:string>
 };
 
 declare function transform:xref($xref as node()) as node() {
-  <item type="array">
-    { for $xref-part in string:split($xref, "・")
+  <j:array>
+    { for $xref-part in tokenize($xref, "・")
       return transform:xref-part($xref-part) }
-  </item>
+  </j:array>
 };
 
 declare function transform:lsource($lsource as node()) as node() {
-  <item type="object">
-    <pair name="lang" type="string"> { $lsource/@xml:lang/string() } </pair>
-    <pair name="full" type="boolean"> { ($lsource/@ls_type/string() = "full") } </pair>
-    <pair name="wasei" type="boolean"> { ($lsource/@ls_wasei/string() = "y") } </pair>
+  <j:map>
+    <j:string key="lang"> { $lsource/@xml:lang/string() } </j:string>
+    <j:boolean key="full"> { ($lsource/@ls_type/string() = "full") } </j:boolean>
+    <j:boolean key="wasei"> { ($lsource/@ls_wasei/string() = "y") } </j:boolean>
     { if ($lsource/text())
-      then <pair name="text" type="string"> { $lsource/text() } </pair>
-      else <pair name="text" type="null" /> }
-  </item>
+      then <j:string key="text"> { $lsource/text() } </j:string>
+      else <j:null key="text"/> }
+  </j:map>
 };
 
 declare function transform:gloss($gloss as node()) as node() {
-  <item type="object">
-    <pair name="lang" type="string"> { $gloss/@xml:lang/string() } </pair>
-    <pair name="text" type="string"> { $gloss/text() } </pair>
-  </item>
+  <j:map>
+    <j:string key="lang"> { $gloss/@xml:lang/string() } </j:string>
+    <j:string key="text"> { $gloss/text() } </j:string>
+  </j:map>
 };
 
 (:
@@ -119,75 +119,75 @@ declare function transform:gloss($gloss as node()) as node() {
 declare function transform:sense($word-id as xs:string, $elems as node()*) as node() {
   let $elem := $elems[last()]
   let $last-pos := $elems[not(empty(*:pos))][last()]/pos
-  return <item type="object">
-    <pair name="partOfSpeech" type="array">
+  return <j:map>
+    <j:array key="partOfSpeech">
       { for $pos in $last-pos
-        return <item type="string"> { tags:convert-entity($word-id, $pos/text()) } </item> }
-    </pair>
-    <pair name="appliesToKanji" type="array">
+        return <j:string> { tags:convert-entity($word-id, $pos/text()) } </j:string> }
+    </j:array>
+    <j:array key="appliesToKanji">
       { if (not($elem/stagk))
-        then <item type="string"> { "*" } </item>
+        then <j:string> { "*" } </j:string>
         else for $restr in $elem/stagk
-          return <item type="string"> { $restr/text() } </item> }
-    </pair>
-    <pair name="appliesToKana" type="array">
+          return <j:string> { $restr/text() } </j:string> }
+    </j:array>
+    <j:array key="appliesToKana">
       { if (not($elem/stagr))
-        then <item type="string"> { "*" } </item>
+        then <j:string> { "*" } </j:string>
         else for $restr in $elem/stagr
-          return <item type="string"> { $restr/text() } </item> }
-    </pair>
-    <pair name="related" type="array">
+          return <j:string> { $restr/text() } </j:string> }
+    </j:array>
+    <j:array key="related">
       { for $xref in $elem/xref
         return transform:xref($xref) }
-    </pair>
-    <pair name="antonym" type="array">
+    </j:array>
+    <j:array key="antonym">
       { for $ant in $elem/ant
         return transform:xref($ant) }
-    </pair>
-    <pair name="field" type="array">
+    </j:array>
+    <j:array key="field">
       { for $field in $elem/field
-        return <item type="string"> { tags:convert-entity($word-id, $field/text()) } </item> }
-    </pair>
-    <pair name="dialect" type="array">
+        return <j:string> { tags:convert-entity($word-id, $field/text()) } </j:string> }
+    </j:array>
+    <j:array key="dialect">
       { for $dial in $elem/dial
-        return <item type="string"> { tags:convert-entity($word-id, $dial/text()) } </item> }
-    </pair>
-    <pair name="misc" type="array">
+        return <j:string> { tags:convert-entity($word-id, $dial/text()) } </j:string> }
+    </j:array>
+    <j:array key="misc">
       { for $misc in $elem/misc
-        return <item type="string"> { tags:convert-entity($word-id, $misc/text()) } </item> }
-    </pair>
-    <pair name="info" type="array">
+        return <j:string> { tags:convert-entity($word-id, $misc/text()) } </j:string> }
+    </j:array>
+    <j:array key="info">
       { for $info in $elem/s_inf
-        return <item type="string"> { $info/text() } </item> }
-    </pair>
-    <pair name="languageSource" type="array">
+        return <j:string> { $info/text() } </j:string> }
+    </j:array>
+    <j:array key="languageSource">
       { for $lsource in $elem/lsource
         return transform:lsource($lsource) }
-    </pair>
-    <pair name="gloss" type="array">
+    </j:array>
+    <j:array key="gloss">
       { for $gloss in $elem/gloss
         return transform:gloss($gloss) }
-    </pair>
-  </item>
+    </j:array>
+  </j:map>
 };
 
 declare function transform:word($word as node()) as node() {
   let $word-id := $word/ent_seq/text()
-  return <item type="object">
-    <pair name="id" type="number">
+  return <j:map>
+    <j:string key="id">
       { $word-id }
-    </pair>
-    <pair name="kanji" type="array">
+    </j:string>
+    <j:array key="kanji">
       { for $e in $word/k_ele
         return transform:kanji($word-id, $e) }
-    </pair>
-    <pair name="kana" type="array">
+    </j:array>
+    <j:array key="kana">
       { for $e in $word/r_ele
         return transform:kana($word-id, $e) }
-    </pair>
-    <pair name="sense" type="array">
+    </j:array>
+    <j:array key="sense">
       { for $idx in (1 to count($word/sense))
         return transform:sense($word-id, subsequence($word/sense, 1, $idx)) }
-    </pair>
-  </item>
+    </j:array>
+  </j:map>
 };

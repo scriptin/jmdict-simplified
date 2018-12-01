@@ -1,15 +1,11 @@
 xquery version "3.0";
 module namespace tags = "tags";
 
-import module namespace tags-utils = "tags-utils" at "../tags-utils.xq";
+import module namespace j = "http://www.w3.org/2005/xpath-functions";
 
 (: This file is generated, do not edit manually! :)
 
 declare function tags:convert-entity($word-id as xs:string, $text as xs:string) as xs:string? {
-  tags:convert($word-id, tags-utils:deduplicate(normalize-space($text)))
-};
-
-declare function tags:convert($word-id as xs:string, $text as xs:string) as xs:string? {
   switch($text)
   case "family or surname" return "surname"
   case "place name" return "place"
@@ -30,18 +26,18 @@ declare function tags:convert($word-id as xs:string, $text as xs:string) as xs:s
   )
 };
 
-declare variable $tags:tags := <pair name="tags" type="object">
-  <pair name="surname" type="string">family or surname</pair>
-  <pair name="place" type="string">place name</pair>
-  <pair name="unclass" type="string">unclassified name</pair>
-  <pair name="company" type="string">company name</pair>
-  <pair name="product" type="string">product name</pair>
-  <pair name="work" type="string">work of art, literature, music, etc. name</pair>
-  <pair name="masc" type="string">male given name or forename</pair>
-  <pair name="fem" type="string">female given name or forename</pair>
-  <pair name="person" type="string">full name of a particular person</pair>
-  <pair name="given" type="string">given name or forename, gender not specified</pair>
-  <pair name="station" type="string">railway station</pair>
-  <pair name="organization" type="string">organization name</pair>
-  <pair name="ok" type="string">old or irregular kana form</pair>
-</pair>;
+declare variable $tags:tags := <j:map key="tags">
+  <j:string key="surname">family or surname</j:string>
+  <j:string key="place">place name</j:string>
+  <j:string key="unclass">unclassified name</j:string>
+  <j:string key="company">company name</j:string>
+  <j:string key="product">product name</j:string>
+  <j:string key="work">work of art, literature, music, etc. name</j:string>
+  <j:string key="masc">male given name or forename</j:string>
+  <j:string key="fem">female given name or forename</j:string>
+  <j:string key="person">full name of a particular person</j:string>
+  <j:string key="given">given name or forename, gender not specified</j:string>
+  <j:string key="station">railway station</j:string>
+  <j:string key="organization">organization name</j:string>
+  <j:string key="ok">old or irregular kana form</j:string>
+</j:map>;

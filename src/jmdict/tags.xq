@@ -1,15 +1,11 @@
 xquery version "3.0";
 module namespace tags = "tags";
 
-import module namespace tags-utils = "tags-utils" at "../tags-utils.xq";
+import module namespace j = "http://www.w3.org/2005/xpath-functions";
 
 (: This file is generated, do not edit manually! :)
 
 declare function tags:convert-entity($word-id as xs:string, $text as xs:string) as xs:string? {
-  tags:convert($word-id, tags-utils:deduplicate(normalize-space($text)))
-};
-
-declare function tags:convert($word-id as xs:string, $text as xs:string) as xs:string? {
   switch($text)
   case "martial arts term" return "MA"
   case "rude or X-rated term (not displayed in educational software)" return "X"
@@ -190,178 +186,178 @@ declare function tags:convert($word-id as xs:string, $text as xs:string) as xs:s
   )
 };
 
-declare variable $tags:tags := <pair name="tags" type="object">
-  <pair name="MA" type="string">martial arts term</pair>
-  <pair name="X" type="string">rude or X-rated term (not displayed in educational software)</pair>
-  <pair name="abbr" type="string">abbreviation</pair>
-  <pair name="adj-i" type="string">adjective (keiyoushi)</pair>
-  <pair name="adj-ix" type="string">adjective (keiyoushi) - yoi/ii class</pair>
-  <pair name="adj-na" type="string">adjectival nouns or quasi-adjectives (keiyodoshi)</pair>
-  <pair name="adj-no" type="string">nouns which may take the genitive case particle &apos;no&apos;</pair>
-  <pair name="adj-pn" type="string">pre-noun adjectival (rentaishi)</pair>
-  <pair name="adj-t" type="string">&apos;taru&apos; adjective</pair>
-  <pair name="adj-f" type="string">noun or verb acting prenominally</pair>
-  <pair name="adv" type="string">adverb (fukushi)</pair>
-  <pair name="adv-to" type="string">adverb taking the &apos;to&apos; particle</pair>
-  <pair name="arch" type="string">archaism</pair>
-  <pair name="ateji" type="string">ateji (phonetic) reading</pair>
-  <pair name="aux" type="string">auxiliary</pair>
-  <pair name="aux-v" type="string">auxiliary verb</pair>
-  <pair name="aux-adj" type="string">auxiliary adjective</pair>
-  <pair name="Buddh" type="string">Buddhist term</pair>
-  <pair name="chem" type="string">chemistry term</pair>
-  <pair name="chn" type="string">children&apos;s language</pair>
-  <pair name="col" type="string">colloquialism</pair>
-  <pair name="comp" type="string">computer terminology</pair>
-  <pair name="conj" type="string">conjunction</pair>
-  <pair name="cop-da" type="string">copula</pair>
-  <pair name="ctr" type="string">counter</pair>
-  <pair name="derog" type="string">derogatory</pair>
-  <pair name="eK" type="string">exclusively kanji</pair>
-  <pair name="ek" type="string">exclusively kana</pair>
-  <pair name="exp" type="string">expressions (phrases, clauses, etc.)</pair>
-  <pair name="fam" type="string">familiar language</pair>
-  <pair name="fem" type="string">female term or language</pair>
-  <pair name="food" type="string">food term</pair>
-  <pair name="geom" type="string">geometry term</pair>
-  <pair name="gikun" type="string">gikun (meaning as reading) or jukujikun (special kanji reading)</pair>
-  <pair name="hon" type="string">honorific or respectful (sonkeigo) language</pair>
-  <pair name="hum" type="string">humble (kenjougo) language</pair>
-  <pair name="iK" type="string">word containing irregular kanji usage</pair>
-  <pair name="id" type="string">idiomatic expression</pair>
-  <pair name="ik" type="string">word containing irregular kana usage</pair>
-  <pair name="int" type="string">interjection (kandoushi)</pair>
-  <pair name="io" type="string">irregular okurigana usage</pair>
-  <pair name="iv" type="string">irregular verb</pair>
-  <pair name="ling" type="string">linguistics terminology</pair>
-  <pair name="m-sl" type="string">manga slang</pair>
-  <pair name="male" type="string">male term or language</pair>
-  <pair name="male-sl" type="string">male slang</pair>
-  <pair name="math" type="string">mathematics</pair>
-  <pair name="mil" type="string">military</pair>
-  <pair name="n" type="string">noun (common) (futsuumeishi)</pair>
-  <pair name="n-adv" type="string">adverbial noun (fukushitekimeishi)</pair>
-  <pair name="n-suf" type="string">noun, used as a suffix</pair>
-  <pair name="n-pref" type="string">noun, used as a prefix</pair>
-  <pair name="n-t" type="string">noun (temporal) (jisoumeishi)</pair>
-  <pair name="num" type="string">numeric</pair>
-  <pair name="oK" type="string">word containing out-dated kanji</pair>
-  <pair name="obs" type="string">obsolete term</pair>
-  <pair name="obsc" type="string">obscure term</pair>
-  <pair name="ok" type="string">out-dated or obsolete kana usage</pair>
-  <pair name="oik" type="string">old or irregular kana form</pair>
-  <pair name="on-mim" type="string">onomatopoeic or mimetic word</pair>
-  <pair name="pn" type="string">pronoun</pair>
-  <pair name="poet" type="string">poetical term</pair>
-  <pair name="pol" type="string">polite (teineigo) language</pair>
-  <pair name="pref" type="string">prefix</pair>
-  <pair name="proverb" type="string">proverb</pair>
-  <pair name="prt" type="string">particle</pair>
-  <pair name="physics" type="string">physics terminology</pair>
-  <pair name="quote" type="string">quotation</pair>
-  <pair name="rare" type="string">rare</pair>
-  <pair name="sens" type="string">sensitive</pair>
-  <pair name="sl" type="string">slang</pair>
-  <pair name="suf" type="string">suffix</pair>
-  <pair name="uK" type="string">word usually written using kanji alone</pair>
-  <pair name="uk" type="string">word usually written using kana alone</pair>
-  <pair name="unc" type="string">unclassified</pair>
-  <pair name="yoji" type="string">yojijukugo</pair>
-  <pair name="v1" type="string">Ichidan verb</pair>
-  <pair name="v1-s" type="string">Ichidan verb - kureru special class</pair>
-  <pair name="v2a-s" type="string">Nidan verb with &apos;u&apos; ending (archaic)</pair>
-  <pair name="v4h" type="string">Yodan verb with &apos;hu/fu&apos; ending (archaic)</pair>
-  <pair name="v4r" type="string">Yodan verb with &apos;ru&apos; ending (archaic)</pair>
-  <pair name="v5aru" type="string">Godan verb - -aru special class</pair>
-  <pair name="v5b" type="string">Godan verb with &apos;bu&apos; ending</pair>
-  <pair name="v5g" type="string">Godan verb with &apos;gu&apos; ending</pair>
-  <pair name="v5k" type="string">Godan verb with &apos;ku&apos; ending</pair>
-  <pair name="v5k-s" type="string">Godan verb - Iku/Yuku special class</pair>
-  <pair name="v5m" type="string">Godan verb with &apos;mu&apos; ending</pair>
-  <pair name="v5n" type="string">Godan verb with &apos;nu&apos; ending</pair>
-  <pair name="v5r" type="string">Godan verb with &apos;ru&apos; ending</pair>
-  <pair name="v5r-i" type="string">Godan verb with &apos;ru&apos; ending (irregular verb)</pair>
-  <pair name="v5s" type="string">Godan verb with &apos;su&apos; ending</pair>
-  <pair name="v5t" type="string">Godan verb with &apos;tsu&apos; ending</pair>
-  <pair name="v5u" type="string">Godan verb with &apos;u&apos; ending</pair>
-  <pair name="v5u-s" type="string">Godan verb with &apos;u&apos; ending (special class)</pair>
-  <pair name="v5uru" type="string">Godan verb - Uru old class verb (old form of Eru)</pair>
-  <pair name="vz" type="string">Ichidan verb - zuru verb (alternative form of -jiru verbs)</pair>
-  <pair name="vi" type="string">intransitive verb</pair>
-  <pair name="vk" type="string">Kuru verb - special class</pair>
-  <pair name="vn" type="string">irregular nu verb</pair>
-  <pair name="vr" type="string">irregular ru verb, plain form ends with -ri</pair>
-  <pair name="vs" type="string">noun or participle which takes the aux. verb suru</pair>
-  <pair name="vs-c" type="string">su verb - precursor to the modern suru</pair>
-  <pair name="vs-s" type="string">suru verb - special class</pair>
-  <pair name="vs-i" type="string">suru verb - included</pair>
-  <pair name="kyb" type="string">Kyoto-ben</pair>
-  <pair name="osb" type="string">Osaka-ben</pair>
-  <pair name="ksb" type="string">Kansai-ben</pair>
-  <pair name="ktb" type="string">Kantou-ben</pair>
-  <pair name="tsb" type="string">Tosa-ben</pair>
-  <pair name="thb" type="string">Touhoku-ben</pair>
-  <pair name="tsug" type="string">Tsugaru-ben</pair>
-  <pair name="kyu" type="string">Kyuushuu-ben</pair>
-  <pair name="rkb" type="string">Ryuukyuu-ben</pair>
-  <pair name="nab" type="string">Nagano-ben</pair>
-  <pair name="hob" type="string">Hokkaido-ben</pair>
-  <pair name="vt" type="string">transitive verb</pair>
-  <pair name="vulg" type="string">vulgar expression or word</pair>
-  <pair name="adj-kari" type="string">&apos;kari&apos; adjective (archaic)</pair>
-  <pair name="adj-ku" type="string">&apos;ku&apos; adjective (archaic)</pair>
-  <pair name="adj-shiku" type="string">&apos;shiku&apos; adjective (archaic)</pair>
-  <pair name="adj-nari" type="string">archaic/formal form of na-adjective</pair>
-  <pair name="n-pr" type="string">proper noun</pair>
-  <pair name="v-unspec" type="string">verb unspecified</pair>
-  <pair name="v4k" type="string">Yodan verb with &apos;ku&apos; ending (archaic)</pair>
-  <pair name="v4g" type="string">Yodan verb with &apos;gu&apos; ending (archaic)</pair>
-  <pair name="v4s" type="string">Yodan verb with &apos;su&apos; ending (archaic)</pair>
-  <pair name="v4t" type="string">Yodan verb with &apos;tsu&apos; ending (archaic)</pair>
-  <pair name="v4n" type="string">Yodan verb with &apos;nu&apos; ending (archaic)</pair>
-  <pair name="v4b" type="string">Yodan verb with &apos;bu&apos; ending (archaic)</pair>
-  <pair name="v4m" type="string">Yodan verb with &apos;mu&apos; ending (archaic)</pair>
-  <pair name="v2k-k" type="string">Nidan verb (upper class) with &apos;ku&apos; ending (archaic)</pair>
-  <pair name="v2g-k" type="string">Nidan verb (upper class) with &apos;gu&apos; ending (archaic)</pair>
-  <pair name="v2t-k" type="string">Nidan verb (upper class) with &apos;tsu&apos; ending (archaic)</pair>
-  <pair name="v2d-k" type="string">Nidan verb (upper class) with &apos;dzu&apos; ending (archaic)</pair>
-  <pair name="v2h-k" type="string">Nidan verb (upper class) with &apos;hu/fu&apos; ending (archaic)</pair>
-  <pair name="v2b-k" type="string">Nidan verb (upper class) with &apos;bu&apos; ending (archaic)</pair>
-  <pair name="v2m-k" type="string">Nidan verb (upper class) with &apos;mu&apos; ending (archaic)</pair>
-  <pair name="v2y-k" type="string">Nidan verb (upper class) with &apos;yu&apos; ending (archaic)</pair>
-  <pair name="v2r-k" type="string">Nidan verb (upper class) with &apos;ru&apos; ending (archaic)</pair>
-  <pair name="v2k-s" type="string">Nidan verb (lower class) with &apos;ku&apos; ending (archaic)</pair>
-  <pair name="v2g-s" type="string">Nidan verb (lower class) with &apos;gu&apos; ending (archaic)</pair>
-  <pair name="v2s-s" type="string">Nidan verb (lower class) with &apos;su&apos; ending (archaic)</pair>
-  <pair name="v2z-s" type="string">Nidan verb (lower class) with &apos;zu&apos; ending (archaic)</pair>
-  <pair name="v2t-s" type="string">Nidan verb (lower class) with &apos;tsu&apos; ending (archaic)</pair>
-  <pair name="v2d-s" type="string">Nidan verb (lower class) with &apos;dzu&apos; ending (archaic)</pair>
-  <pair name="v2n-s" type="string">Nidan verb (lower class) with &apos;nu&apos; ending (archaic)</pair>
-  <pair name="v2h-s" type="string">Nidan verb (lower class) with &apos;hu/fu&apos; ending (archaic)</pair>
-  <pair name="v2b-s" type="string">Nidan verb (lower class) with &apos;bu&apos; ending (archaic)</pair>
-  <pair name="v2m-s" type="string">Nidan verb (lower class) with &apos;mu&apos; ending (archaic)</pair>
-  <pair name="v2y-s" type="string">Nidan verb (lower class) with &apos;yu&apos; ending (archaic)</pair>
-  <pair name="v2r-s" type="string">Nidan verb (lower class) with &apos;ru&apos; ending (archaic)</pair>
-  <pair name="v2w-s" type="string">Nidan verb (lower class) with &apos;u&apos; ending and &apos;we&apos; conjugation (archaic)</pair>
-  <pair name="archit" type="string">architecture term</pair>
-  <pair name="astron" type="string">astronomy, etc. term</pair>
-  <pair name="baseb" type="string">baseball term</pair>
-  <pair name="biol" type="string">biology term</pair>
-  <pair name="bot" type="string">botany term</pair>
-  <pair name="bus" type="string">business term</pair>
-  <pair name="econ" type="string">economics term</pair>
-  <pair name="engr" type="string">engineering term</pair>
-  <pair name="finc" type="string">finance term</pair>
-  <pair name="geol" type="string">geology, etc. term</pair>
-  <pair name="law" type="string">law, etc. term</pair>
-  <pair name="mahj" type="string">mahjong term</pair>
-  <pair name="med" type="string">medicine, etc. term</pair>
-  <pair name="music" type="string">music term</pair>
-  <pair name="Shinto" type="string">Shinto term</pair>
-  <pair name="shogi" type="string">shogi term</pair>
-  <pair name="sports" type="string">sports term</pair>
-  <pair name="sumo" type="string">sumo term</pair>
-  <pair name="zool" type="string">zoology term</pair>
-  <pair name="joc" type="string">jocular, humorous term</pair>
-  <pair name="anat" type="string">anatomical term</pair>
-</pair>;
+declare variable $tags:tags := <j:map key="tags">
+  <j:string key="MA">martial arts term</j:string>
+  <j:string key="X">rude or X-rated term (not displayed in educational software)</j:string>
+  <j:string key="abbr">abbreviation</j:string>
+  <j:string key="adj-i">adjective (keiyoushi)</j:string>
+  <j:string key="adj-ix">adjective (keiyoushi) - yoi/ii class</j:string>
+  <j:string key="adj-na">adjectival nouns or quasi-adjectives (keiyodoshi)</j:string>
+  <j:string key="adj-no">nouns which may take the genitive case particle &apos;no&apos;</j:string>
+  <j:string key="adj-pn">pre-noun adjectival (rentaishi)</j:string>
+  <j:string key="adj-t">&apos;taru&apos; adjective</j:string>
+  <j:string key="adj-f">noun or verb acting prenominally</j:string>
+  <j:string key="adv">adverb (fukushi)</j:string>
+  <j:string key="adv-to">adverb taking the &apos;to&apos; particle</j:string>
+  <j:string key="arch">archaism</j:string>
+  <j:string key="ateji">ateji (phonetic) reading</j:string>
+  <j:string key="aux">auxiliary</j:string>
+  <j:string key="aux-v">auxiliary verb</j:string>
+  <j:string key="aux-adj">auxiliary adjective</j:string>
+  <j:string key="Buddh">Buddhist term</j:string>
+  <j:string key="chem">chemistry term</j:string>
+  <j:string key="chn">children&apos;s language</j:string>
+  <j:string key="col">colloquialism</j:string>
+  <j:string key="comp">computer terminology</j:string>
+  <j:string key="conj">conjunction</j:string>
+  <j:string key="cop-da">copula</j:string>
+  <j:string key="ctr">counter</j:string>
+  <j:string key="derog">derogatory</j:string>
+  <j:string key="eK">exclusively kanji</j:string>
+  <j:string key="ek">exclusively kana</j:string>
+  <j:string key="exp">expressions (phrases, clauses, etc.)</j:string>
+  <j:string key="fam">familiar language</j:string>
+  <j:string key="fem">female term or language</j:string>
+  <j:string key="food">food term</j:string>
+  <j:string key="geom">geometry term</j:string>
+  <j:string key="gikun">gikun (meaning as reading) or jukujikun (special kanji reading)</j:string>
+  <j:string key="hon">honorific or respectful (sonkeigo) language</j:string>
+  <j:string key="hum">humble (kenjougo) language</j:string>
+  <j:string key="iK">word containing irregular kanji usage</j:string>
+  <j:string key="id">idiomatic expression</j:string>
+  <j:string key="ik">word containing irregular kana usage</j:string>
+  <j:string key="int">interjection (kandoushi)</j:string>
+  <j:string key="io">irregular okurigana usage</j:string>
+  <j:string key="iv">irregular verb</j:string>
+  <j:string key="ling">linguistics terminology</j:string>
+  <j:string key="m-sl">manga slang</j:string>
+  <j:string key="male">male term or language</j:string>
+  <j:string key="male-sl">male slang</j:string>
+  <j:string key="math">mathematics</j:string>
+  <j:string key="mil">military</j:string>
+  <j:string key="n">noun (common) (futsuumeishi)</j:string>
+  <j:string key="n-adv">adverbial noun (fukushitekimeishi)</j:string>
+  <j:string key="n-suf">noun, used as a suffix</j:string>
+  <j:string key="n-pref">noun, used as a prefix</j:string>
+  <j:string key="n-t">noun (temporal) (jisoumeishi)</j:string>
+  <j:string key="num">numeric</j:string>
+  <j:string key="oK">word containing out-dated kanji</j:string>
+  <j:string key="obs">obsolete term</j:string>
+  <j:string key="obsc">obscure term</j:string>
+  <j:string key="ok">out-dated or obsolete kana usage</j:string>
+  <j:string key="oik">old or irregular kana form</j:string>
+  <j:string key="on-mim">onomatopoeic or mimetic word</j:string>
+  <j:string key="pn">pronoun</j:string>
+  <j:string key="poet">poetical term</j:string>
+  <j:string key="pol">polite (teineigo) language</j:string>
+  <j:string key="pref">prefix</j:string>
+  <j:string key="proverb">proverb</j:string>
+  <j:string key="prt">particle</j:string>
+  <j:string key="physics">physics terminology</j:string>
+  <j:string key="quote">quotation</j:string>
+  <j:string key="rare">rare</j:string>
+  <j:string key="sens">sensitive</j:string>
+  <j:string key="sl">slang</j:string>
+  <j:string key="suf">suffix</j:string>
+  <j:string key="uK">word usually written using kanji alone</j:string>
+  <j:string key="uk">word usually written using kana alone</j:string>
+  <j:string key="unc">unclassified</j:string>
+  <j:string key="yoji">yojijukugo</j:string>
+  <j:string key="v1">Ichidan verb</j:string>
+  <j:string key="v1-s">Ichidan verb - kureru special class</j:string>
+  <j:string key="v2a-s">Nidan verb with &apos;u&apos; ending (archaic)</j:string>
+  <j:string key="v4h">Yodan verb with &apos;hu/fu&apos; ending (archaic)</j:string>
+  <j:string key="v4r">Yodan verb with &apos;ru&apos; ending (archaic)</j:string>
+  <j:string key="v5aru">Godan verb - -aru special class</j:string>
+  <j:string key="v5b">Godan verb with &apos;bu&apos; ending</j:string>
+  <j:string key="v5g">Godan verb with &apos;gu&apos; ending</j:string>
+  <j:string key="v5k">Godan verb with &apos;ku&apos; ending</j:string>
+  <j:string key="v5k-s">Godan verb - Iku/Yuku special class</j:string>
+  <j:string key="v5m">Godan verb with &apos;mu&apos; ending</j:string>
+  <j:string key="v5n">Godan verb with &apos;nu&apos; ending</j:string>
+  <j:string key="v5r">Godan verb with &apos;ru&apos; ending</j:string>
+  <j:string key="v5r-i">Godan verb with &apos;ru&apos; ending (irregular verb)</j:string>
+  <j:string key="v5s">Godan verb with &apos;su&apos; ending</j:string>
+  <j:string key="v5t">Godan verb with &apos;tsu&apos; ending</j:string>
+  <j:string key="v5u">Godan verb with &apos;u&apos; ending</j:string>
+  <j:string key="v5u-s">Godan verb with &apos;u&apos; ending (special class)</j:string>
+  <j:string key="v5uru">Godan verb - Uru old class verb (old form of Eru)</j:string>
+  <j:string key="vz">Ichidan verb - zuru verb (alternative form of -jiru verbs)</j:string>
+  <j:string key="vi">intransitive verb</j:string>
+  <j:string key="vk">Kuru verb - special class</j:string>
+  <j:string key="vn">irregular nu verb</j:string>
+  <j:string key="vr">irregular ru verb, plain form ends with -ri</j:string>
+  <j:string key="vs">noun or participle which takes the aux. verb suru</j:string>
+  <j:string key="vs-c">su verb - precursor to the modern suru</j:string>
+  <j:string key="vs-s">suru verb - special class</j:string>
+  <j:string key="vs-i">suru verb - included</j:string>
+  <j:string key="kyb">Kyoto-ben</j:string>
+  <j:string key="osb">Osaka-ben</j:string>
+  <j:string key="ksb">Kansai-ben</j:string>
+  <j:string key="ktb">Kantou-ben</j:string>
+  <j:string key="tsb">Tosa-ben</j:string>
+  <j:string key="thb">Touhoku-ben</j:string>
+  <j:string key="tsug">Tsugaru-ben</j:string>
+  <j:string key="kyu">Kyuushuu-ben</j:string>
+  <j:string key="rkb">Ryuukyuu-ben</j:string>
+  <j:string key="nab">Nagano-ben</j:string>
+  <j:string key="hob">Hokkaido-ben</j:string>
+  <j:string key="vt">transitive verb</j:string>
+  <j:string key="vulg">vulgar expression or word</j:string>
+  <j:string key="adj-kari">&apos;kari&apos; adjective (archaic)</j:string>
+  <j:string key="adj-ku">&apos;ku&apos; adjective (archaic)</j:string>
+  <j:string key="adj-shiku">&apos;shiku&apos; adjective (archaic)</j:string>
+  <j:string key="adj-nari">archaic/formal form of na-adjective</j:string>
+  <j:string key="n-pr">proper noun</j:string>
+  <j:string key="v-unspec">verb unspecified</j:string>
+  <j:string key="v4k">Yodan verb with &apos;ku&apos; ending (archaic)</j:string>
+  <j:string key="v4g">Yodan verb with &apos;gu&apos; ending (archaic)</j:string>
+  <j:string key="v4s">Yodan verb with &apos;su&apos; ending (archaic)</j:string>
+  <j:string key="v4t">Yodan verb with &apos;tsu&apos; ending (archaic)</j:string>
+  <j:string key="v4n">Yodan verb with &apos;nu&apos; ending (archaic)</j:string>
+  <j:string key="v4b">Yodan verb with &apos;bu&apos; ending (archaic)</j:string>
+  <j:string key="v4m">Yodan verb with &apos;mu&apos; ending (archaic)</j:string>
+  <j:string key="v2k-k">Nidan verb (upper class) with &apos;ku&apos; ending (archaic)</j:string>
+  <j:string key="v2g-k">Nidan verb (upper class) with &apos;gu&apos; ending (archaic)</j:string>
+  <j:string key="v2t-k">Nidan verb (upper class) with &apos;tsu&apos; ending (archaic)</j:string>
+  <j:string key="v2d-k">Nidan verb (upper class) with &apos;dzu&apos; ending (archaic)</j:string>
+  <j:string key="v2h-k">Nidan verb (upper class) with &apos;hu/fu&apos; ending (archaic)</j:string>
+  <j:string key="v2b-k">Nidan verb (upper class) with &apos;bu&apos; ending (archaic)</j:string>
+  <j:string key="v2m-k">Nidan verb (upper class) with &apos;mu&apos; ending (archaic)</j:string>
+  <j:string key="v2y-k">Nidan verb (upper class) with &apos;yu&apos; ending (archaic)</j:string>
+  <j:string key="v2r-k">Nidan verb (upper class) with &apos;ru&apos; ending (archaic)</j:string>
+  <j:string key="v2k-s">Nidan verb (lower class) with &apos;ku&apos; ending (archaic)</j:string>
+  <j:string key="v2g-s">Nidan verb (lower class) with &apos;gu&apos; ending (archaic)</j:string>
+  <j:string key="v2s-s">Nidan verb (lower class) with &apos;su&apos; ending (archaic)</j:string>
+  <j:string key="v2z-s">Nidan verb (lower class) with &apos;zu&apos; ending (archaic)</j:string>
+  <j:string key="v2t-s">Nidan verb (lower class) with &apos;tsu&apos; ending (archaic)</j:string>
+  <j:string key="v2d-s">Nidan verb (lower class) with &apos;dzu&apos; ending (archaic)</j:string>
+  <j:string key="v2n-s">Nidan verb (lower class) with &apos;nu&apos; ending (archaic)</j:string>
+  <j:string key="v2h-s">Nidan verb (lower class) with &apos;hu/fu&apos; ending (archaic)</j:string>
+  <j:string key="v2b-s">Nidan verb (lower class) with &apos;bu&apos; ending (archaic)</j:string>
+  <j:string key="v2m-s">Nidan verb (lower class) with &apos;mu&apos; ending (archaic)</j:string>
+  <j:string key="v2y-s">Nidan verb (lower class) with &apos;yu&apos; ending (archaic)</j:string>
+  <j:string key="v2r-s">Nidan verb (lower class) with &apos;ru&apos; ending (archaic)</j:string>
+  <j:string key="v2w-s">Nidan verb (lower class) with &apos;u&apos; ending and &apos;we&apos; conjugation (archaic)</j:string>
+  <j:string key="archit">architecture term</j:string>
+  <j:string key="astron">astronomy, etc. term</j:string>
+  <j:string key="baseb">baseball term</j:string>
+  <j:string key="biol">biology term</j:string>
+  <j:string key="bot">botany term</j:string>
+  <j:string key="bus">business term</j:string>
+  <j:string key="econ">economics term</j:string>
+  <j:string key="engr">engineering term</j:string>
+  <j:string key="finc">finance term</j:string>
+  <j:string key="geol">geology, etc. term</j:string>
+  <j:string key="law">law, etc. term</j:string>
+  <j:string key="mahj">mahjong term</j:string>
+  <j:string key="med">medicine, etc. term</j:string>
+  <j:string key="music">music term</j:string>
+  <j:string key="Shinto">Shinto term</j:string>
+  <j:string key="shogi">shogi term</j:string>
+  <j:string key="sports">sports term</j:string>
+  <j:string key="sumo">sumo term</j:string>
+  <j:string key="zool">zoology term</j:string>
+  <j:string key="joc">jocular, humorous term</j:string>
+  <j:string key="anat">anatomical term</j:string>
+</j:map>;
