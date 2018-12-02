@@ -244,7 +244,6 @@ val createDistDir: Task by tasks.creating {
 val jmdictFullZip by tasks.creating(Zip::class) {
     group = "Distribution"
     description = "Create JMdict full version distribution archive (zip)"
-    dependsOn(jmdictFullConvert)
     val jmdictFullJsonName: String by jmdictFullConvert.extra
     val jmdictFullJsonPath: String by jmdictFullConvert.extra
     val distDir: String by createDistDir.extra
@@ -256,7 +255,6 @@ val jmdictFullZip by tasks.creating(Zip::class) {
 val jmdictFullTar by tasks.creating(Tar::class) {
     group = "Distribution"
     description = "Create JMdict full version distribution archive (tar+gzip)"
-    dependsOn(jmdictFullConvert)
     val jmdictFullJsonName: String by jmdictFullConvert.extra
     val jmdictFullJsonPath: String by jmdictFullConvert.extra
     val distDir: String by createDistDir.extra
@@ -269,7 +267,6 @@ val jmdictFullTar by tasks.creating(Tar::class) {
 val jmdictCommonZip by tasks.creating(Zip::class) {
     group = "Distribution"
     description = "Create JMdict common-only version distribution archive (zip)"
-    dependsOn(jmdictCommonConvert)
     val jmdictCommonJsonName: String by jmdictCommonConvert.extra
     val jmdictCommonJsonPath: String by jmdictCommonConvert.extra
     val distDir: String by createDistDir.extra
@@ -281,7 +278,6 @@ val jmdictCommonZip by tasks.creating(Zip::class) {
 val jmdictCommonTar by tasks.creating(Tar::class) {
     group = "Distribution"
     description = "Create JMdict common-only version distribution archive (tar+gzip)"
-    dependsOn(jmdictCommonConvert)
     val jmdictCommonJsonName: String by jmdictCommonConvert.extra
     val jmdictCommonJsonPath: String by jmdictCommonConvert.extra
     val distDir: String by createDistDir.extra
@@ -294,7 +290,6 @@ val jmdictCommonTar by tasks.creating(Tar::class) {
 val jmnedictZip by tasks.creating(Zip::class) {
     group = "Distribution"
     description = "Create JMnedict distribution archive (zip)"
-    dependsOn(jmnedictConvert)
     val jmnedictJsonName: String by jmnedictConvert.extra
     val jmnedictJsonPath: String by jmnedictConvert.extra
     val distDir: String by createDistDir.extra
@@ -306,7 +301,6 @@ val jmnedictZip by tasks.creating(Zip::class) {
 val jmnedictTar by tasks.creating(Tar::class) {
     group = "Distribution"
     description = "Create JMnedict distribution archive (tar+gzip)"
-    dependsOn(jmnedictConvert)
     val jmnedictJsonName: String by jmnedictConvert.extra
     val jmnedictJsonPath: String by jmnedictConvert.extra
     val distDir: String by createDistDir.extra
