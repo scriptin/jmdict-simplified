@@ -51,7 +51,7 @@ declare function transform:kana($word-id as xs:string, $elem as node()) as node(
     <j:string key="text">
       { $elem/reb/text() }
     </j:string>
-    <j:array ket="tags">
+    <j:array key="tags">
       { for $info in $elem/re_inf
         return <j:string> { tags:convert-entity($word-id, $info/text()) } </j:string> }
     </j:array>
