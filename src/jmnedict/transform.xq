@@ -5,28 +5,6 @@ import module namespace j = "http://www.w3.org/2005/xpath-functions";
 import module namespace tags = "tags" at "tags.xq";
 
 (:
-  Extract a creation date from a comment with following format: "JMnedict created: YYYY-MM-DD".
-:)
-declare function transform:extract-date($doc as node()) as node() {
-  let $version-comment := string($doc//comment()[contains(., 'JMnedict created')][1])
-  return <j:string key="dictDate">
-    { normalize-space(substring-after($version-comment, ':')) }
-  </j:string>
-};
-
-(:
-  Extract revision numbers, as they appear in comments before DOCTYPE.
-  Strictly speaking, these are version numbers of JMnedict, but they are not mentioned in official documentation.
-:)
-declare function transform:extract-revisions($doc as node()) as node() {
-  <j:array key="dictRevisions">
-    { for $rev in $doc//comment()[matches(., 'Rev \d+\.\d+')]
-      let $first-line := substring-before(string($rev), '&#10;')
-      return <j:string> { normalize-space(substring-after($first-line, 'Rev')) } </j:string> }
-  </j:array>
-};
-
-(:
   Note: ke_pri elements are ignored because they always seem to be missing.
   Try `grep ke_pri JMnedict.xml` to check.
 :)

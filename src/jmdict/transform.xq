@@ -4,28 +4,6 @@ module namespace transform = "transform";
 import module namespace j = "http://www.w3.org/2005/xpath-functions";
 import module namespace tags = "tags" at "tags.xq";
 
-(:
-  Extract a creation date from a comment with following format: "JMdict created: YYYY-MM-DD".
-:)
-declare function transform:extract-date($doc as node()) as node() {
-  let $version-comment := string($doc//comment()[contains(., 'JMdict created')][1])
-  return <j:string key="dictDate">
-    { normalize-space(substring-after($version-comment, ':')) }
-  </j:string>
-};
-
-(:
-  Extract revision numbers, as they appear in comments before DOCTYPE.
-  Strictly speaking, these are version numbers of JMdict, but they are not mentioned in official documentation.
-:)
-declare function transform:extract-revisions($doc as node()) as node() {
-  <j:array key="dictRevisions">
-    { for $rev in $doc//comment()[matches(., 'Rev \d+\.\d+')]
-      let $first-line := substring-before(string($rev), '&#10;')
-      return <j:string> { normalize-space(substring-after($first-line, 'Rev')) } </j:string> }
-  </j:array>
-};
-
 declare function transform:is-common($pri-elems as node()*) as xs:boolean {
   let $common-indicators := ("news1", "ichi1", "spec1", "spec2", "gai1")
   return if (exists($pri-elems[text() = $common-indicators]))
