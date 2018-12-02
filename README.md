@@ -18,7 +18,7 @@ Note: There are two versions of the JMdict dictionary: full and "common"-only. D
 ## Requirements
 
 - Java 8+, must be on your `$PATH`
-- [BaseX](http://basex.org/), full distribution, `basex` command must be on your , must be on your `$PATH`
+- [BaseX](http://basex.org/), full distribution, `basex` command must be on your `$PATH`
 
 ## Building
 
