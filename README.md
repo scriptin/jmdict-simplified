@@ -12,25 +12,32 @@ Grab results here: **[Latest release](https://github.com/scriptin/jmdict-simplif
 
 Note: There are two versions of the JMdict dictionary: full and "common"-only. Dictionary entries are considered common if `/k_ele/ke_pri` or `/r_ele/re_pri` elements in original file contain one of these markers: "news1", "ichi1", "spec1", "spec2", "gai1". Common-only distributions are much smaller. JMnedict has only one version.
 
+## Requirements
+
+- Java 8+, must be on your `$PATH`
+- [BaseX](http://basex.org/), full distribution, `basex` command must be on your , must be on your `$PATH`
+
 ## Building
 
-Requirements: Bash and [Zorba](https://github.com/zorba-processor/zorba)
+Use included scripts: `gradlew` for Linux/Mac OSm `gradlew.bat` for Windows.
 
-~~~
-Usage examples:
-> ./build.sh help -- show this help message
-> ./build.sh download -- download source dictionary files
-> ./build.sh convert jmdict 1.2.3 -- convert only JMdict, version 1.2.3
-> ./build.sh convert jmnedict 1.2.3 -- convert only JMnedict, version 1.2.3
-> ./build.sh convert all 1.2.3 -- convert all, version 1.2.3
-> ./build.sh archive -- create distribution archives
-~~~
+- `./gradlew clean` - clean all build artifacts to start a fresh build, in cases when you need to re-download and convert from scratch
+- `./gradlew download` - download source dictionary files
+- `./gradlew tags` - (after re-downloading source XML files) regenerate `src/jmdict/tag.xq` and `src/jmnedict/tag.xq`
+- `./gradlew convert` - convert all dictionaries to JSON
+- `./gradlew dist` - create distribution archives
 
-Workflow:
+There are also more specific tasks, run `./gradlew tasks` for details
 
-1. Run `./build.sh download` to download source XML files into a build directory.
-2. Run `./build.sh convert all 1.2.3` (use proper version, you can add modifiers like `-dev`) to convert XML files into JSON versions.
-3. Run `./build.sh archive` to create distribution archives once you're done. Make sure you set a proper version.
+## Troubleshooting
+
+- Make sure `java` and `basex` are available on your `$PATH` env. variable
+- Run Gradle with `--stacktrace`, `--info`, or `--debug` to see details
+- In cases when conversion fails, it may be due to JVM memory limitations. 
+  You can pass properties to set memory like this, they will be set as `-Xmx` JVM argument:
+  - `-PjmdictFullMem=6g`
+  - `-PjmdictCommonMem=2g`
+  - `-PjmnedictMem=10g`
 
 ## Format of JMdict
 
@@ -53,7 +60,7 @@ Workflow:
 - `dictRevisions` (array of string) := Revisions of JMdict file, as they appear in comments before DOCTYPE in the original XML file header. These only contain actual version (e.g., "1.08"), not a full comment. Original comments also mention changes made, but this is omitted in the resulting JSON files
 - `tags` (object) := all tags: parts of speech, names of dialects, fields of application, etc. All those things are expressed as XML entities in the original file. Keys of this objects are tags per se, values are descriptions, slightly modified from the original file
 - `words` (array of objects) :=
-    - `id` (number) := unique identifier
+    - `id` (string) := unique identifier
     - `kanji` (array of objects) := kanji (and other non-kana) writings
         - `common` (boolean) := `true` if this particular spelling is common. This field combines all the `*_pri` fields from original files in a same way as [jisho.org][] and other on-line dictionaries do ("common" word markers). It gets rid of bunch of `*_pri` fields which are not typically used. Words marked with "news1", "ichi1", "spec1", "spec2", "gai1" in the original file are treated as common, which may or may not be true according other sources.
         - `text` (string) := any non-kana-only writing, may contain kanji, kana, and some other characters
@@ -101,7 +108,7 @@ Same as for JMdict
 - `dictRevisions` (array of string) := Revisions of JMnedict file, as they appear in comments before DOCTYPE in the original XML file header. These only contain actual version (e.g., "1.08"), not a full comment. Original comments also mention changes made, but this is omitted in the resulting JSON files
 - `tags` (object) := all tags: parts of speech, names of dialects, fields of application, etc. All those things are expressed as XML entities in the original file. Keys of this objects are tags per se, values are descriptions, slightly modified from the original file
 - `words` (array of objects) :=
-    - `id` (number) := unique identifier
+    - `id` (string) := unique identifier
     - `kanji` (array of objects) := kanji (and other non-kana) writings
         - `text` (string) := any non-kana-only writing, may contain kanji, kana, and some other characters
         - `tags` (array of tags) := tags applied to this writing

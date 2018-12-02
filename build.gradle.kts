@@ -16,6 +16,8 @@ plugins {
  * Clean the build dir
  */
 val clean: Task by tasks.creating {
+    group = "Clean"
+    description = "Remove all build artifacts and source XML files"
     doLast {
         delete(buildDir)
     }
@@ -30,6 +32,8 @@ val createDataDir: Task by tasks.creating {
 }
 
 val jmdictDownload by tasks.creating(Download::class) {
+    group = "Download"
+    description = "Download JMdict source XML archive"
     val dataDir: String by createDataDir.extra
     val filePath = "$dataDir/JMdict_e.gz"
     src("http://ftp.monash.edu.au/pub/nihongo/JMdict_e.gz")
@@ -40,6 +44,8 @@ val jmdictDownload by tasks.creating(Download::class) {
 }
 
 val jmdictExtract: Task by tasks.creating {
+    group = "Extract"
+    description = "Extract JMdict source XML from an archive"
     dependsOn(jmdictDownload)
     val dataDir: String by createDataDir.extra
     val archivePath: String by jmdictDownload.extra
@@ -51,6 +57,8 @@ val jmdictExtract: Task by tasks.creating {
 }
 
 val jmnedictDownload by tasks.creating(Download::class) {
+    group = "Download"
+    description = "Download JMnedict source XML archive"
     val dataDir: String by createDataDir.extra
     val filePath = "$dataDir/JMnedict.xml.gz"
     src("http://ftp.monash.edu/pub/nihongo/JMnedict.xml.gz")
@@ -61,6 +69,8 @@ val jmnedictDownload by tasks.creating(Download::class) {
 }
 
 val jmnedictExtract: Task by tasks.creating {
+    group = "Extract"
+    description = "Extract JMnedict source XML from an archive"
     dependsOn(jmnedictDownload)
     val dataDir: String by createDataDir.extra
     val archivePath: String by jmnedictDownload.extra
@@ -75,6 +85,8 @@ val jmnedictExtract: Task by tasks.creating {
  * Download and extract all dictionaries
  */
 val download: Task by tasks.creating {
+    group = "Download"
+    description = "Download and unpack all dictionaries"
     dependsOn(jmdictExtract, jmnedictExtract)
 }
 
@@ -120,6 +132,8 @@ fun generateTagsXQuery(tags: List<Pair<String, String>>): String {
 }
 
 val jmdictTags: Task by tasks.creating {
+    group = "Tags"
+    description = "Generate JMdict tag.xq file"
     val jmdictPath: String by jmdictExtract.extra
     doLast {
         file("$projectDir/src/jmdict/tags.xq").writeText(generateTagsXQuery(getTags(jmdictPath)))
@@ -127,6 +141,8 @@ val jmdictTags: Task by tasks.creating {
 }
 
 val jmnedictTags: Task by tasks.creating {
+    group = "Tags"
+    description = "Generate JMnedict tag.xq file"
     val jmnedictPath: String by jmnedictExtract.extra
     doLast {
         file("$projectDir/src/jmnedict/tags.xq").writeText(generateTagsXQuery(getTags(jmnedictPath)))
@@ -137,10 +153,14 @@ val jmnedictTags: Task by tasks.creating {
  * (Re)generate tags.xq for all dictionaries
  */
 val tags: Task by tasks.creating {
+    group = "Tags"
+    description = "Generate all tag files"
     dependsOn(jmdictTags, jmnedictTags)
 }
 
 val jmdictFullConvert by tasks.creating(Exec::class) {
+    group = "Convert"
+    description = "Convert JMdict full version from XML to JSON"
     val jmdictPath: String by jmdictExtract.extra
     val jmdictFullMem: String by project.extra
     val fileName = "jmdict-eng-$version.json"
@@ -162,6 +182,8 @@ val jmdictFullConvert by tasks.creating(Exec::class) {
 }
 
 val jmdictCommonConvert by tasks.creating(Exec::class) {
+    group = "Convert"
+    description = "Convert JMdict common-only version from XML to JSON"
     val jmdictPath: String by jmdictExtract.extra
     val jmdictCommonMem: String by project.extra
     val fileName = "jmdict-end-common-$version.json"
@@ -183,6 +205,8 @@ val jmdictCommonConvert by tasks.creating(Exec::class) {
 }
 
 val jmnedictConvert by tasks.creating(Exec::class) {
+    group = "Convert"
+    description = "Convert JMnedict from XML to JSON"
     val jmnedictPath: String by jmnedictExtract.extra
     val jmnedictMem: String by project.extra
     val fileName = "jmnedict-$version.json"
@@ -204,6 +228,8 @@ val jmnedictConvert by tasks.creating(Exec::class) {
 }
 
 val convert: Task by tasks.creating {
+    group = "Convert"
+    description = "Convert all dictionaries from XML to JSON"
     dependsOn(jmdictFullConvert, jmdictCommonConvert, jmnedictConvert)
 }
 
@@ -216,6 +242,8 @@ val createDistDir: Task by tasks.creating {
 }
 
 val jmdictFullZip by tasks.creating(Zip::class) {
+    group = "Distribution"
+    description = "Create JMdict full version distribution archive (zip)"
     dependsOn(jmdictFullConvert)
     val jmdictFullJsonName: String by jmdictFullConvert.extra
     val jmdictFullJsonPath: String by jmdictFullConvert.extra
@@ -226,6 +254,8 @@ val jmdictFullZip by tasks.creating(Zip::class) {
 }
 
 val jmdictFullTar by tasks.creating(Tar::class) {
+    group = "Distribution"
+    description = "Create JMdict full version distribution archive (tar+gzip)"
     dependsOn(jmdictFullConvert)
     val jmdictFullJsonName: String by jmdictFullConvert.extra
     val jmdictFullJsonPath: String by jmdictFullConvert.extra
@@ -237,6 +267,8 @@ val jmdictFullTar by tasks.creating(Tar::class) {
 }
 
 val jmdictCommonZip by tasks.creating(Zip::class) {
+    group = "Distribution"
+    description = "Create JMdict common-only version distribution archive (zip)"
     dependsOn(jmdictCommonConvert)
     val jmdictCommonJsonName: String by jmdictCommonConvert.extra
     val jmdictCommonJsonPath: String by jmdictCommonConvert.extra
@@ -247,6 +279,8 @@ val jmdictCommonZip by tasks.creating(Zip::class) {
 }
 
 val jmdictCommonTar by tasks.creating(Tar::class) {
+    group = "Distribution"
+    description = "Create JMdict common-only version distribution archive (tar+gzip)"
     dependsOn(jmdictCommonConvert)
     val jmdictCommonJsonName: String by jmdictCommonConvert.extra
     val jmdictCommonJsonPath: String by jmdictCommonConvert.extra
@@ -258,6 +292,8 @@ val jmdictCommonTar by tasks.creating(Tar::class) {
 }
 
 val jmnedictZip by tasks.creating(Zip::class) {
+    group = "Distribution"
+    description = "Create JMnedict distribution archive (zip)"
     dependsOn(jmnedictConvert)
     val jmnedictJsonName: String by jmnedictConvert.extra
     val jmnedictJsonPath: String by jmnedictConvert.extra
@@ -268,6 +304,8 @@ val jmnedictZip by tasks.creating(Zip::class) {
 }
 
 val jmnedictTar by tasks.creating(Tar::class) {
+    group = "Distribution"
+    description = "Create JMnedict distribution archive (tar+gzip)"
     dependsOn(jmnedictConvert)
     val jmnedictJsonName: String by jmnedictConvert.extra
     val jmnedictJsonPath: String by jmnedictConvert.extra
@@ -282,6 +320,8 @@ val jmnedictTar by tasks.creating(Tar::class) {
  * Create distribution archives of all dictionaries in zip format
  */
 val zip: Task by tasks.creating {
+    group = "Distribution"
+    description = "Create distribution archives (zip)"
     dependsOn(jmdictFullZip, jmdictCommonZip, jmnedictZip)
 }
 
@@ -289,6 +329,8 @@ val zip: Task by tasks.creating {
  * Create distribution archives of all dictionaries in tar+gzip format
  */
 val tar: Task by tasks.creating {
+    group = "Distribution"
+    description = "Create distribution archives (tar+gzip)"
     dependsOn(jmdictFullTar, jmdictCommonTar, jmnedictTar)
 }
 
@@ -296,5 +338,7 @@ val tar: Task by tasks.creating {
  * Create distribution archives of all dictionaries in all formats
  */
 val dist: Task by tasks.creating {
+    group = "Distribution"
+    description = "Create distribution archives (all formats)"
     dependsOn(zip, tar)
 }
