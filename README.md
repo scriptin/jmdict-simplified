@@ -22,7 +22,7 @@ Note: There are two versions of the JMdict dictionary: full and "common"-only. D
 
 ## Building
 
-Use included scripts: `gradlew` for Linux/Mac OSm `gradlew.bat` for Windows.
+Use included scripts: `gradlew` for Linux/Mac OS, `gradlew.bat` for Windows.
 
 - `./gradlew clean` - clean all build artifacts to start a fresh build, in cases when you need to re-download and convert from scratch
 - `./gradlew download` - download source dictionary files
