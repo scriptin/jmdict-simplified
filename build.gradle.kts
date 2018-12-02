@@ -3,7 +3,7 @@ import org.gradle.internal.impldep.org.osgi.util.function.Function
 import java.io.FileOutputStream
 import kotlin.streams.toList
 
-version = "3.0.0-dev"
+version = "3.0.0"
 
 project.extra["jmdictFullMem"] = project.findProperty("jmdictFullMem") ?: "6g"
 project.extra["jmdictCommonMem"] = project.findProperty("jmdictFullMem") ?: "2g"

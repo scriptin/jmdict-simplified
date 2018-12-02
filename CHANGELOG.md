@@ -1,3 +1,11 @@
+# Version 3.0.0
+
+- :warning: Change in the format: entries' `id` fields in all dictionaries are now strings (were numbers), this is to prevent BaseX converting long numbers to exponential notation (like `1.001e+8`). ID values themselves haven't changed
+- Migrated from Zorba to [BaseX](http://basex.org/), JSON output formatting changed as a result
+- Migrated from bash script to Gradle build
+- JMnedict is now being processed in batches and then concatenated. This way the conversion process doesn't consume all system memory
+- Distribution files now have version is their names
+
 # Version 2.0.0
 
 - #7: Rename fields: jm(ne)dict-date -> dictDate, jm(ne)dict-revisions -> dictRevisions
