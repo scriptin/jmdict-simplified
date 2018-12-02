@@ -2,7 +2,6 @@ xquery version "3.0";
 module namespace util = "util";
 
 import module namespace j = "http://www.w3.org/2005/xpath-functions";
-import module namespace tags = "tags" at "tags.xq";
 
 (:
   Extract a creation date from a comment with following format: "JM(ne)dict created: YYYY-MM-DD".
