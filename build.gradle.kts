@@ -1,4 +1,5 @@
 import de.undercouch.gradle.tasks.download.Download
+import org.gradle.internal.impldep.org.osgi.util.function.Function
 import java.io.FileOutputStream
 import kotlin.streams.toList
 
@@ -6,7 +7,7 @@ version = "3.0.0-dev"
 
 project.extra["jmdictFullMem"] = project.findProperty("jmdictFullMem") ?: "6g"
 project.extra["jmdictCommonMem"] = project.findProperty("jmdictFullMem") ?: "2g"
-project.extra["jmnedictMem"] = project.findProperty("jmnedictMem") ?: "10g"
+project.extra["jmnedictMem"] = project.findProperty("jmnedictMem") ?: "4g"
 
 plugins {
     id ("de.undercouch.download") version "3.4.3"
@@ -204,27 +205,123 @@ val jmdictCommonConvert by tasks.creating(Exec::class) {
     )
 }
 
-val jmnedictConvert by tasks.creating(Exec::class) {
+fun jmnedictConvertWrapper(): String {
+    val fileName = "jmnedict-part-0-$version.json"
+    val filePath = "$buildDir/$fileName"
+    exec {
+        val jmnedictPath: String by jmnedictExtract.extra
+        val jmnedictMem: String by project.extra
+        environment = mapOf(
+            "PATH" to System.getenv("PATH"),
+            "JAVA_HOME" to System.getenv("JAVA_HOME"),
+            "BASEX_JVM" to "-Xmx$jmnedictMem -Djdk.xml.entityExpansionLimit=0"
+        )
+        commandLine(
+            "basex",
+            "-i", jmnedictPath,
+            "-b", "version=$version",
+            "-o", filePath,
+            "$projectDir/src/jmnedict/convert-dictionary.xq"
+        )
+    }
+    return filePath
+}
+
+fun jmnedictConvertEntriesRange(idx: Int, start: Long, end: Long): String {
+    val fileName = "jmnedict-part-${idx+1}-$version.json"
+    val filePath = "$buildDir/$fileName"
+    exec {
+        val jmnedictPath: String by jmnedictExtract.extra
+        val jmnedictMem: String by project.extra
+        environment = mapOf(
+            "PATH" to System.getenv("PATH"),
+            "JAVA_HOME" to System.getenv("JAVA_HOME"),
+            "BASEX_JVM" to "-Xmx$jmnedictMem -Djdk.xml.entityExpansionLimit=0"
+        )
+        commandLine(
+            "basex",
+            "-i", jmnedictPath,
+            "-b", "version=$version",
+            "-b", "start=$start",
+            "-b", "end=$end",
+            "-o", filePath,
+            "$projectDir/src/jmnedict/convert-entries-range.xq"
+        )
+    }
+    return filePath
+}
+
+fun jmnedictGenerateFiles(partsCount: Int, partSize: Long): Pair<String, List<String>> {
+    val progressTotal = partsCount + 1
+    println("Converting: 1/$progressTotal")
+    val wrapperFile = jmnedictConvertWrapper()
+    val parts = mutableListOf<String>()
+    for (i in 0 until partsCount) {
+        println("Converting: ${i+2}/$progressTotal")
+        val start = i * partSize
+        val end = start + partSize
+        parts.add(jmnedictConvertEntriesRange(i, start, end))
+    }
+    return Pair(wrapperFile, parts.toList())
+}
+
+fun jmnedictConcat(f: File, wrapperFile: String, parts: List<String>) {
+    val offset = "  "
+    val startRegex = "^$offset\"words\"\\s*:\\s*\\[\\s*$".toRegex()
+    val endRegex = "^$offset\\]\\s*$".toRegex()
+
+    var started: Boolean
+    var ended = false
+    var needsNewLine = false
+
+    val totalProgress = parts.size + 1
+    println("Concatenating: 1/$totalProgress")
+    file(wrapperFile).bufferedReader().lines().forEachOrdered { line ->
+        if (!ended) {
+            ended = startRegex.matches(line)
+            f.appendText(if (needsNewLine) "\n$line" else line)
+        }
+        needsNewLine = true
+    }
+
+    for (i in 0 until parts.size) {
+        println("Concatenating: ${i+2}/$totalProgress")
+        val part = parts[i]
+        val needsComma = i != (parts.size - 1)
+        started = false
+        ended = false
+        file(part).bufferedReader().lines().forEachOrdered { line ->
+            if (started && !ended) {
+                ended = endRegex.matches(line)
+                if (!ended) {
+                    f.appendText("\n$line")
+                } else if (needsComma) {
+                    f.appendText(",")
+                }
+            }
+            if (!started) {
+                started = startRegex.matches(line)
+            }
+        }
+    }
+    f.appendText("\n$offset]")
+    f.appendText("\n}\n")
+}
+
+val jmnedictConvert: Task by tasks.creating {
     group = "Convert"
     description = "Convert JMnedict from XML to JSON"
-    val jmnedictPath: String by jmnedictExtract.extra
-    val jmnedictMem: String by project.extra
     val fileName = "jmnedict-$version.json"
     val filePath = "$buildDir/$fileName"
     extra["jmnedictJsonName"] = fileName
     extra["jmnedictJsonPath"] = filePath
-    environment = mapOf(
-        "PATH" to System.getenv("PATH"),
-        "JAVA_HOME" to System.getenv("JAVA_HOME"),
-        "BASEX_JVM" to "-Xmx$jmnedictMem -Djdk.xml.entityExpansionLimit=0"
-    )
-    commandLine(
-        "basex",
-        "-i", jmnedictPath,
-        "-b", "version=$version",
-        "-o", filePath,
-        "$projectDir/src/jmnedict/convert-dictionary.xq"
-    )
+    doLast {
+        val (wrapperFile, parts) = jmnedictGenerateFiles(8, 100_000L)
+        val f = file(filePath)
+        f.delete()
+        f.createNewFile()
+        jmnedictConcat(f, wrapperFile, parts)
+    }
 }
 
 val convert: Task by tasks.creating {
@@ -336,3 +433,18 @@ val dist: Task by tasks.creating {
     description = "Create distribution archives (all formats)"
     dependsOn(zip, tar)
 }
+
+//val test by tasks.creating(Exec::class) {
+//    environment = mapOf(
+//        "PATH" to System.getenv("PATH"),
+//        "JAVA_HOME" to System.getenv("JAVA_HOME"),
+//        "BASEX_JVM" to "-Xmx2g -Djdk.xml.entityExpansionLimit=0"
+//    )
+//    commandLine(
+//        "basex",
+//        "-i", "build/data/JMnedict.xml",
+//        "-b", "version=$version",
+//        project.property("q")
+//    )
+//    standardOutput = System.out
+//}

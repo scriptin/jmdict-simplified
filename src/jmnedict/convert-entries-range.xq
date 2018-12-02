@@ -5,13 +5,14 @@ import module namespace transform = "transform" at "transform.xq";
 import module namespace tags = "tags" at "tags.xq";
 
 declare variable $version external;
+declare variable $start as xs:int external;
+declare variable $end as xs:int external;
 
 fn:xml-to-json(
   <j:map>
-    <j:string key="version"> { $version } </j:string>
-    { transform:extract-date(/) }
-    { transform:extract-revisions(/) }
-    { $tags:tags }
-    <j:array key="words"/>
+    <j:array key="words">
+      { for $word in /JMnedict/entry[position() >= $start and position() < $end]
+        return transform:word($word) }
+    </j:array>
   </j:map>
 )

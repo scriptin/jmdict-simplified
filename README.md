@@ -37,7 +37,7 @@ There are also more specific tasks, run `./gradlew tasks` for details
   You can pass properties to set memory like this, they will be set as `-Xmx` JVM argument:
   - `-PjmdictFullMem=6g`
   - `-PjmdictCommonMem=2g`
-  - `-PjmnedictMem=10g`
+  - `-PjmnedictMem=4g`
 
 ## Format of JMdict
 
