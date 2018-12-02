@@ -187,7 +187,7 @@ val jmdictCommonConvert by tasks.creating(Exec::class) {
     description = "Convert JMdict common-only version from XML to JSON"
     val jmdictPath: String by jmdictExtract.extra
     val jmdictCommonMem: String by project.extra
-    val fileName = "jmdict-end-common-$version.json"
+    val fileName = "jmdict-eng-common-$version.json"
     val filePath = "$buildDir/$fileName"
     extra["jmdictCommonJsonName"] = fileName
     extra["jmdictCommonJsonPath"] = filePath
@@ -331,7 +331,7 @@ val convert: Task by tasks.creating {
 }
 
 val createDistDir: Task by tasks.creating {
-    val distDir = "$buildDir/data"
+    val distDir = "$buildDir/dist"
     extra["distDir"] = distDir
     doLast {
         mkdir(distDir)
@@ -433,18 +433,3 @@ val dist: Task by tasks.creating {
     description = "Create distribution archives (all formats)"
     dependsOn(zip, tar)
 }
-
-//val test by tasks.creating(Exec::class) {
-//    environment = mapOf(
-//        "PATH" to System.getenv("PATH"),
-//        "JAVA_HOME" to System.getenv("JAVA_HOME"),
-//        "BASEX_JVM" to "-Xmx2g -Djdk.xml.entityExpansionLimit=0"
-//    )
-//    commandLine(
-//        "basex",
-//        "-i", "build/data/JMnedict.xml",
-//        "-b", "version=$version",
-//        project.property("q")
-//    )
-//    standardOutput = System.out
-//}
