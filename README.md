@@ -9,7 +9,7 @@ Original XML files are... less than ideal. This project provides the following i
 1. Regular structure for every item in every collection, no "same as in previous" implicit values
 2. Human-readable names for fields
 3. [Array fields are never `null` or missing, always empty arrays](http://thecodelesscode.com/case/6) 
-4. JSON is better that XML :trollface:
+4. JSON is better than XML :trollface:
 
 Grab results here: **[Latest release](https://github.com/scriptin/jmdict-simplified/releases/latest)**
 
