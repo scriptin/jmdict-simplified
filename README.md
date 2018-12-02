@@ -1,12 +1,15 @@
 # JMdict and JMnedict, simplified!
 
-**Goal**: create a version of [JMdict](http://www.edrdg.org/jmdict/j_jmdict.html) and [JMnedict](http://www.edrdg.org/enamdict/enamdict_doc.html) in JSON format with more comprehensible structure.
+> [JMdict](http://www.edrdg.org/jmdict/j_jmdict.html) and [JMnedict](http://www.edrdg.org/enamdict/enamdict_doc.html) in JSON format with more comprehensible structure.
 
-**Principles**:
+## Why?
 
-1. More regular file structure
-2. More clarity (mostly in naming conventions)
-3. Less custom things
+Original XML files are... less than ideal. This project provides the following improvements:
+
+1. Regular structure for every item in every collection, no "same as in previous" implicit values
+2. Human-readable names for fields
+3. [Array fields are never `null` or missing, always empty arrays](http://thecodelesscode.com/case/6) 
+4. JSON is better that XML :trollface:
 
 Grab results here: **[Latest release](https://github.com/scriptin/jmdict-simplified/releases/latest)**
 
@@ -92,7 +95,7 @@ There are also more specific tasks, run `./gradlew tasks` for details
 Notes:
 
 1. All fields in all objects are always present, none ever omitted
-2. Array fields are never `null`, only empty
+2. Array fields are never `null` or missing, only empty
 3. The only place which allows `null` values is `sense->languageSource->text` field in word element
 
 ## Format of JMnedict
