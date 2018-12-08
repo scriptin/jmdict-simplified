@@ -9,7 +9,7 @@ import org.gradle.internal.impldep.org.osgi.util.function.Function
 import java.io.FileOutputStream
 import kotlin.streams.toList
 
-version = "3.0.1-dev"
+version = "3.0.1"
 
 plugins {
     id ("de.undercouch.download") version "3.4.3"

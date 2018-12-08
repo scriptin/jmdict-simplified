@@ -1,3 +1,8 @@
+# Version 3.0.1
+
+- BaseX is no longer required as an external binary, now it's used internally as a build script dependency
+- Latest source files (new data in JMnedict)
+
 # Version 3.0.0
 
 - :warning: Change in the format: entries' `id` fields in all dictionaries are now strings (were numbers), this is to prevent BaseX converting long numbers to exponential notation (like `1.001e+8`). ID values themselves haven't changed
