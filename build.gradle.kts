@@ -11,10 +11,6 @@ import kotlin.streams.toList
 
 version = "3.0.1-dev"
 
-project.extra["jmdictFullMem"] = project.findProperty("jmdictFullMem") ?: "6g"
-project.extra["jmdictCommonMem"] = project.findProperty("jmdictFullMem") ?: "2g"
-project.extra["jmnedictMem"] = project.findProperty("jmnedictMem") ?: "4g"
-
 plugins {
     id ("de.undercouch.download") version "3.4.3"
 }
