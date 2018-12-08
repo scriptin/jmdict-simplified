@@ -17,8 +17,7 @@ Note: There are two versions of the JMdict dictionary: full and "common"-only. D
 
 ## Requirements
 
-- Java 8+, must be on your `$PATH`
-- [BaseX](http://basex.org/), full distribution, `basex` command must be on your `$PATH`
+- Java 8+
 
 ## Building
 
@@ -34,13 +33,10 @@ There are also more specific tasks, run `./gradlew tasks` for details
 
 ## Troubleshooting
 
-- Make sure `java` and `basex` are available on your `$PATH` env. variable
+- Make sure `java` is available on your `$PATH` env. variable
 - Run Gradle with `--stacktrace`, `--info`, or `--debug` to see details
 - In cases when conversion fails, it may be due to JVM memory limitations. 
-  You can pass properties to set memory like this, they will be set as `-Xmx` JVM argument:
-  - `-PjmdictFullMem=6g`
-  - `-PjmdictCommonMem=2g`
-  - `-PjmnedictMem=4g`
+  You can set a value for `-Xmx` variable in `gradle.properties`
 
 ## Format of JMdict
 
