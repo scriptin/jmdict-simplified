@@ -1,9 +1,15 @@
 import de.undercouch.gradle.tasks.download.Download
+import org.basex.core.Context
+import org.basex.core.cmd.CreateDB
+import org.basex.core.cmd.DropDB
+import org.basex.core.cmd.XQuery
+import org.basex.query.QueryProcessor
+import org.basex.query.value.item.Item
 import org.gradle.internal.impldep.org.osgi.util.function.Function
 import java.io.FileOutputStream
 import kotlin.streams.toList
 
-version = "3.0.0"
+version = "3.0.1-dev"
 
 project.extra["jmdictFullMem"] = project.findProperty("jmdictFullMem") ?: "6g"
 project.extra["jmdictCommonMem"] = project.findProperty("jmdictFullMem") ?: "2g"
@@ -11,6 +17,15 @@ project.extra["jmnedictMem"] = project.findProperty("jmnedictMem") ?: "4g"
 
 plugins {
     id ("de.undercouch.download") version "3.4.3"
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        "classpath"(group = "org.basex", name = "basex", version = "9.1")
+    }
 }
 
 /**
@@ -159,95 +174,85 @@ val tags: Task by tasks.creating {
     dependsOn(jmdictTags, jmnedictTags)
 }
 
-val jmdictFullConvert by tasks.creating(Exec::class) {
+val defaultVars = mapOf("version" to version)
+
+fun runXQuery(
+    inputFilePath: String,
+    queryFilePath: String,
+    outputFilePath: String,
+    vars: Map<String, Any> = defaultVars
+) {
+    val dbName = "doc"
+    val context = Context()
+    val xqFile = File(queryFilePath)
+    val outputFile = File(outputFilePath)
+    if (!outputFile.exists()) {
+        outputFile.createNewFile()
+    }
+    DropDB(dbName).execute(context)
+    CreateDB(dbName, inputFilePath).execute(context)
+    QueryProcessor(
+        xqFile.readText(),
+        xqFile.absolutePath,
+        context
+    ).use { processor ->
+        vars.forEach { (k, v) -> processor.bind(k, v) }
+        val iter = processor.iter()
+        processor.getSerializer(outputFile.outputStream()).use { serializer ->
+            var item: Item? = iter.next()
+            while (item != null) {
+                serializer.serialize(item)
+                item = iter.next()
+            }
+        }
+    }
+    DropDB(dbName).execute(context)
+}
+
+val jmdictFullConvert: Task by tasks.creating {
     group = "Convert"
     description = "Convert JMdict full version from XML to JSON"
     val jmdictPath: String by jmdictExtract.extra
-    val jmdictFullMem: String by project.extra
     val fileName = "jmdict-eng-$version.json"
     val filePath = "$buildDir/$fileName"
     extra["jmdictFullJsonName"] = fileName
     extra["jmdictFullJsonPath"] = filePath
-    environment = mapOf(
-        "PATH" to System.getenv("PATH"),
-        "JAVA_HOME" to System.getenv("JAVA_HOME"),
-        "BASEX_JVM" to "-Xmx$jmdictFullMem -Djdk.xml.entityExpansionLimit=0"
-    )
-    commandLine(
-        "basex",
-        "-i", jmdictPath,
-        "-b", "version=$version",
-        "-o", filePath,
-        "$projectDir/src/jmdict/convert-dictionary.xq"
-    )
+    doLast {
+        runXQuery(jmdictPath, "$projectDir/src/jmdict/convert-dictionary.xq", filePath)
+    }
 }
 
-val jmdictCommonConvert by tasks.creating(Exec::class) {
+val jmdictCommonConvert: Task by tasks.creating {
     group = "Convert"
     description = "Convert JMdict common-only version from XML to JSON"
     val jmdictPath: String by jmdictExtract.extra
-    val jmdictCommonMem: String by project.extra
     val fileName = "jmdict-eng-common-$version.json"
     val filePath = "$buildDir/$fileName"
     extra["jmdictCommonJsonName"] = fileName
     extra["jmdictCommonJsonPath"] = filePath
-    environment = mapOf(
-        "PATH" to System.getenv("PATH"),
-        "JAVA_HOME" to System.getenv("JAVA_HOME"),
-        "BASEX_JVM" to "-Xmx$jmdictCommonMem -Djdk.xml.entityExpansionLimit=0"
-    )
-    commandLine(
-        "basex",
-        "-i", jmdictPath,
-        "-b", "version=$version",
-        "-o", filePath,
-        "$projectDir/src/jmdict/convert-dictionary-common.xq"
-    )
+    doLast {
+        runXQuery(jmdictPath, "$projectDir/src/jmdict/convert-dictionary-common.xq", filePath)
+    }
 }
 
 fun jmnedictConvertWrapper(): String {
     val fileName = "jmnedict-part-0-$version.json"
     val filePath = "$buildDir/$fileName"
-    exec {
-        val jmnedictPath: String by jmnedictExtract.extra
-        val jmnedictMem: String by project.extra
-        environment = mapOf(
-            "PATH" to System.getenv("PATH"),
-            "JAVA_HOME" to System.getenv("JAVA_HOME"),
-            "BASEX_JVM" to "-Xmx$jmnedictMem -Djdk.xml.entityExpansionLimit=0"
-        )
-        commandLine(
-            "basex",
-            "-i", jmnedictPath,
-            "-b", "version=$version",
-            "-o", filePath,
-            "$projectDir/src/jmnedict/convert-dictionary.xq"
-        )
-    }
+    val jmnedictPath: String by jmnedictExtract.extra
+    runXQuery(jmnedictPath, "$projectDir/src/jmnedict/convert-dictionary.xq", filePath)
     return filePath
 }
 
 fun jmnedictConvertEntriesRange(idx: Int, start: Long, end: Long): String {
     val fileName = "jmnedict-part-${idx+1}-$version.json"
     val filePath = "$buildDir/$fileName"
-    exec {
-        val jmnedictPath: String by jmnedictExtract.extra
-        val jmnedictMem: String by project.extra
-        environment = mapOf(
-            "PATH" to System.getenv("PATH"),
-            "JAVA_HOME" to System.getenv("JAVA_HOME"),
-            "BASEX_JVM" to "-Xmx$jmnedictMem -Djdk.xml.entityExpansionLimit=0"
-        )
-        commandLine(
-            "basex",
-            "-i", jmnedictPath,
-            "-b", "version=$version",
-            "-b", "start=$start",
-            "-b", "end=$end",
-            "-o", filePath,
-            "$projectDir/src/jmnedict/convert-entries-range.xq"
-        )
-    }
+    val jmnedictPath: String by jmnedictExtract.extra
+    runXQuery(
+        jmnedictPath,
+        "$projectDir/src/jmnedict/convert-entries-range.xq",
+        filePath,
+        defaultVars.plus(mapOf("start" to start, "end" to end))
+    )
     return filePath
 }
 
