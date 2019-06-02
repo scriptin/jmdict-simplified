@@ -2,6 +2,8 @@
 
 > [JMdict](http://www.edrdg.org/jmdict/j_jmdict.html) and [JMnedict](http://www.edrdg.org/enamdict/enamdict_doc.html) in JSON format with more comprehensible structure.
 
+**[LATEST RELEASE](https://github.com/scriptin/jmdict-simplified/releases/latest)**
+
 ## Why?
 
 Original XML files are... less than ideal. This project provides the following improvements:
@@ -11,13 +13,13 @@ Original XML files are... less than ideal. This project provides the following i
 3. [Array fields are never `null` or missing, always empty arrays](http://thecodelesscode.com/case/6) 
 4. JSON is better than XML :trollface:
 
-Grab results here: **[Latest release](https://github.com/scriptin/jmdict-simplified/releases/latest)**
-
 Note: There are two versions of the JMdict dictionary: full and "common"-only. Dictionary entries are considered common if `/k_ele/ke_pri` or `/r_ele/re_pri` elements in original file contain one of these markers: "news1", "ichi1", "spec1", "spec2", "gai1". Common-only distributions are much smaller. JMnedict has only one version.
 
 ## Requirements
 
 - Java 8+
+
+NB: Java is the only requirement, you don't need to have Gradle installed, just use Gradle wrapper provided in this repository: `./gradlew` or `gradlew.bat`
 
 ## Building
 
