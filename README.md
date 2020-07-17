@@ -1,33 +1,39 @@
-# JMdict and JMnedict, simplified!
+# JMdict and JMnedict, but in JSON
 
-> [JMdict](http://www.edrdg.org/jmdict/j_jmdict.html) and [JMnedict](http://www.edrdg.org/enamdict/enamdict_doc.html) in JSON format with more comprehensible structure.
+> TL;DR: [JMdict](http://www.edrdg.org/jmdict/j_jmdict.html) and [JMnedict](http://www.edrdg.org/enamdict/enamdict_doc.html) in JSON format with more comprehensible structure and (hopefully) better documentation.
 
-**[LATEST RELEASE](https://github.com/scriptin/jmdict-simplified/releases/latest)**
+**[LATEST RELEASE](https://github.com/scriptin/jmdict-simplified/releases/latest) - INCLUDES PRE-BUILT JSON FILES**, you don't have to run the conversion yourself.
 
 ## Why?
 
-Original XML files are... less than ideal. This project provides the following improvements:
+Original XML files are less than ideal. This project provides the following changes and improvements:
 
-1. Regular structure for every item in every collection, no "same as in previous" implicit values
-2. Human-readable names for fields
-3. [Array fields are never `null` or missing, always empty arrays](http://thecodelesscode.com/case/6) 
-4. JSON is better than XML :trollface:
+1. JSON format.
+2. Regular structure for every item in every collection, no "same as in previous" implicit values. This is a problem with original XML files because your code has to track parts of state while traversing collections.
+3. Human-readable names for fields. No more cryptic abbreviations with no explainations.
+4. [Array fields are never `null` or missing, always empty arrays.](http://thecodelesscode.com/case/6)
 
-Note: There are two versions of the JMdict dictionary: full and "common"-only. Dictionary entries are considered common if `/k_ele/ke_pri` or `/r_ele/re_pri` elements in original file contain one of these markers: "news1", "ichi1", "spec1", "spec2", "gai1". Common-only distributions are much smaller. JMnedict has only one version.
+## Full and "common" versions
 
-## Requirements
+There are two versions of the JMdict dictionary: full and "common"-only. Dictionary entries are considered "common" if `/k_ele/ke_pri` or `/r_ele/re_pri` elements in original file contain one of these markers: "news1", "ichi1", "spec1", "spec2", "gai1". Common-only distributions are much smaller.
 
-- Java 8+
+JMnedict has only one version.
 
-NB: Java is the only requirement, you don't need to have Gradle installed, just use Gradle wrapper provided in this repository: `./gradlew` or `gradlew.bat`
+## Requirements for running the scripts
 
-## Building
+- Java 8+ (not JDK, just Java itself)
+
+You don't need to have Gradle installed, just use the Gradle wrapper provided in this repository: `gradlew` (for Linux/Mac) or `gradlew.bat` (for Windows)
+
+## Building dictionaries
+
+NOTE: You can grab the pre-built JSON files in the [latest release](https://github.com/scriptin/jmdict-simplified/releases/latest).
 
 Use included scripts: `gradlew` for Linux/Mac OS, `gradlew.bat` for Windows.
 
 - `./gradlew clean` - clean all build artifacts to start a fresh build, in cases when you need to re-download and convert from scratch
-- `./gradlew download` - download source dictionary files
-- `./gradlew tags` - (after re-downloading source XML files) regenerate `src/jmdict/tag.xq` and `src/jmnedict/tag.xq`
+- `./gradlew download` - download source dictionary XML files
+- `./gradlew tags` - (after re-downloading source XML files) regenerate `src/jmdict/tag.xq` and `src/jmnedict/tag.xq`. Without these tags the `convert` command will not work
 - `./gradlew convert` - convert all dictionaries to JSON
 - `./gradlew dist` - create distribution archives
 
@@ -35,10 +41,11 @@ There are also more specific tasks, run `./gradlew tasks` for details
 
 ## Troubleshooting
 
-- Make sure `java` is available on your `$PATH` env. variable
-- Run Gradle with `--stacktrace`, `--info`, or `--debug` to see details
+- Make sure `java` is available on your `$PATH` environment variable
+- Make sure you run `tags` command before running `convert` when you first close this repository
 - In cases when conversion fails, it may be due to JVM memory limitations. 
   You can set a value for `-Xmx` variable in `gradle.properties`
+- Run Gradle with `--stacktrace`, `--info`, or `--debug` arguments to see more details
 
 ## Format of JMdict
 
@@ -56,7 +63,7 @@ There are also more specific tasks, run `./gradlew tasks` for details
 
 ### Root JSON object
 
-- `version` (string) := [Semantic version](http://semver.org/) of this project
+- `version` (string) := [Semantic version](http://semver.org/) of this project (not the dictionary itself)
 - `dictDate` (string) := Creation date of JMdict file, as it appears in a comment with format "JMdict created: YYYY-MM-DD" in the original XML file header
 - `dictRevisions` (array of string) := Revisions of JMdict file, as they appear in comments before DOCTYPE in the original XML file header. These only contain actual version (e.g., "1.08"), not a full comment. Original comments also mention changes made, but this is omitted in the resulting JSON files
 - `tags` (object) := all tags: parts of speech, names of dialects, fields of application, etc. All those things are expressed as XML entities in the original file. Keys of this objects are tags per se, values are descriptions, slightly modified from the original file
@@ -104,7 +111,7 @@ Same as for JMdict
 
 ### Root JSON object
 
-- `version` (string) := [Semantic version](http://semver.org/) of this project
+- `version` (string) := [Semantic version](http://semver.org/) of this project (not the dictionary itself)
 - `dictDate` (string) := Creation date of JMnedict file, as it appears in a comment with format "JMnedict created: YYYY-MM-DD" in the original XML file header
 - `dictRevisions` (array of string) := Revisions of JMnedict file, as they appear in comments before DOCTYPE in the original XML file header. These only contain actual version (e.g., "1.08"), not a full comment. Original comments also mention changes made, but this is omitted in the resulting JSON files
 - `tags` (object) := all tags: parts of speech, names of dialects, fields of application, etc. All those things are expressed as XML entities in the original file. Keys of this objects are tags per se, values are descriptions, slightly modified from the original file
