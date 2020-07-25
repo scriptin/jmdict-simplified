@@ -1,0 +1,64 @@
+name: Update the distribution
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_notes:
+        description: 'Release notes'
+        required: true
+        default: 'Updated to the latest version of the source dictionary files'
+
+jobs:
+  update_distribution:
+    name: Update the distribution
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build project
+        uses: actions/setup-java@v1
+        with:
+          java-version: '1.8'
+          java-package: jre
+        run: |
+          ./gradlew clean
+          ./gradlew download
+          ./gradlew tags
+          ./gradlew convert
+          ./gradlew dist
+          build_version_number=$(./gradlew properties | grep 'version: .*' | cut -d' ' -f2 | tr -d '[:space:]')
+          build_version_metadata=$(date --utc +%Y%m%d%H%M%S) # UTC date+time, but only numbers
+          build_tag="${build_version_number}+${build_version_metadata}"
+          echo "::set-env name=BUILD_VERSION_NUMBER::$build_version_number"
+          echo "::set-env name=BUILD_VERSION_METADATA::$build_version_metadata"
+          echo "::set-env name=BUILD_TAG::$build_tag"
+          echo "::set-env name=BUILD_TIME::$(date --utc +'%Y-%m-%d %H:%M:%S UTC')"
+      - name: Rename files
+        run: |
+          for f in ./build/dist/*.zip; do
+            mv $f ${f/$BUILD_VERSION_NUMBER/$BUILD_TAG}
+          done
+          for f in ./build/dist/*.tgz; do
+            mv $f ${f/$BUILD_VERSION_NUMBER/$BUILD_TAG}
+          done
+      - name: Create release
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # install hub
+          curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s 2.14.2
+          # collect assets
+          assets=()
+          for asset in ./build/dist/*.zip; do
+            assets+=("-a" "$asset")
+          done
+          for asset in ./build/dist/*.tgz; do
+            assets+=("-a" "$asset")
+          done
+          # release message: release title (1st line) + release notes (rest of lines)
+          message_file=./build/dist/release-${BUILD_TAG}.md
+          touch $message_file
+          echo -e "${BUILD_VERSION}, update ${BUILD_TIME}\n\n${INPUT_RELEASE_NOTES}" > $message_file
+          # create a release
+          hub release create "${assets[@]}" --file $message_file $BUILD_TAG

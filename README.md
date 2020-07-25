@@ -43,9 +43,12 @@ There are also more specific tasks, run `./gradlew tasks` for details
 
 - Make sure `java` is available on your `$PATH` environment variable
 - Make sure you run `tags` command before running `convert` when you first close this repository
-- In cases when conversion fails, it may be due to JVM memory limitations. 
-  You can set a value for `-Xmx` variable in `gradle.properties`
+- In cases when conversion fails, it may be due to JVM memory limitations.
+  You can set a value for `-Xmx` variable in `gradle.properties` (e.g. `-Xmx6g` for 6 GB).
+  Note that [RAM limit for GitHub actions is 7 GB][gh-actions-hardware].
 - Run Gradle with `--stacktrace`, `--info`, or `--debug` arguments to see more details
+
+[gh-actions-hardware]: https://docs.github.com/en/actions/reference/virtual-environments-for-github-hosted-runners#supported-runners-and-hardware-resources
 
 ## Format of JMdict
 
