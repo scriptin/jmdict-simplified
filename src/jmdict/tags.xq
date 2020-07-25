@@ -30,7 +30,7 @@ declare function tags:convert-entity($word-id as xs:string, $text as xs:string) 
   case "colloquialism" return "col"
   case "computer terminology" return "comp"
   case "conjunction" return "conj"
-  case "copula" return "cop-da"
+  case "copula" return "cop"
   case "counter" return "ctr"
   case "derogatory" return "derog"
   case "exclusively kanji" return "eK"
@@ -180,6 +180,21 @@ declare function tags:convert-entity($word-id as xs:string, $text as xs:string) 
   case "zoology term" return "zool"
   case "jocular, humorous term" return "joc"
   case "anatomical term" return "anat"
+  case "Christian term" return "Christn"
+  case "Internet slang" return "net-sl"
+  case "dated term" return "dated"
+  case "historical term" return "hist"
+  case "literary or formal term" return "litf"
+  case "family or surname" return "surname"
+  case "place name" return "place"
+  case "unclassified name" return "unclass"
+  case "company name" return "company"
+  case "product name" return "product"
+  case "work of art, literature, music, etc. name" return "work"
+  case "full name of a particular person" return "person"
+  case "given name or forename, gender not specified" return "given"
+  case "railway station" return "station"
+  case "organization name" return "organization"
   default return error(
     xs:QName("unknown-tag"),
     concat("Unknown tag '", $text, "' on entity ", $word-id)
@@ -210,7 +225,7 @@ declare variable $tags:tags := <j:map key="tags">
   <j:string key="col">colloquialism</j:string>
   <j:string key="comp">computer terminology</j:string>
   <j:string key="conj">conjunction</j:string>
-  <j:string key="cop-da">copula</j:string>
+  <j:string key="cop">copula</j:string>
   <j:string key="ctr">counter</j:string>
   <j:string key="derog">derogatory</j:string>
   <j:string key="eK">exclusively kanji</j:string>
@@ -360,4 +375,19 @@ declare variable $tags:tags := <j:map key="tags">
   <j:string key="zool">zoology term</j:string>
   <j:string key="joc">jocular, humorous term</j:string>
   <j:string key="anat">anatomical term</j:string>
+  <j:string key="Christn">Christian term</j:string>
+  <j:string key="net-sl">Internet slang</j:string>
+  <j:string key="dated">dated term</j:string>
+  <j:string key="hist">historical term</j:string>
+  <j:string key="litf">literary or formal term</j:string>
+  <j:string key="surname">family or surname</j:string>
+  <j:string key="place">place name</j:string>
+  <j:string key="unclass">unclassified name</j:string>
+  <j:string key="company">company name</j:string>
+  <j:string key="product">product name</j:string>
+  <j:string key="work">work of art, literature, music, etc. name</j:string>
+  <j:string key="person">full name of a particular person</j:string>
+  <j:string key="given">given name or forename, gender not specified</j:string>
+  <j:string key="station">railway station</j:string>
+  <j:string key="organization">organization name</j:string>
 </j:map>;
