@@ -60,6 +60,6 @@ jobs:
           # release message: release title (1st line) + release notes (rest of lines)
           message_file=./build/dist/release-${BUILD_TAG}.md
           touch $message_file
-          echo -e "${BUILD_VERSION}, update ${BUILD_TIME}\n\n${INPUT_RELEASE_NOTES}" > $message_file
+          echo -e "${BUILD_VERSION_NUMBER}, update ${BUILD_TIME}\n\n${INPUT_RELEASE_NOTES}" > $message_file
           # create a release
           hub release create "${assets[@]}" --file $message_file $BUILD_TAG
