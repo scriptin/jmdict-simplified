@@ -67,22 +67,22 @@ jobs:
           if [[ -z "$INPUT_RELEASE_NOTES" ]]; then
             # $INPUT_RELEASE_NOTES is empty - we're in a scheduled build
             if [[ "$JMDICT_UPDATED" = "YES" ]] && [[ "$JMNEDICT_UPDATED" = "YES" ]]; then
-              RELASE_NOTES="JMdict and JMnedict were updated."
+              RELEASE_NOTES="JMdict and JMnedict were updated."
             elif [[ "$JMDICT_UPDATED" = "YES" ]]; then
-              RELASE_NOTES="JMdict was updated."
+              RELEASE_NOTES="JMdict was updated."
             elif [[ "$JMNEDICT_UPDATED" = "YES" ]]; then
-              RELASE_NOTES="JMnedict was updated."
+              RELEASE_NOTES="JMnedict was updated."
             else
               # this should not happen, but just in case
-              RELASE_NOTES="Distribution files were updated."
+              RELEASE_NOTES="Distribution files were updated."
             fi
             WARNING="NOTE: This is a scheduled automated release. It was likely NOT reviewed by a human."
             RELEASE_NOTES="$RELEASE_NOTES\n\n$WARNING"
           else
             # $INPUT_RELEASE_NOTES is NOT empty - we're in a manually triggered build
-            RELASE_NOTES=$INPUT_RELEASE_NOTES
+            RELEASE_NOTES=$INPUT_RELEASE_NOTES
           fi
-          echo "::set-env name=RELASE_NOTES::$RELASE_NOTES"
+          echo "::set-env name=RELEASE_NOTES::$RELASE_NOTES"
       - name: Rename archives
         if: env.SOMETHING_UPDATED == 'YES'
         run: |
