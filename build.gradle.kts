@@ -2,11 +2,10 @@ import de.undercouch.gradle.tasks.download.Download
 import org.basex.core.Context
 import org.basex.core.cmd.CreateDB
 import org.basex.core.cmd.DropDB
-import org.basex.core.cmd.XQuery
 import org.basex.query.QueryProcessor
 import org.basex.query.value.item.Item
-import org.gradle.internal.impldep.org.osgi.util.function.Function
-import java.io.FileOutputStream
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 import kotlin.streams.toList
 
 version = "3.0.1"
@@ -100,6 +99,68 @@ val download: Task by tasks.creating {
     group = "Download"
     description = "Download and unpack all dictionaries"
     dependsOn(jmdictExtract, jmnedictExtract)
+}
+
+fun getFileHash(inputFilePath: String): String {
+    try {
+        val md = MessageDigest.getInstance("SHA-256");
+        return md.digest(file(inputFilePath).readBytes())
+            .joinToString("") { b -> (0xFF and b.toInt()).toString(16) }
+    } catch (e: NoSuchAlgorithmException) {
+        throw Exception("SHA-256 is not supported in this Java instance", e);
+    }
+}
+
+val jmdictUpdateChecksumFile: Task by tasks.creating {
+    group = "Checksum"
+    description = "Generate a checksum of JMdict XML file and write it into a checksum file"
+    val jmdictPath: String by jmdictExtract.extra
+    val jmdictChecksumPath = "$projectDir/checksums/JMdict_e.xml.sha256"
+    extra["jmdictChecksumPath"] = jmdictChecksumPath
+    doLast {
+        file(jmdictChecksumPath).writeText(getFileHash(jmdictPath))
+    }
+}
+
+val jmnedictUpdateChecksumFile: Task by tasks.creating {
+    group = "Checksum"
+    description = "Generate a checksum JMnedict XML file and write it into a checksum file"
+    val jmnedictPath: String by jmnedictExtract.extra
+    val jmnedictChecksumPath = "$projectDir/checksums/JMnedict.xml.sha256"
+    extra["jmnedictChecksumPath"] = jmnedictChecksumPath
+    doLast {
+        file(jmnedictChecksumPath).writeText(getFileHash(jmnedictPath))
+    }
+}
+
+val updateChecksums: Task by tasks.creating {
+    group = "Checksum"
+    description = "Generate checksums of all dictionaries and write into checksum files"
+    dependsOn(jmdictUpdateChecksumFile, jmnedictUpdateChecksumFile)
+}
+
+val jmdictHasChanged: Task by tasks.creating {
+    group = "Checksum"
+    description = "Check if a checksum of JMdict XML file has changed"
+    val jmdictPath: String by jmdictExtract.extra
+    val jmdictChecksumPath: String by jmdictUpdateChecksumFile.extra
+    doLast {
+        val previousChecksum = file(jmdictChecksumPath).readText().trim()
+        val newChecksum = getFileHash(jmdictPath).trim()
+        println(if (previousChecksum == newChecksum) "NO" else "YES")
+    }
+}
+
+val jmnedictHasChanged: Task by tasks.creating {
+    group = "Checksum"
+    description = "Check if a checksum of JMnedict XML file has changed"
+    val jmnedictPath: String by jmnedictExtract.extra
+    val jmnedictChecksumPath: String by jmnedictUpdateChecksumFile.extra
+    doLast {
+        val previousChecksum = file(jmnedictChecksumPath).readText().trim()
+        val newChecksum = getFileHash(jmnedictPath).trim()
+        println(if (previousChecksum == newChecksum) "NO" else "YES")
+    }
 }
 
 fun getTags(inputFilePath: String): List<Pair<String, String>> {
