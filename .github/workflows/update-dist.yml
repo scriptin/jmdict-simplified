@@ -1,6 +1,8 @@
 name: Update the distribution
 
 on:
+  schedule:
+    - cron: '* * 1,15 * *' # 1st and 15th of every month
   workflow_dispatch:
     inputs:
       release_notes:
@@ -20,13 +22,38 @@ jobs:
         with:
           java-version: '1.8'
           java-package: jre
-      - name: Build project
+      - name: Download source files
         run: |
           ./gradlew clean
           ./gradlew download
-          ./gradlew tags
-          ./gradlew convert
-          ./gradlew dist
+      - name: Check for updates
+        shell: bash
+        run: |
+          # outputs 'YES' or 'NO'
+          jmdict_updated=$(./gradlew --quiet jmdictHasChanged)
+          jmnedict_updated=$(./gradlew --quiet jmnedictHasChanged)
+          echo "::set-env name=JMDICT_UPDATED::$jmdict_updated"
+          echo "::set-env name=JMNEDICT_UPDATED::$jmnedict_updated"
+          if [[ "$jmdict_updated" = "YES" ]] || [[ "$jmnedict_updated" = "YES" ]]; then
+            echo "::set-env name=SOMETHING_UPDATED::YES"
+          fi
+      - name: Install hub
+        # doing it here because if it fails, conversion is pointless and expensive operation
+        if: env.SOMETHING_UPDATED
+        shell: bash
+        run: curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s 2.14.2
+      - name: Regenerate tags
+        if: env.SOMETHING_UPDATED
+        run: ./gradlew tags
+      - name: Convert dictionaries
+        if: env.SOMETHING_UPDATED
+        run: ./gradlew convert
+      - name: Create archives
+        if: env.SOMETHING_UPDATED
+        run: ./gradlew dist
+      - name: Set build info
+        if: env.SOMETHING_UPDATED
+        run: |
           build_version_number=$(./gradlew properties | grep 'version: .*' | cut -d' ' -f2 | tr -d '[:space:]')
           build_version_metadata=$(date --utc +%Y%m%d%H%M%S) # UTC date+time, but only numbers
           build_tag="${build_version_number}+${build_version_metadata}"
@@ -34,7 +61,31 @@ jobs:
           echo "::set-env name=BUILD_VERSION_METADATA::$build_version_metadata"
           echo "::set-env name=BUILD_TAG::$build_tag"
           echo "::set-env name=BUILD_TIME::$(date --utc +'%Y-%m-%d %H:%M:%S UTC')"
-      - name: Rename files
+      - name: Set release notes
+        if: env.SOMETHING_UPDATED
+        shell: bash
+        run: |
+          if [[ -z "$INPUT_RELEASE_NOTES" ]]; then
+            # $INPUT_RELEASE_NOTES is empty - we're in a scheduled build
+            if [[ "$JMDICT_UPDATED" = "YES" ]] && [[ "$JMNEDICT_UPDATED" = "YES" ]]; then
+              RELASE_NOTES="JMdict and JMnedict were updated."
+            elif [[ "$JMDICT_UPDATED" = "YES" ]]; then
+              RELASE_NOTES="JMdict was updated."
+            elif [[ "$JMNEDICT_UPDATED" = "YES" ]]; then
+              RELASE_NOTES="JMnedict was updated."
+            else
+              # this should not happen, but just in case
+              RELASE_NOTES="Distribution files were updated."
+            fi
+            WARNING="NOTE: This is a scheduled automated release. It was likely NOT reviewed by a human."
+            RELEASE_NOTES="$RELEASE_NOTES\n\n$WARNING"
+          else
+            # $INPUT_RELEASE_NOTES is NOT empty - we're in a manually triggered build
+            RELASE_NOTES=$INPUT_RELEASE_NOTES
+          fi
+          echo "::set-env name=RELASE_NOTES::$RELASE_NOTES"
+      - name: Rename archives
+        if: env.SOMETHING_UPDATED
         run: |
           for f in ./build/dist/*.zip; do
             mv $f ${f/$BUILD_VERSION_NUMBER/$BUILD_TAG}
@@ -43,12 +94,11 @@ jobs:
             mv $f ${f/$BUILD_VERSION_NUMBER/$BUILD_TAG}
           done
       - name: Create release
+        if: env.SOMETHING_UPDATED
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # install hub
-          curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s 2.14.2
           # collect assets
           assets=()
           for asset in ./build/dist/*.zip; do
@@ -57,9 +107,20 @@ jobs:
           for asset in ./build/dist/*.tgz; do
             assets+=("-a" "$asset")
           done
-          # release message: release title (1st line) + release notes (rest of lines)
           message_file=./build/dist/release-${BUILD_TAG}.md
           touch $message_file
-          echo -e "${BUILD_VERSION_NUMBER}, update ${BUILD_TIME}\n\n${INPUT_RELEASE_NOTES}" > $message_file
+          # release message: release title (1st line) + release notes (rest of lines)
+          echo -e "${BUILD_VERSION_NUMBER}, update ${BUILD_TIME}\n\n${RELEASE_NOTES}" > $message_file
           # create a release
           hub release create "${assets[@]}" --file $message_file $BUILD_TAG
+      - name: Update checksums
+        if: env.SOMETHING_UPDATED
+        run: ./gradlew updateChecksums
+      - name: Commit tags and checksums
+        if: env.SOMETHING_UPDATED
+        uses: EndBug/add-and-commit@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          add: "src/jmdict/tags.xq src/jmnedict/tags.xq checksums/*.sha256"
+          message: Update tags and checksum files
