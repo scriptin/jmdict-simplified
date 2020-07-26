@@ -29,7 +29,6 @@ jobs:
       - name: Check for updates
         shell: bash
         run: |
-          # outputs 'YES' or 'NO'
           jmdict_updated=$(./gradlew --quiet jmdictHasChanged)
           jmnedict_updated=$(./gradlew --quiet jmnedictHasChanged)
           echo "::set-env name=JMDICT_UPDATED::$jmdict_updated"
@@ -39,20 +38,20 @@ jobs:
           fi
       - name: Install hub
         # doing it here because if it fails, conversion is pointless and expensive operation
-        if: env.SOMETHING_UPDATED
+        if: env.SOMETHING_UPDATED == 'YES'
         shell: bash
         run: curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s 2.14.2
       - name: Regenerate tags
-        if: env.SOMETHING_UPDATED
+        if: env.SOMETHING_UPDATED == 'YES'
         run: ./gradlew tags
       - name: Convert dictionaries
-        if: env.SOMETHING_UPDATED
+        if: env.SOMETHING_UPDATED == 'YES'
         run: ./gradlew convert
       - name: Create archives
-        if: env.SOMETHING_UPDATED
+        if: env.SOMETHING_UPDATED == 'YES'
         run: ./gradlew dist
       - name: Set build info
-        if: env.SOMETHING_UPDATED
+        if: env.SOMETHING_UPDATED == 'YES'
         run: |
           build_version_number=$(./gradlew properties | grep 'version: .*' | cut -d' ' -f2 | tr -d '[:space:]')
           build_version_metadata=$(date --utc +%Y%m%d%H%M%S) # UTC date+time, but only numbers
@@ -62,7 +61,7 @@ jobs:
           echo "::set-env name=BUILD_TAG::$build_tag"
           echo "::set-env name=BUILD_TIME::$(date --utc +'%Y-%m-%d %H:%M:%S UTC')"
       - name: Set release notes
-        if: env.SOMETHING_UPDATED
+        if: env.SOMETHING_UPDATED == 'YES'
         shell: bash
         run: |
           if [[ -z "$INPUT_RELEASE_NOTES" ]]; then
@@ -85,7 +84,7 @@ jobs:
           fi
           echo "::set-env name=RELASE_NOTES::$RELASE_NOTES"
       - name: Rename archives
-        if: env.SOMETHING_UPDATED
+        if: env.SOMETHING_UPDATED == 'YES'
         run: |
           for f in ./build/dist/*.zip; do
             mv $f ${f/$BUILD_VERSION_NUMBER/$BUILD_TAG}
@@ -94,7 +93,7 @@ jobs:
             mv $f ${f/$BUILD_VERSION_NUMBER/$BUILD_TAG}
           done
       - name: Create release
-        if: env.SOMETHING_UPDATED
+        if: env.SOMETHING_UPDATED == 'YES'
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -114,10 +113,10 @@ jobs:
           # create a release
           hub release create "${assets[@]}" --file $message_file $BUILD_TAG
       - name: Update checksums
-        if: env.SOMETHING_UPDATED
+        if: env.SOMETHING_UPDATED == 'YES'
         run: ./gradlew updateChecksums
       - name: Commit tags and checksums
-        if: env.SOMETHING_UPDATED
+        if: env.SOMETHING_UPDATED == 'YES'
         uses: EndBug/add-and-commit@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
