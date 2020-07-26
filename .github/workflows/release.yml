@@ -1,4 +1,4 @@
-name: Update the distribution
+name: Release
 
 on:
   schedule:
@@ -11,8 +11,8 @@ on:
         default: 'Updated to the latest version of the source dictionary files'
 
 jobs:
-  update_distribution:
-    name: Update the distribution
+  release:
+    name: Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
