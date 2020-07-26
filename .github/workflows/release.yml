@@ -82,7 +82,7 @@ jobs:
             # $INPUT_RELEASE_NOTES is NOT empty - we're in a manually triggered build
             RELEASE_NOTES=$INPUT_RELEASE_NOTES
           fi
-          echo "::set-env name=RELEASE_NOTES::$RELASE_NOTES"
+          echo "::set-env name=RELEASE_NOTES::$RELEASE_NOTES"
       - name: Rename archives
         if: env.SOMETHING_UPDATED == 'YES'
         run: |
