@@ -31,11 +31,22 @@ NOTE: You can grab the pre-built JSON files in the [latest release](https://gith
 
 Use included scripts: `gradlew` for Linux/Mac OS, `gradlew.bat` for Windows.
 
+Tasks to convert dictionary files and create distribution archives:
+
 - `./gradlew clean` - clean all build artifacts to start a fresh build, in cases when you need to re-download and convert from scratch
-- `./gradlew download` - download source dictionary XML files
+- `./gradlew download` - download and extract source dictionary XML files
 - `./gradlew tags` - (after re-downloading source XML files) regenerate `src/jmdict/tag.xq` and `src/jmnedict/tag.xq`. Without these tags the `convert` command will not work
 - `./gradlew convert` - convert all dictionaries to JSON
 - `./gradlew dist` - create distribution archives
+
+Utility tasks (for CI/CD workflows):
+
+- `./gradlew --quiet jmdictHasChanged` and `./gradlew --quiet jmnedictHasChanged` - check if JMdict or JMnedict has changed
+  by comparing checksums of downloaded files (run after `download` task!) with those stored in checksum files.
+  Outputs `YES` or `NO`. The `--quiet` is needed to put values into shell variables without extra output from Gradle.
+- `./gradlew updateChecksums` - update checksum files in `checksums/` directory.
+  Run after creating distribution archives and commit checksum files into the repository,
+  so that next time CI/CD workflow knows if it needs to rebuild anything.
 
 There are also more specific tasks, run `./gradlew tasks` for details
 
