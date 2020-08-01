@@ -8,7 +8,7 @@ import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import kotlin.streams.toList
 
-version = "3.0.1"
+version = "3.1.0"
 
 plugins {
     id ("de.undercouch.download") version "3.4.3"

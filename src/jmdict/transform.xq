@@ -73,8 +73,22 @@ declare function transform:lsource($lsource as node()) as node() {
   </j:map>
 };
 
-declare function transform:gloss($gloss as node()) as node() {
+declare function transform:g_type($word-id as xs:string, $g_type as attribute()?) as node() {
+  if (not($g_type))
+  then <j:null key="type"/>
+  else switch($g_type)
+    case "lit" return <j:string key="type"> { "literal" } </j:string>
+    case "fig" return <j:string key="type"> { "figurative" } </j:string>
+    case "expl" return <j:string key="type"> { "explanation" } </j:string>
+    default return error(
+      xs:QName("unknown-gloss-type"),
+      concat("Unknown gloss type '", $g_type, "' on entity ", $word-id)
+    )
+};
+
+declare function transform:gloss($word-id as xs:string, $gloss as node()) as node() {
   <j:map>
+    { transform:g_type($word-id, $gloss/@g_type) }
     <j:string key="lang"> { $gloss/@xml:lang/string() } </j:string>
     <j:string key="text"> { $gloss/text() } </j:string>
   </j:map>
@@ -144,7 +158,7 @@ declare function transform:sense($word-id as xs:string, $elems as node()*) as no
     </j:array>
     <j:array key="gloss">
       { for $gloss in $elem/gloss
-        return transform:gloss($gloss) }
+        return transform:gloss($word-id, $gloss) }
     </j:array>
   </j:map>
 };

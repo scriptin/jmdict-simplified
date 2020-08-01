@@ -108,6 +108,7 @@ There are also more specific tasks, run `./gradlew tasks` for details
             - `wasei` (boolean) := indicates that the Japanese word has been constructed from words in the source language, and not from an actual phrase in that language. See [Wasei-eigo](https://en.wikipedia.org/wiki/Wasei-eigo)
             - `text` (string or null) := text in the language defined by a `lang` element, or `null`
         - `gloss` (array of objects) := translations
+            - `type` (string or null) := type of translation, one of `"literal"`, `"figurative"`, `"explanation"`, or `null`. Most words have `null` values, meaning this attribute was absent in the original XML entry. The original documents do not describe the meaning of this attribute being absent.
             - `lang` (string) := language code from the ISO 639-2 standard
             - `text` (string) := a word or phrase
 

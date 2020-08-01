@@ -1,3 +1,7 @@
+# Version 3.1.0
+
+- Added conversion for `g_type` attribute on `gloss` elements (words->sense->gloss->type)
+
 # Version 3.0.1
 
 - BaseX is no longer required as an external binary, now it's used internally as a build script dependency
