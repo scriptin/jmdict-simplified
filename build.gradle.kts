@@ -241,29 +241,32 @@ fun runXQuery(
 ) {
     val dbName = "doc"
     val context = Context()
-    val xqFile = File(queryFilePath)
-    val outputFile = File(outputFilePath)
-    if (!outputFile.exists()) {
-        outputFile.createNewFile()
-    }
-    DropDB(dbName).execute(context)
-    CreateDB(dbName, inputFilePath).execute(context)
-    QueryProcessor(
-        xqFile.readText(),
-        xqFile.absolutePath,
-        context
-    ).use { processor ->
-        vars.forEach { (k, v) -> processor.bind(k, v) }
-        val iter = processor.iter()
-        processor.getSerializer(outputFile.outputStream()).use { serializer ->
-            var item: Item? = iter.next()
-            while (item != null) {
-                serializer.serialize(item)
-                item = iter.next()
+    try {
+        val xqFile = File(queryFilePath)
+        val outputFile = File(outputFilePath)
+        if (!outputFile.exists()) {
+            outputFile.createNewFile()
+        }
+        DropDB(dbName).execute(context)
+        CreateDB(dbName, inputFilePath).execute(context)
+        QueryProcessor(
+            xqFile.readText(),
+            xqFile.absolutePath,
+            context
+        ).use { processor ->
+            vars.forEach { (k, v) -> processor.bind(k, v) }
+            val iter = processor.iter()
+            processor.getSerializer(outputFile.outputStream()).use { serializer ->
+                var item: Item? = iter.next()
+                while (item != null) {
+                    serializer.serialize(item)
+                    item = iter.next()
+                }
             }
         }
+    } finally {
+        DropDB(dbName).execute(context)
     }
-    DropDB(dbName).execute(context)
 }
 
 val jmdictFullConvert: Task by tasks.creating {
