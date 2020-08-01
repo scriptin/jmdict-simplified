@@ -103,11 +103,11 @@ val download: Task by tasks.creating {
 
 fun getFileHash(inputFilePath: String): String {
     try {
-        val md = MessageDigest.getInstance("SHA-256");
+        val md = MessageDigest.getInstance("SHA-256")
         return md.digest(file(inputFilePath).readBytes())
             .joinToString("") { b -> (0xFF and b.toInt()).toString(16) }
     } catch (e: NoSuchAlgorithmException) {
-        throw Exception("SHA-256 is not supported in this Java instance", e);
+        throw Exception("SHA-256 is not supported in this Java instance", e)
     }
 }
 
@@ -346,7 +346,7 @@ fun jmnedictConcat(f: File, wrapperFile: String, parts: List<String>) {
         needsNewLine = true
     }
 
-    for (i in 0 until parts.size) {
+    for (i in parts.indices) {
         println("Concatenating: ${i+2}/$totalProgress")
         val part = parts[i]
         val needsComma = i != (parts.size - 1)
