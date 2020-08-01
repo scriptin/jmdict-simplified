@@ -2,7 +2,7 @@ name: Release
 
 on:
   schedule:
-    - cron: '* * 1,15 * *' # 1st and 15th of every month
+    - cron: '0 12 1,15 * *' # 1st and 15th of every month
   workflow_dispatch:
     inputs:
       release_notes:
