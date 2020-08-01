@@ -116,7 +116,7 @@ Notes:
 
 1. All fields in all objects are always present, none ever omitted
 2. Array fields are never `null` or missing, only empty
-3. The only place which allows `null` values is `sense->languageSource->text` field in word element
+3. The only places which allow `null` values are `sense->languageSource->text` and `sense->gloss->type` in word element
 
 ## Format of JMnedict
 
