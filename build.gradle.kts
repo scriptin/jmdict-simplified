@@ -8,10 +8,18 @@ import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import kotlin.streams.toList
 
-version = "3.1.0"
+group = "org.edrdg.jmdict.simplified"
+version = "4.0.0-SNAPSHOT"
 
 plugins {
-    id ("de.undercouch.download") version "3.4.3"
+    id("de.undercouch.download") version "3.4.3"
+    kotlin("jvm") version "1.4.21"
+    application
+}
+
+application {
+    mainClass.set("org.edrdg.jmdict.simplified.MainKt")
+    applicationDefaultJvmArgs = listOf("-Djdk.xml.entityExpansionLimit=0")
 }
 
 buildscript {
@@ -23,15 +31,14 @@ buildscript {
     }
 }
 
-/**
- * Clean the build dir
- */
-val clean: Task by tasks.creating {
-    group = "Clean"
-    description = "Remove all build artifacts and source XML files"
-    doLast {
-        delete(buildDir)
-    }
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation(kotlin("stdlib"))
+    implementation("org.slf4j:slf4j-simple:1.7.29")
+    implementation("io.github.microutils:kotlin-logging:1.8.3")
 }
 
 val createDataDir: Task by tasks.creating {
