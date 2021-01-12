@@ -304,7 +304,7 @@ fun jmnedictConvertWrapper(): String {
 }
 
 fun jmnedictConvertEntriesRange(idx: Int, start: Long, end: Long): String {
-    val fileName = "jmnedict-part-${idx+1}-$version.json"
+    val fileName = "jmnedict-part-${idx + 1}-$version.json"
     val filePath = "$buildDir/$fileName"
     val jmnedictPath: String by jmnedictExtract.extra
     runXQuery(
@@ -322,7 +322,7 @@ fun jmnedictGenerateFiles(partsCount: Int, partSize: Long): Pair<String, List<St
     val wrapperFile = jmnedictConvertWrapper()
     val parts = mutableListOf<String>()
     for (i in 0 until partsCount) {
-        println("Converting: ${i+2}/$progressTotal")
+        println("Converting: ${i + 2}/$progressTotal")
         val start = i * partSize
         val end = start + partSize
         parts.add(jmnedictConvertEntriesRange(i, start, end))
@@ -350,7 +350,7 @@ fun jmnedictConcat(f: File, wrapperFile: String, parts: List<String>) {
     }
 
     for (i in parts.indices) {
-        println("Concatenating: ${i+2}/$totalProgress")
+        println("Concatenating: ${i + 2}/$totalProgress")
         val part = parts[i]
         val needsComma = i != (parts.size - 1)
         started = false
