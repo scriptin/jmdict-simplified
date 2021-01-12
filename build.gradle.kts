@@ -416,8 +416,8 @@ val jmdictFullZip by tasks.creating(Zip::class) {
     val jmdictFullJsonName: String by jmdictFullConvert.extra
     val jmdictFullJsonPath: String by jmdictFullConvert.extra
     val distDir: String by createDistDir.extra
-    archiveName = "$jmdictFullJsonName.zip"
-    destinationDir = file(distDir)
+    archiveFileName.set("$jmdictFullJsonName.zip")
+    destinationDirectory.set(file(distDir))
     from(file(jmdictFullJsonPath))
 }
 
@@ -427,9 +427,9 @@ val jmdictFullTar by tasks.creating(Tar::class) {
     val jmdictFullJsonName: String by jmdictFullConvert.extra
     val jmdictFullJsonPath: String by jmdictFullConvert.extra
     val distDir: String by createDistDir.extra
-    archiveName = "$jmdictFullJsonName.tgz"
+    archiveFileName.set("$jmdictFullJsonName.tgz")
     compression = Compression.GZIP
-    destinationDir = file(distDir)
+    destinationDirectory.set(file(distDir))
     from(file(jmdictFullJsonPath))
 }
 
@@ -439,8 +439,8 @@ val jmdictCommonZip by tasks.creating(Zip::class) {
     val jmdictCommonJsonName: String by jmdictCommonConvert.extra
     val jmdictCommonJsonPath: String by jmdictCommonConvert.extra
     val distDir: String by createDistDir.extra
-    archiveName = "$jmdictCommonJsonName.zip"
-    destinationDir = file(distDir)
+    archiveFileName.set("$jmdictCommonJsonName.zip")
+    destinationDirectory.set(file(distDir))
     from(file(jmdictCommonJsonPath))
 }
 
@@ -450,9 +450,9 @@ val jmdictCommonTar by tasks.creating(Tar::class) {
     val jmdictCommonJsonName: String by jmdictCommonConvert.extra
     val jmdictCommonJsonPath: String by jmdictCommonConvert.extra
     val distDir: String by createDistDir.extra
-    archiveName = "$jmdictCommonJsonName.tgz"
+    archiveFileName.set("$jmdictCommonJsonName.tgz")
     compression = Compression.GZIP
-    destinationDir = file(distDir)
+    destinationDirectory.set(file(distDir))
     from(file(jmdictCommonJsonPath))
 }
 
@@ -462,8 +462,8 @@ val jmnedictZip by tasks.creating(Zip::class) {
     val jmnedictJsonName: String by jmnedictConvert.extra
     val jmnedictJsonPath: String by jmnedictConvert.extra
     val distDir: String by createDistDir.extra
-    archiveName = "$jmnedictJsonName.zip"
-    destinationDir = file(distDir)
+    archiveFileName.set("$jmnedictJsonName.zip")
+    destinationDirectory.set(file(distDir))
     from(file(jmnedictJsonPath))
 }
 
@@ -473,9 +473,9 @@ val jmnedictTar by tasks.creating(Tar::class) {
     val jmnedictJsonName: String by jmnedictConvert.extra
     val jmnedictJsonPath: String by jmnedictConvert.extra
     val distDir: String by createDistDir.extra
-    archiveName = "$jmnedictJsonName.tgz"
+    archiveFileName.set("$jmnedictJsonName.tgz")
     compression = Compression.GZIP
-    destinationDir = file(distDir)
+    destinationDirectory.set(file(distDir))
     from(file(jmnedictJsonPath))
 }
 
