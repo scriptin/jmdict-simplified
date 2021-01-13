@@ -39,19 +39,19 @@ object Parser {
         return eventReader.tag(QName("entry"), "entry") { entry ->
             JMdictTag.Entry(
                 entSeq = eventReader.tag(QName("ent_seq"), "ent_seq") {
-                    JMdictTag.EntSeq(eventReader.characters(it).data.trim())
+                    JMdictTag.EntSeq(eventReader.text(it))
                 },
                 kEle = eventReader.tagList(QName("k_ele")) {
                     eventReader.tag(QName("k_ele"), "k_ele") {
                         JMdictTag.KEle(
                             keb = eventReader.tag(QName("keb"), "keb") {
-                                JMdictTag.Keb(eventReader.characters(it).data.trim())
+                                JMdictTag.Keb(eventReader.text(it))
                             },
                             keInf = eventReader.simpleTagList(QName("ke_inf"), "ke_inf") {
-                                JMdictTag.KeInf(eventReader.characters(it).data.trim())
+                                JMdictTag.KeInf(eventReader.text(it))
                             },
                             kePri = eventReader.simpleTagList(QName("ke_pri"), "ke_pri") {
-                                JMdictTag.KePri(eventReader.characters(it).data.trim())
+                                JMdictTag.KePri(eventReader.text(it))
                             }
                         )
                     }
@@ -60,19 +60,19 @@ object Parser {
                     eventReader.tag(QName("r_ele"), "r_ele") {
                         JMdictTag.REle(
                             reb = eventReader.tag(QName("reb"), "reb") {
-                                JMdictTag.Reb(eventReader.characters(it).data.trim())
+                                JMdictTag.Reb(eventReader.text(it))
                             },
                             reNokanji = eventReader.maybeTag(QName("re_nokanji"), "re_nokanji") {
-                                JMdictTag.ReNokanji(eventReader.maybeCharacters(it)?.data?.trim())
+                                JMdictTag.ReNokanji(eventReader.maybeText(it))
                             },
                             reRestr = eventReader.simpleTagList(QName("re_restr"), "re_restr") {
-                                JMdictTag.ReRestr(eventReader.characters(it).data.trim())
+                                JMdictTag.ReRestr(eventReader.text(it))
                             },
                             reInf = eventReader.simpleTagList(QName("re_inf"), "re_inf") {
-                                JMdictTag.ReInf(eventReader.characters(it).data.trim())
+                                JMdictTag.ReInf(eventReader.text(it))
                             },
                             rePri = eventReader.simpleTagList(QName("re_pri"), "re_pri") {
-                                JMdictTag.RePri(eventReader.characters(it).data.trim())
+                                JMdictTag.RePri(eventReader.text(it))
                             }
                         )
                     }
@@ -81,28 +81,28 @@ object Parser {
                     eventReader.tag(QName("sense"), "sense") {
                         JMdictTag.Sense(
                             stagk = eventReader.simpleTagList(QName("stagk"), "stagk") {
-                                JMdictTag.Stagk(eventReader.characters(it).data.trim())
+                                JMdictTag.Stagk(eventReader.text(it))
                             },
                             stagr = eventReader.simpleTagList(QName("stagr"), "stagr") {
-                                JMdictTag.Stagr(eventReader.characters(it).data.trim())
+                                JMdictTag.Stagr(eventReader.text(it))
                             },
                             pos = eventReader.simpleTagList(QName("pos"), "pos") {
-                                JMdictTag.Pos(eventReader.characters(it).data.trim())
+                                JMdictTag.Pos(eventReader.text(it))
                             },
                             xref = eventReader.simpleTagList(QName("xref"), "xref") {
-                                JMdictTag.Xref(eventReader.characters(it).data.trim())
+                                JMdictTag.Xref(eventReader.text(it))
                             },
                             ant = eventReader.simpleTagList(QName("ant"), "ant") {
-                                JMdictTag.Ant(eventReader.characters(it).data.trim())
+                                JMdictTag.Ant(eventReader.text(it))
                             },
                             field = eventReader.simpleTagList(QName("field"), "field") {
-                                JMdictTag.Field(eventReader.characters(it).data.trim())
+                                JMdictTag.Field(eventReader.text(it))
                             },
                             misc = eventReader.simpleTagList(QName("misc"), "misc") {
-                                JMdictTag.Misc(eventReader.characters(it).data.trim())
+                                JMdictTag.Misc(eventReader.text(it))
                             },
                             sInf = eventReader.simpleTagList(QName("s_inf"), "s_inf") {
-                                JMdictTag.SInf(eventReader.characters(it).data.trim())
+                                JMdictTag.SInf(eventReader.text(it))
                             },
                             lsource = eventReader.simpleTagList(QName("lsource"), "lsource") {
                                 JMdictTag.Lsource(
@@ -117,7 +117,7 @@ object Parser {
                                 )
                             },
                             dial = eventReader.simpleTagList(QName("dial"), "dial") {
-                                JMdictTag.Dial(eventReader.characters(it).data.trim())
+                                JMdictTag.Dial(eventReader.text(it))
                             },
                             gloss = eventReader.simpleTagList(QName("gloss"), "gloss") {
                                 JMdictTag.Gloss(
@@ -129,7 +129,7 @@ object Parser {
                                         JMdictTag.GType::fromString
                                     ),
                                     text = listOf(
-                                        JMdictTag.GlossContent.PCData(eventReader.characters(it).data.trim())
+                                        JMdictTag.GlossContent.PCData(eventReader.text(it))
                                     )
                                 )
                             }

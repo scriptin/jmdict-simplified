@@ -206,8 +206,14 @@ internal fun XMLEventReader.characters(parentTag: StartElement): Characters {
     return event
 }
 
+internal fun XMLEventReader.text(parentTag: StartElement): String =
+    characters(parentTag).data.trim()
+
 internal fun XMLEventReader.maybeCharacters(parentTag: StartElement): Characters? =
     if (!peek().isCharacters) null else characters(parentTag)
+
+internal fun XMLEventReader.maybeText(parentTag: StartElement): String? =
+    maybeCharacters(parentTag)?.data?.trim()
 
 /**
  * Convert [QName] into a [String] of 'prefix:localName' or 'localName' format
