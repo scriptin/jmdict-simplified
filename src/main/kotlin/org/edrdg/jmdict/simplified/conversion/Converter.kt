@@ -76,7 +76,9 @@ class Converter(metadata: Metadata) {
                             JMdictTag.GType.EXPL -> JMdictSimplified.GlossType.EXPLANATION
                             null -> null
                         },
-                        text = it.text,
+                        // There seems to be an issue in the original XML where one translation is empty.
+                        // This is a quick fix for that, but <gloss> tags should never be empty.
+                        text = it.text ?: "",
                     )
                 }
             )
