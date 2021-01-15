@@ -55,8 +55,8 @@ val jmdictDownload by tasks.creating(Download::class) {
     group = "Download"
     description = "Download JMdict source XML archive"
     val dataDir: String by createDataDir.extra
-    val filePath = "$dataDir/JMdict_e.gz"
-    src("http://ftp.edrdg.org/pub/Nihongo/JMdict_e.gz")
+    val filePath = "$dataDir/JMdict.gz"
+    src("http://ftp.monash.edu.au/pub/nihongo/JMdict.gz")
     dest(filePath)
     extra["archivePath"] = filePath
     overwrite(true)
@@ -69,7 +69,7 @@ val jmdictExtract: Task by tasks.creating {
     dependsOn(jmdictDownload)
     val dataDir: String by createDataDir.extra
     val archivePath: String by jmdictDownload.extra
-    val filePath = "$dataDir/JMdict_e.xml"
+    val filePath = "$dataDir/JMdict.xml"
     extra["jmdictPath"] = filePath
     doLast {
         resources.gzip(archivePath).read().copyTo(file(filePath).outputStream())
@@ -124,7 +124,7 @@ val jmdictUpdateChecksumFile: Task by tasks.creating {
     group = "Checksum"
     description = "Generate a checksum of JMdict XML file and write it into a checksum file"
     val jmdictPath: String by jmdictExtract.extra
-    val jmdictChecksumPath = "$projectDir/checksums/JMdict_e.xml.sha256"
+    val jmdictChecksumPath = "$projectDir/checksums/JMdict.xml.sha256"
     extra["jmdictChecksumPath"] = jmdictChecksumPath
     doLast {
         file(jmdictChecksumPath).writeText(getFileHash(jmdictPath))
