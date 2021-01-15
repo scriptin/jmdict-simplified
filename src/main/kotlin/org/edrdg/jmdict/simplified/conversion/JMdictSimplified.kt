@@ -49,7 +49,7 @@ sealed class JMdictSimplified {
         val lang: String,
         val gender: Gender?,
         val type: GlossType?,
-        val text: String,
+        val text: String?,
     )
 
     enum class Gender(val value: String) {
