@@ -55,7 +55,7 @@ sealed class JMdictSimplified {
     enum class Gender(val value: String) {
         MASCULINE("masculine"),
         FEMININE("feminine"),
-        NEUTER("neuter"),
+        NEUTER("neuter");
     }
 
     enum class GlossType(val value: String) {

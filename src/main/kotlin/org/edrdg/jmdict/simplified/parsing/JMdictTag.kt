@@ -25,7 +25,7 @@ sealed class JMdictTag(open val name: String) {
         val entSeq: EntSeq,
         val kEle: List<KEle>,
         val rEle: List<REle>,
-        val sense: List<Sense>
+        val sense: List<Sense>,
     ) : JMdictTag("entry")
 
     /**
@@ -60,7 +60,7 @@ sealed class JMdictTag(open val name: String) {
     data class KEle(
         val keb: Keb,
         val keInf: List<KeInf>,
-        val kePri: List<KePri>
+        val kePri: List<KePri>,
     ) : JMdictTag("k_ele")
 
     /**
@@ -145,7 +145,7 @@ sealed class JMdictTag(open val name: String) {
         val reNokanji: ReNokanji?,
         val reRestr: List<ReRestr>,
         val reInf: List<ReInf>,
-        val rePri: List<RePri>
+        val rePri: List<RePri>,
     ) : JMdictTag("r_ele")
 
     /**
@@ -228,7 +228,7 @@ sealed class JMdictTag(open val name: String) {
         val sInf: List<SInf>,
         val lsource: List<Lsource>,
         val dial: List<Dial>,
-        val gloss: List<Gloss>
+        val gloss: List<Gloss>,
     ) : JMdictTag("sense")
 
     /**
@@ -379,7 +379,7 @@ sealed class JMdictTag(open val name: String) {
          * indicate "waseieigo".
          */
         val lsWasei: Boolean,
-        val text: String?
+        val text: String?,
     ) : JMdictTag("lsource")
 
     /**

@@ -48,7 +48,7 @@ object Parser {
                 },
                 sense = eventReader.nonEmptyTagList(entry, QName("sense")) {
                     sense(eventReader)
-                }
+                },
             )
         }
     }
@@ -67,7 +67,7 @@ object Parser {
             },
             kePri = eventReader.simpleTagList(QName("ke_pri"), "ke_pri") {
                 JMdictTag.KePri(eventReader.text(it))
-            }
+            },
         )
     }
 
@@ -87,7 +87,7 @@ object Parser {
             },
             rePri = eventReader.simpleTagList(QName("re_pri"), "re_pri") {
                 JMdictTag.RePri(eventReader.text(it))
-            }
+            },
         )
     }
 
@@ -125,7 +125,7 @@ object Parser {
             },
             gloss = eventReader.simpleTagList(QName("gloss"), "gloss") {
                 gloss(it, eventReader)
-            }
+            },
         )
     }
 
