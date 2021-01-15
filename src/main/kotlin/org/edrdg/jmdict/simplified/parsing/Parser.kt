@@ -140,7 +140,7 @@ object Parser {
             JMdictTag.LsType::fromString
         ) ?: JMdictTag.LsType.FULL,
         lsWasei = it.attrString(QName("ls_wasei")) == "y",
-        text = eventReader.maybeCharacters(it)?.data?.trim()
+        text = eventReader.maybeCharacters(it)?.data?.trim(),
     )
 
     private fun gloss(
@@ -154,8 +154,6 @@ object Parser {
             JMdictTag.GType.values(),
             JMdictTag.GType::fromString
         ),
-        text = listOf(
-            JMdictTag.GlossContent.PCData(eventReader.text(it))
-        )
+        text = eventReader.maybeText(it),
     )
 }

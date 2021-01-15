@@ -446,24 +446,6 @@ sealed class JMdictTag(open val name: String) {
          * type, e.g. "lit" (literal), "fig" (figurative), "expl" (explanation).
          */
         val gType: GType?,
-        val text: List<GlossContent>
+        val text: String?,
     ) : JMdictTag("gloss")
-
-    sealed class GlossContent(override val name: String) : JMdictTag(name) {
-        /** Just text */
-        data class PCData(val text: String) : GlossContent("")
-        /**
-         * ~~~xml
-         * <!ELEMENT pri (#PCDATA)>
-         * ~~~
-         *
-         * These elements highlight particular target-language words which
-         * are strongly associated with the Japanese word. The purpose is to
-         * establish a set of target-language words which can effectively be
-         * used as head-words in a reverse target-language/Japanese relationship.
-         *
-         * Note: this is not actually used anywhere.
-         */
-        data class Pri(val text: String) : GlossContent("pri")
-    }
 }
