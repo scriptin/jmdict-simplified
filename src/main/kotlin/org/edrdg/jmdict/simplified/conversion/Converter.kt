@@ -26,8 +26,9 @@ class Converter(metadata: Metadata) {
         text = rEle.reb.text,
         tags = rEle.reInf.map { entityToTag(it.text, entSeq) },
         appliesToKanji = when {
-            rEle.reNokanji != null && rEle.reRestr.isNotEmpty() -> throw Exception(
-                "[ent_seq=$entSeq] <r_ele> contains a <re_nokanji/>, but also has a non-empty list of <re_restr>"
+            rEle.reNokanji != null && rEle.reRestr.isNotEmpty() -> throw ConversionException(
+                entSeq,
+                "<r_ele> contains a <re_nokanji/>, but also has a non-empty list of <re_restr>"
             )
             rEle.reNokanji != null -> emptyList()
             rEle.reRestr.isEmpty() -> listOf("*")
@@ -38,15 +39,16 @@ class Converter(metadata: Metadata) {
     private fun senses(senses: List<JMdictTag.Sense>, entSeq: String): List<JMdictSimplified.Sense> {
         return senses.mapIndexed { i, sense ->
             val lastSenseWithPartOfSpeech = senses.take(i + 1).lastOrNull { it.pos.isNotEmpty() }
-            val lastPartOfSpeech = lastSenseWithPartOfSpeech?.pos ?: throw Exception(
-                "[ent_seq=$entSeq] No part-of-speech (<pos>) found in ${i + 1} first <sense> tags"
+            val lastPartOfSpeech = lastSenseWithPartOfSpeech?.pos ?: throw ConversionException(
+                entSeq,
+                "No part-of-speech (<pos>) found in ${i + 1} first <sense> tags"
             )
             JMdictSimplified.Sense(
                 partOfSpeech = lastPartOfSpeech.map { entityToTag(it.text, entSeq) },
                 appliesToKanji = sense.stagk.map { it.text },
                 appliesToKana = sense.stagr.map { it.text },
-                related = sense.xref.map { xref(it.text, entSeq) },
-                antonym = sense.ant.map { xref(it.text, entSeq) },
+                related = sense.xref.map { xref(it.text, "xref", entSeq) },
+                antonym = sense.ant.map { xref(it.text, "ant", entSeq) },
                 field = sense.field.map { entityToTag(it.text, entSeq) },
                 dialect = sense.dial.map { entityToTag(it.text, entSeq) },
                 info = sense.sInf.map { it.text },
@@ -66,7 +68,7 @@ class Converter(metadata: Metadata) {
                             "f", "fem", "femin", "feminine" -> JMdictSimplified.Gender.FEMININE
                             "n", "neu", "neut", "neuter" -> JMdictSimplified.Gender.NEUTER
                             null -> null
-                            else -> throw Exception("[ent_seq=$entSeq] unknown gender: ${it.gGend}")
+                            else -> throw ConversionException(entSeq, "Unknown gender: ${it.gGend}")
                         },
                         type = when (it.gType) {
                             JMdictTag.GType.LIT -> JMdictSimplified.GlossType.LITERAL
@@ -82,12 +84,13 @@ class Converter(metadata: Metadata) {
     }
 
     private fun entityToTag(text: String, entSeq: String) = JMdictSimplified.Tag(
-        entities[text] ?: throw Exception(
-            "[ent_seq=$entSeq] Following text doesn't match any entities from the original XML file: $text"
+        entities[text] ?: throw ConversionException(
+            entSeq,
+            "Following text doesn't match any entities from the original XML file: $text"
         )
     )
 
-    private fun xref(text: String, entSeq: String): JMdictSimplified.Xref {
+    private fun xref(text: String, tagName: String, entSeq: String): JMdictSimplified.Xref {
         val parts = text.split("・").map { it.trim() }
         return when (parts.size) {
             1 -> JMdictSimplified.Xref(parts[0], null, null)
@@ -97,8 +100,9 @@ class Converter(metadata: Metadata) {
                 else
                     JMdictSimplified.Xref(parts[0], parts[1], null)
             3 -> JMdictSimplified.Xref(parts[0], parts[1], parts[2].toInt())
-            else -> throw Exception(
-                "[ent_seq=$entSeq] Unexpected number of parts (${parts.size}) in xref (related/antonym): $text"
+            else -> throw ConversionException(
+                entSeq,
+                "Unexpected number of parts (${parts.size}, expected 1-3) in <$tagName>: $text"
             )
         }
     }
