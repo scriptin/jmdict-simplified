@@ -1,5 +1,7 @@
 package org.edrdg.jmdict.simplified
 
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 import org.edrdg.jmdict.simplified.conversion.Converter
 import org.edrdg.jmdict.simplified.parsing.*
@@ -40,13 +42,15 @@ fun main(args: Array<String>) {
 
             val converter = Converter(metadata)
 
-            var n = 10000
+            var n = 1000
             while (n > 0) {
                 if (!Parser.hasNextEntry(eventReader)) break
                 val entry = Parser.parseEntry(eventReader)
                 logger.info { "Entry: $entry" }
                 val word = converter.convertWord(entry)
                 logger.info { "Word: $word"}
+                val json = Json.encodeToString(word)
+                logger.info { "JSON: $json" }
                 n -= 1
             }
         } catch (e: Exception) {

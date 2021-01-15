@@ -1,10 +1,23 @@
 package org.edrdg.jmdict.simplified.conversion
 
-sealed class JMdictSimplified {
-    data class Xref(val part1: String, val part2: String?, val index: Int?)
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+sealed class JMdictSimplified {
+    @Serializable(with = XrefSerializer::class)
+    data class Xref(val part1: String, val part2: String?, val index: Int?) {
+        val size: Int
+            get() = 1 + when {
+                part2 == null && index == null -> 0
+                (part2 != null) xor (index != null) -> 1
+                else -> 2
+            }
+    }
+
+    @Serializable(with = TagSerializer::class)
     data class Tag(val abbreviation: String)
 
+    @Serializable
     data class Word(
         val id: String,
         val kanji: List<Kanji>,
@@ -12,12 +25,14 @@ sealed class JMdictSimplified {
         val sense: List<Sense>,
     )
 
+    @Serializable
     data class Kanji(
         val common: Boolean,
         val text: String,
         val tags: List<Tag>,
     )
 
+    @Serializable
     data class Kana(
         val common: Boolean,
         val text: String,
@@ -25,6 +40,7 @@ sealed class JMdictSimplified {
         val appliesToKanji: List<String>,
     )
 
+    @Serializable
     data class Sense(
         val partOfSpeech: List<Tag>,
         val appliesToKanji: List<String>,
@@ -38,6 +54,7 @@ sealed class JMdictSimplified {
         val gloss: List<Gloss>,
     )
 
+    @Serializable
     data class LanguageSource(
         val lang: String,
         val full: Boolean,
@@ -45,6 +62,7 @@ sealed class JMdictSimplified {
         val text: String?,
     )
 
+    @Serializable
     data class Gloss(
         val lang: String,
         val gender: Gender?,
@@ -52,15 +70,17 @@ sealed class JMdictSimplified {
         val text: String?,
     )
 
+    @Serializable
     enum class Gender(val value: String) {
-        MASCULINE("masculine"),
-        FEMININE("feminine"),
-        NEUTER("neuter");
+        @SerialName("masculine") MASCULINE("masculine"),
+        @SerialName("feminine") FEMININE("feminine"),
+        @SerialName("neuter") NEUTER("neuter");
     }
 
+    @Serializable
     enum class GlossType(val value: String) {
-        LITERAL("literal"),
-        FIGURATIVE("figurative"),
-        EXPLANATION("explanation");
+        @SerialName("literal") LITERAL("literal"),
+        @SerialName("figurative") FIGURATIVE("figurative"),
+        @SerialName("explanation") EXPLANATION("explanation");
     }
 }

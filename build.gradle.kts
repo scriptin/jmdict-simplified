@@ -14,6 +14,7 @@ version = "4.0.0-SNAPSHOT"
 plugins {
     id("de.undercouch.download") version "3.4.3"
     kotlin("jvm") version "1.4.21"
+    kotlin("plugin.serialization") version "1.4.21"
     application
 }
 
@@ -39,6 +40,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("org.slf4j:slf4j-simple:1.7.29")
     implementation("io.github.microutils:kotlin-logging:1.8.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
 }
 
 val createDataDir: Task by tasks.creating {
