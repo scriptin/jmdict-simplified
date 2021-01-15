@@ -1,6 +1,7 @@
 package org.edrdg.jmdict.simplified
 
 import mu.KotlinLogging
+import org.edrdg.jmdict.simplified.conversion.Converter
 import org.edrdg.jmdict.simplified.parsing.*
 import java.io.File
 import java.io.FileInputStream
@@ -37,12 +38,15 @@ fun main(args: Array<String>) {
 
             eventReader.openTag(QName("JMdict"), "root opening tag")
 
-            // val commonIndicators = setOf("news1", "ichi1", "spec1", "spec2", "gai1")
+            val converter = Converter(metadata)
+
             var n = 10000
             while (n > 0) {
                 if (!Parser.hasNextEntry(eventReader)) break
                 val entry = Parser.parseEntry(eventReader)
                 logger.info { "Entry: $entry" }
+                val word = converter.convertWord(entry)
+                logger.info { "Word: $word"}
                 n -= 1
             }
         } catch (e: Exception) {
