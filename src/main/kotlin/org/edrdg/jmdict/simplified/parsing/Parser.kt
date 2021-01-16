@@ -1,5 +1,6 @@
 package org.edrdg.jmdict.simplified.parsing
 
+import javax.xml.XMLConstants
 import javax.xml.namespace.QName
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.events.EntityDeclaration
@@ -133,7 +134,7 @@ object Parser {
         it: StartElement,
         eventReader: XMLEventReader
     ) = JMdictTag.Lsource(
-        lang = it.attrString(QName("xml", "lang")) ?: "eng",
+        lang = it.attrString(QName(XMLConstants.XML_NS_URI, "lang", "xml")) ?: "eng",
         lsType = it.attrEnum(
             QName("ls_type"),
             JMdictTag.LsType.values(),
@@ -147,7 +148,7 @@ object Parser {
         it: StartElement,
         eventReader: XMLEventReader
     ) = JMdictTag.Gloss(
-        lang = it.attrString(QName("xml", "lang")) ?: "eng",
+        lang = it.attrString(QName(XMLConstants.XML_NS_URI, "lang", "xml")) ?: "eng",
         gGend = it.attrString(QName("g_gend")),
         gType = it.attrEnum(
             QName("g_type"),
