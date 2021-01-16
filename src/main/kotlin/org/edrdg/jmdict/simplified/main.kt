@@ -1,62 +1,11 @@
 package org.edrdg.jmdict.simplified
 
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import mu.KotlinLogging
-import org.edrdg.jmdict.simplified.conversion.Converter
-import org.edrdg.jmdict.simplified.parsing.*
-import java.io.File
-import java.io.FileInputStream
-import javax.xml.namespace.QName
-import javax.xml.stream.XMLInputFactory
+import com.github.ajalt.clikt.core.subcommands
+import org.edrdg.jmdict.simplified.commands.AnalyzeJMdict
+import org.edrdg.jmdict.simplified.commands.ConvertJMdict
+import org.edrdg.jmdict.simplified.commands.JMdictSimplified
 
-private val logger = KotlinLogging.logger {}
-
-fun main(args: Array<String>) {
-    if (args.isEmpty()) {
-        println(
-            """
-            Arguments (positional):
-            1. /path/to/JMdict.xml
-            2. /path/to/result/jmdict.json
-            Example:
-            ./gradlew run --args="./build/data/JMdict_e.xml ./build/jmdict-eng-4.0.0-SNAPSHOT.json"
-            """.trimIndent()
-        )
-    } else {
-        val inputFilePath = args[0]
-        val outputFilePath = args[1]
-        logger.info { "Input file: $inputFilePath" }
-        logger.info { "Output file: $outputFilePath" }
-
-        val file = File(inputFilePath)
-        val factory = XMLInputFactory.newFactory()
-        factory.setProperty(XMLInputFactory.IS_COALESCING, true)
-        val eventReader = factory.createXMLEventReader(FileInputStream(file))
-
-        try {
-            val metadata = Parser.parseMetadata(eventReader)
-            logger.info { "Metadata: $metadata" }
-
-            eventReader.openTag(QName("JMdict"), "root opening tag")
-
-            val converter = Converter(metadata)
-
-            var n = 1000
-            while (n > 0) {
-                if (!Parser.hasNextEntry(eventReader)) break
-                val entry = Parser.parseEntry(eventReader)
-                logger.info { "Entry: $entry" }
-                val word = converter.convertWord(entry)
-                logger.info { "Word: $word"}
-                val json = Json.encodeToString(word)
-                logger.info { "JSON: $json" }
-                n -= 1
-            }
-        } catch (e: Exception) {
-            logger.error { e }
-        } finally {
-            eventReader.close()
-        }
-    }
-}
+fun main(args: Array<String>) = JMdictSimplified().subcommands(
+    AnalyzeJMdict(),
+    ConvertJMdict(),
+).main(args)

@@ -40,6 +40,7 @@ buildscript {
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -47,6 +48,8 @@ dependencies {
     implementation("org.slf4j:slf4j-simple:1.7.29")
     implementation("io.github.microutils:kotlin-logging:1.8.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+    implementation("com.github.ajalt.clikt:clikt:3.1.0")
+    implementation("net.swiftzer.semver:semver:1.1.1")
 }
 
 val createDataDir: Task by tasks.creating {
