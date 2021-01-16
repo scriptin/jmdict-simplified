@@ -23,6 +23,12 @@ application {
     applicationDefaultJvmArgs = listOf("-Djdk.xml.entityExpansionLimit=0")
 }
 
+tasks {
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+}
+
 buildscript {
     repositories {
         mavenCentral()
