@@ -9,7 +9,7 @@ import java.security.NoSuchAlgorithmException
 import kotlin.streams.toList
 
 group = "org.edrdg.jmdict.simplified"
-version = "4.0.0-SNAPSHOT"
+version = "3.2.0-SNAPSHOT"
 
 plugins {
     id("de.undercouch.download") version "3.4.3"
