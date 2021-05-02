@@ -65,7 +65,7 @@ val jmdictDownload by tasks.creating(Download::class) {
     description = "Download JMdict source XML archive"
     val dataDir: String by createDataDir.extra
     val filePath = "$dataDir/JMdict.gz"
-    src("http://ftp.monash.edu.au/pub/nihongo/JMdict.gz")
+    src("http://ftp.edrdg.org/pub/Nihongo/JMdict.gz")
     dest(filePath)
     extra["archivePath"] = filePath
     overwrite(true)
