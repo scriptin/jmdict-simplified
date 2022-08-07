@@ -80,6 +80,7 @@ declare function transform:g_type($word-id as xs:string, $g_type as attribute()?
     case "lit" return <j:string key="type"> { "literal" } </j:string>
     case "fig" return <j:string key="type"> { "figurative" } </j:string>
     case "expl" return <j:string key="type"> { "explanation" } </j:string>
+    case "tm" return <j:string key="type"> { "trademark" } </j:string>
     default return error(
       xs:QName("unknown-gloss-type"),
       concat("Unknown gloss type '", $g_type, "' on entity ", $word-id)
