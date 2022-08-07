@@ -167,6 +167,7 @@ fun getTags(inputFilePath: String): List<Pair<String, String>> {
     val regex = """<!ENTITY\s+(.+)\s+"([^"]+)">""".toRegex()
     return file(inputFilePath).bufferedReader().lines()
         .filter { it.matches(regex) }
+        .distinct()
         .map { line ->
             val groups = regex.find(line)!!.groupValues
             Pair(groups[1], groups[2])

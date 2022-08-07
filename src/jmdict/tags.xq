@@ -258,7 +258,6 @@ declare function tags:convert-entity($word-id as xs:string, $text as xs:string) 
   case "transitive verb" return "vt"
   case "Ichidan verb - zuru verb (alternative form of -jiru verbs)" return "vz"
   case "gikun (meaning as reading) or jukujikun (special kanji reading)" return "gikun"
-  case "word containing irregular kana usage" return "ik"
   case "out-dated or obsolete kana usage" return "ok"
   case "word usually written using kanji alone" return "uK"
   default return error(
