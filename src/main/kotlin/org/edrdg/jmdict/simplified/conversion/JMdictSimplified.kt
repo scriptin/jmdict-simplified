@@ -81,6 +81,7 @@ sealed class JMdictSimplified {
     enum class GlossType(val value: String) {
         @SerialName("literal") LITERAL("literal"),
         @SerialName("figurative") FIGURATIVE("figurative"),
-        @SerialName("explanation") EXPLANATION("explanation");
+        @SerialName("explanation") EXPLANATION("explanation"),
+        @SerialName("trademark") TRADEMARK("trademark");
     }
 }

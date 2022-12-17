@@ -395,7 +395,8 @@ sealed class JMdictTag(open val name: String) {
     enum class GType(val value: String) {
         LIT("lit"),
         FIG("fig"),
-        EXPL("expl");
+        EXPL("expl"),
+        TM("tm");
 
         companion object {
             fun fromString(s: String): GType {

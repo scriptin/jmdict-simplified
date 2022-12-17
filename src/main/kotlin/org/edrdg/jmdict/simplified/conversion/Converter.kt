@@ -74,6 +74,7 @@ class Converter(metadata: Metadata) {
                             JMdictTag.GType.LIT -> JMdictSimplified.GlossType.LITERAL
                             JMdictTag.GType.FIG -> JMdictSimplified.GlossType.FIGURATIVE
                             JMdictTag.GType.EXPL -> JMdictSimplified.GlossType.EXPLANATION
+                            JMdictTag.GType.TM -> JMdictSimplified.GlossType.TRADEMARK
                             null -> null
                         },
                         // There seems to be an issue in the original XML where one translation is empty.
