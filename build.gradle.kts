@@ -15,7 +15,7 @@ version = "3.2.0-SNAPSHOT"
 plugins {
     id("de.undercouch.download") version "3.4.3"
     kotlin("jvm") version "1.7.21"
-    kotlin("plugin.serialization") version "1.4.21"
+    kotlin("plugin.serialization") version "1.7.21"
     application
 }
 
@@ -46,9 +46,9 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("org.slf4j:slf4j-simple:2.0.6")
     implementation("io.github.microutils:kotlin-logging:3.0.4")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
     implementation("com.github.ajalt.clikt:clikt:3.5.0")
-    implementation("net.swiftzer.semver:semver:1.1.2")
+    implementation("net.swiftzer.semver:semver:1.2.0")
 }
 
 val createDataDir: Task by tasks.creating {

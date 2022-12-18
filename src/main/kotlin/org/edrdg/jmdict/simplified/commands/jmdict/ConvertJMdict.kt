@@ -1,5 +1,6 @@
 package org.edrdg.jmdict.simplified.commands.jmdict
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.edrdg.jmdict.simplified.commands.ConvertDictionary

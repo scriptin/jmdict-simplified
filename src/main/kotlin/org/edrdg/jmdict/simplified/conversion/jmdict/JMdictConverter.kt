@@ -66,7 +66,7 @@ class JMdictConverter(metadata: Metadata) : Converter<JMdictXmlElement.Entry, JM
                 gloss = sense.gloss.map {
                     JMdictJsonElement.Gloss(
                         lang = it.lang,
-                        gender = when (it.gGend?.toLowerCase()) {
+                        gender = when (it.gGend?.lowercase()) {
                             "m", "mas", "masc", "mascul", "masculine" -> JMdictJsonElement.Gender.MASCULINE
                             "f", "fem", "femin", "feminine" -> JMdictJsonElement.Gender.FEMININE
                             "n", "neu", "neut", "neuter" -> JMdictJsonElement.Gender.NEUTER
