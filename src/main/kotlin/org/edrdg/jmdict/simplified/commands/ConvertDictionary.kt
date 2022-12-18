@@ -36,7 +36,7 @@ abstract class ConvertDictionary<E, W>(
     abstract val dictionaryName: String
 
     private val languages by option(
-        "-l", "--lang", "--langs", "--language", "--languages",
+        "-l", "--languages",
         metavar = "LANGUAGES",
         help = "Comma-separated language IDs: ISO 639-2/B values, " +
             "optionally separated by dash (to have multiple languages in a same file), " +
@@ -110,9 +110,9 @@ abstract class ConvertDictionary<E, W>(
     }
 
     private val version by option(
-        "--version",
+        "-v", "--version",
         metavar = "VERSION",
-        help = "Version of the jmdict-simplified project, used in output file names",
+        help = "Version which will be used in output files",
     ).required().check("must be a valid semantic version <https://semver.org/spec/v2.0.0.html>") {
         try {
             SemVer.parse(it)
