@@ -14,7 +14,7 @@ import java.nio.file.Path
 import java.util.*
 
 abstract class ConvertDictionary<E, W>(
-    val hasCommon: Boolean,
+    val supportsCommon: Boolean,
     override val help: String = "Convert dictionary file into JSON",
     parser: Parser<E>,
 ) : AnalyzeDictionary<E>(
@@ -41,9 +41,9 @@ abstract class ConvertDictionary<E, W>(
         help = "Comma-separated language IDs: ISO 639-2/B values, " +
             "optionally separated by dash (to have multiple languages in a same file), " +
             "or special 'all' value. " +
-            (if (hasCommon) "Can have '-common' suffix (e.g. 'eng-common') to include only common words. " else "") +
+            (if (supportsCommon) "Can have '-common' suffix (e.g. 'eng-common') to include only common words. " else "") +
             "Examples: " +
-            (if (hasCommon) "'all,eng,eng-common' (will produce 3 files: all, English, English-common)" else "'all,eng' (will produce 2 files: all, English)") + ", " +
+            (if (supportsCommon) "'all,eng,eng-common' (will produce 3 files: all, English, English-common)" else "'all,eng' (will produce 2 files: all, English)") + ", " +
             "'ger,eng-ger' (2 files: German, English+German), 'fre' (French)",
     ).split(",").required().validate { languages ->
         languages.forEach { language ->
@@ -104,7 +104,7 @@ abstract class ConvertDictionary<E, W>(
                     .replace("-common$".toRegex(), "")
                     .split("-")
                     .toSet(),
-                common = language.endsWith("-common"),
+                common = if (supportsCommon) language.endsWith("-common") else false,
             )
         }
     }
