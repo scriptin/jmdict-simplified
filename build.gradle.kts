@@ -4,6 +4,7 @@ import org.basex.core.cmd.CreateDB
 import org.basex.core.cmd.DropDB
 import org.basex.query.QueryProcessor
 import org.basex.query.value.item.Item
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import kotlin.streams.toList
@@ -13,7 +14,7 @@ version = "3.2.0-SNAPSHOT"
 
 plugins {
     id("de.undercouch.download") version "3.4.3"
-    kotlin("jvm") version "1.4.21"
+    kotlin("jvm") version "1.7.21"
     kotlin("plugin.serialization") version "1.4.21"
     application
 }
@@ -23,10 +24,8 @@ application {
     applicationDefaultJvmArgs = listOf("-Djdk.xml.entityExpansionLimit=0")
 }
 
-tasks {
-    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions.jvmTarget = "1.8"
-    }
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "1.8"
 }
 
 buildscript {
@@ -45,11 +44,11 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("org.slf4j:slf4j-simple:1.7.29")
-    implementation("io.github.microutils:kotlin-logging:1.8.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
-    implementation("com.github.ajalt.clikt:clikt:3.1.0")
-    implementation("net.swiftzer.semver:semver:1.1.1")
+    implementation("org.slf4j:slf4j-simple:2.0.6")
+    implementation("io.github.microutils:kotlin-logging:3.0.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
+    implementation("com.github.ajalt.clikt:clikt:3.5.0")
+    implementation("net.swiftzer.semver:semver:1.1.2")
 }
 
 val createDataDir: Task by tasks.creating {
