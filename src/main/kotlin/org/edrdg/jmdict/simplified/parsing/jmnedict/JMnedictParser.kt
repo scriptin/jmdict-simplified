@@ -1,5 +1,8 @@
-package org.edrdg.jmdict.simplified.parsing
+package org.edrdg.jmdict.simplified.parsing.jmnedict
 
+import org.edrdg.jmdict.simplified.parsing.*
+import org.edrdg.jmdict.simplified.parsing.dtd
+import org.edrdg.jmdict.simplified.parsing.skip
 import javax.xml.XMLConstants
 import javax.xml.namespace.QName
 import javax.xml.stream.XMLEventReader

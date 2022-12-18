@@ -1,7 +1,8 @@
-package org.edrdg.jmdict.simplified.conversion
+package org.edrdg.jmdict.simplified.conversion.jmdict
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.edrdg.jmdict.simplified.conversion.CommonJsonElement
 
 sealed class JMdictJsonElement : CommonJsonElement() {
     @Serializable

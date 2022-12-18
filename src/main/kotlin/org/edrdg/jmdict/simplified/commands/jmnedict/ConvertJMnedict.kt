@@ -1,16 +1,17 @@
-package org.edrdg.jmdict.simplified.commands
+package org.edrdg.jmdict.simplified.commands.jmnedict
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.edrdg.jmdict.simplified.conversion.JMnedictConverter
-import org.edrdg.jmdict.simplified.conversion.JMnedictJsonElement
-import org.edrdg.jmdict.simplified.parsing.JMnedictParser
-import org.edrdg.jmdict.simplified.parsing.JMnedictXmlElement
+import org.edrdg.jmdict.simplified.commands.ConvertDictionary
+import org.edrdg.jmdict.simplified.conversion.jmnedict.JMnedictConverter
+import org.edrdg.jmdict.simplified.conversion.jmnedict.JMnedictJsonElement
+import org.edrdg.jmdict.simplified.parsing.jmnedict.JMnedictParser
+import org.edrdg.jmdict.simplified.parsing.jmnedict.JMnedictXmlElement
 import org.edrdg.jmdict.simplified.parsing.Metadata
 
 class ConvertJMnedict : ConvertDictionary<JMnedictXmlElement.Entry, JMnedictJsonElement.Word>(
     hasCommon = false,
-    help = "Convert JMdict.xml file into JSON",
+    help = "Convert JMnedict.xml file into JSON",
     parser = JMnedictParser,
 ) {
     override val dictionaryName = "jmnedict"

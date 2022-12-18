@@ -1,7 +1,8 @@
-package org.edrdg.jmdict.simplified.commands
+package org.edrdg.jmdict.simplified.commands.jmdict
 
-import org.edrdg.jmdict.simplified.parsing.JMdictParser
-import org.edrdg.jmdict.simplified.parsing.JMdictXmlElement
+import org.edrdg.jmdict.simplified.commands.AnalyzeDictionary
+import org.edrdg.jmdict.simplified.parsing.jmdict.JMdictParser
+import org.edrdg.jmdict.simplified.parsing.jmdict.JMdictXmlElement
 
 open class AnalyzeJMdict(
     override val help: String = "Analyze JMdict.xml file contents",

@@ -1,6 +1,7 @@
-package org.edrdg.jmdict.simplified.conversion
+package org.edrdg.jmdict.simplified.conversion.jmnedict
 
-import org.edrdg.jmdict.simplified.parsing.JMnedictXmlElement
+import org.edrdg.jmdict.simplified.conversion.Converter
+import org.edrdg.jmdict.simplified.parsing.jmnedict.JMnedictXmlElement
 import org.edrdg.jmdict.simplified.parsing.Metadata
 
 class JMnedictConverter(metadata: Metadata) : Converter<JMnedictXmlElement.Entry, JMnedictJsonElement.Word>() {

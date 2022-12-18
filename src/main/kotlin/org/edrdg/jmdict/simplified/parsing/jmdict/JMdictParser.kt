@@ -1,5 +1,8 @@
-package org.edrdg.jmdict.simplified.parsing
+package org.edrdg.jmdict.simplified.parsing.jmdict
 
+import org.edrdg.jmdict.simplified.parsing.*
+import org.edrdg.jmdict.simplified.parsing.commentList
+import org.edrdg.jmdict.simplified.parsing.skip
 import javax.xml.XMLConstants
 import javax.xml.namespace.QName
 import javax.xml.stream.XMLEventReader
@@ -136,7 +139,7 @@ object JMdictParser : Parser<JMdictXmlElement.Entry> {
         lsType = it.attrEnum(
             QName("ls_type"),
             JMdictXmlElement.LsType.values(),
-            JMdictXmlElement.LsType::fromString
+            JMdictXmlElement.LsType.Companion::fromString
         ) ?: JMdictXmlElement.LsType.FULL,
         lsWasei = it.attrString(QName("ls_wasei")) == "y",
         text = eventReader.maybeCharacters(it)?.data?.trim(),
@@ -151,7 +154,7 @@ object JMdictParser : Parser<JMdictXmlElement.Entry> {
         gType = it.attrEnum(
             QName("g_type"),
             JMdictXmlElement.GType.values(),
-            JMdictXmlElement.GType::fromString
+            JMdictXmlElement.GType.Companion::fromString
         ),
         text = eventReader.maybeText(it),
     )

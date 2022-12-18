@@ -1,4 +1,4 @@
-package org.edrdg.jmdict.simplified.parsing
+package org.edrdg.jmdict.simplified.parsing.jmdict
 
 /**
  * Tags from the original XML files.

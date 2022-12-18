@@ -1,11 +1,12 @@
-package org.edrdg.jmdict.simplified.commands
+package org.edrdg.jmdict.simplified.commands.jmdict
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.edrdg.jmdict.simplified.conversion.JMdictConverter
-import org.edrdg.jmdict.simplified.conversion.JMdictJsonElement
-import org.edrdg.jmdict.simplified.parsing.JMdictParser
-import org.edrdg.jmdict.simplified.parsing.JMdictXmlElement
+import org.edrdg.jmdict.simplified.commands.ConvertDictionary
+import org.edrdg.jmdict.simplified.conversion.jmdict.JMdictConverter
+import org.edrdg.jmdict.simplified.conversion.jmdict.JMdictJsonElement
+import org.edrdg.jmdict.simplified.parsing.jmdict.JMdictParser
+import org.edrdg.jmdict.simplified.parsing.jmdict.JMdictXmlElement
 import org.edrdg.jmdict.simplified.parsing.Metadata
 
 class ConvertJMdict : ConvertDictionary<JMdictXmlElement.Entry, JMdictJsonElement.Word>(

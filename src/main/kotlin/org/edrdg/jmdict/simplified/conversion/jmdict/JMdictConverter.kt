@@ -1,6 +1,8 @@
-package org.edrdg.jmdict.simplified.conversion
+package org.edrdg.jmdict.simplified.conversion.jmdict
 
-import org.edrdg.jmdict.simplified.parsing.JMdictXmlElement
+import org.edrdg.jmdict.simplified.conversion.ConversionException
+import org.edrdg.jmdict.simplified.conversion.Converter
+import org.edrdg.jmdict.simplified.parsing.jmdict.JMdictXmlElement
 import org.edrdg.jmdict.simplified.parsing.Metadata
 
 class JMdictConverter(metadata: Metadata) : Converter<JMdictXmlElement.Entry, JMdictJsonElement.Word>() {
@@ -30,6 +32,7 @@ class JMdictConverter(metadata: Metadata) : Converter<JMdictXmlElement.Entry, JM
                 entSeq,
                 "<r_ele> contains a <re_nokanji/>, but also has a non-empty list of <re_restr>"
             )
+
             rEle.reNokanji != null -> emptyList()
             rEle.reRestr.isEmpty() -> listOf("*")
             else -> rEle.reRestr.map { it.text }
