@@ -3,7 +3,6 @@ package org.edrdg.jmdict.simplified.parsing
 import javax.xml.XMLConstants
 import javax.xml.namespace.QName
 import javax.xml.stream.XMLEventReader
-import javax.xml.stream.events.EntityDeclaration
 import javax.xml.stream.events.StartElement
 import javax.xml.stream.events.XMLEvent
 
@@ -20,10 +19,9 @@ object Parser {
             it.text.split("\n").first().trim().split(" ").last()
         }
 
-        @Suppress("UNCHECKED_CAST")
-        val entities = (eventReader.dtd("DTD declaration").entities as List<EntityDeclaration>).map {
+        val entities = eventReader.dtd("DTD declaration").entities.associate {
             it.name to it.replacementText
-        }.toMap()
+        }
 
         val date = eventReader.comment("JMdict creation date comment")
             .text.split(":").last().trim()

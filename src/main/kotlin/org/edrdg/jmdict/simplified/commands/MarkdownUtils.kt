@@ -15,9 +15,7 @@ object MarkdownUtils {
     ): String {
         val sb = StringBuilder()
         val colWidths = columns.mapIndexed { i, column ->
-            val maxValueLength = rows
-                .map { it[i].toString().length }
-                .maxOrNull() ?: 0
+            val maxValueLength = rows.maxOfOrNull { it[i].toString().length } ?: 0
             maxOf(column.length, maxValueLength)
         }
         sb.append(
