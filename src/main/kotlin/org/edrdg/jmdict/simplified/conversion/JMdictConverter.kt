@@ -1,12 +1,12 @@
 package org.edrdg.jmdict.simplified.conversion
 
-import org.edrdg.jmdict.simplified.parsing.JMdictTag
+import org.edrdg.jmdict.simplified.parsing.JMdictXmlElement
 import org.edrdg.jmdict.simplified.parsing.Metadata
 
-class Converter(metadata: Metadata) {
+class JMdictConverter(metadata: Metadata) {
     private val entities = metadata.entities.entries.associate { (k, v) -> v to k }
 
-    fun convertWord(xmlEntry: JMdictTag.Entry) = JMdictSimplified.Word(
+    fun convertWord(xmlEntry: JMdictXmlElement.Entry) = JMdictJsonElement.Word(
         id = xmlEntry.entSeq.text,
         kanji = xmlEntry.kEle.map { kanji(it, xmlEntry.entSeq.text) },
         kana = xmlEntry.rEle.map { kana(it, xmlEntry.entSeq.text) },
@@ -15,13 +15,13 @@ class Converter(metadata: Metadata) {
 
     private val commonIndicators = listOf("news1", "ichi1", "spec1", "spec2", "gai1")
 
-    private fun kanji(kEle: JMdictTag.KEle, entSeq: String) = JMdictSimplified.Kanji(
+    private fun kanji(kEle: JMdictXmlElement.KEle, entSeq: String) = JMdictJsonElement.Kanji(
         common = kEle.kePri.any { commonIndicators.contains(it.text) },
         text = kEle.keb.text,
         tags = kEle.keInf.map { entityToTag(it.text, entSeq) }
     )
 
-    private fun kana(rEle: JMdictTag.REle, entSeq: String) = JMdictSimplified.Kana(
+    private fun kana(rEle: JMdictXmlElement.REle, entSeq: String) = JMdictJsonElement.Kana(
         common = rEle.rePri.any { commonIndicators.contains(it.text) },
         text = rEle.reb.text,
         tags = rEle.reInf.map { entityToTag(it.text, entSeq) },
@@ -36,14 +36,14 @@ class Converter(metadata: Metadata) {
         }
     )
 
-    private fun senses(senses: List<JMdictTag.Sense>, entSeq: String): List<JMdictSimplified.Sense> {
+    private fun senses(senses: List<JMdictXmlElement.Sense>, entSeq: String): List<JMdictJsonElement.Sense> {
         return senses.mapIndexed { i, sense ->
             val lastSenseWithPartOfSpeech = senses.take(i + 1).lastOrNull { it.pos.isNotEmpty() }
             val lastPartOfSpeech = lastSenseWithPartOfSpeech?.pos ?: throw ConversionException(
                 entSeq,
                 "No part-of-speech (<pos>) found in ${i + 1} first <sense> tags"
             )
-            JMdictSimplified.Sense(
+            JMdictJsonElement.Sense(
                 partOfSpeech = lastPartOfSpeech.map { entityToTag(it.text, entSeq) },
                 appliesToKanji = sense.stagk.map { it.text },
                 appliesToKana = sense.stagr.map { it.text },
@@ -53,28 +53,28 @@ class Converter(metadata: Metadata) {
                 dialect = sense.dial.map { entityToTag(it.text, entSeq) },
                 info = sense.sInf.map { it.text },
                 languageSource = sense.lsource.map {
-                    JMdictSimplified.LanguageSource(
+                    JMdictJsonElement.LanguageSource(
                         lang = it.lang,
-                        full = it.lsType == JMdictTag.LsType.FULL,
+                        full = it.lsType == JMdictXmlElement.LsType.FULL,
                         wasei = it.lsWasei,
                         text = it.text,
                     )
                 },
                 gloss = sense.gloss.map {
-                    JMdictSimplified.Gloss(
+                    JMdictJsonElement.Gloss(
                         lang = it.lang,
                         gender = when (it.gGend?.toLowerCase()) {
-                            "m", "mas", "masc", "mascul", "masculine" -> JMdictSimplified.Gender.MASCULINE
-                            "f", "fem", "femin", "feminine" -> JMdictSimplified.Gender.FEMININE
-                            "n", "neu", "neut", "neuter" -> JMdictSimplified.Gender.NEUTER
+                            "m", "mas", "masc", "mascul", "masculine" -> JMdictJsonElement.Gender.MASCULINE
+                            "f", "fem", "femin", "feminine" -> JMdictJsonElement.Gender.FEMININE
+                            "n", "neu", "neut", "neuter" -> JMdictJsonElement.Gender.NEUTER
                             null -> null
                             else -> throw ConversionException(entSeq, "Unknown gender: ${it.gGend}")
                         },
                         type = when (it.gType) {
-                            JMdictTag.GType.LIT -> JMdictSimplified.GlossType.LITERAL
-                            JMdictTag.GType.FIG -> JMdictSimplified.GlossType.FIGURATIVE
-                            JMdictTag.GType.EXPL -> JMdictSimplified.GlossType.EXPLANATION
-                            JMdictTag.GType.TM -> JMdictSimplified.GlossType.TRADEMARK
+                            JMdictXmlElement.GType.LIT -> JMdictJsonElement.GlossType.LITERAL
+                            JMdictXmlElement.GType.FIG -> JMdictJsonElement.GlossType.FIGURATIVE
+                            JMdictXmlElement.GType.EXPL -> JMdictJsonElement.GlossType.EXPLANATION
+                            JMdictXmlElement.GType.TM -> JMdictJsonElement.GlossType.TRADEMARK
                             null -> null
                         },
                         // There seems to be an issue in the original XML where one translation is empty.
@@ -86,23 +86,23 @@ class Converter(metadata: Metadata) {
         }
     }
 
-    private fun entityToTag(text: String, entSeq: String) = JMdictSimplified.Tag(
+    private fun entityToTag(text: String, entSeq: String) = CommonJsonElement.Tag(
         entities[text] ?: throw ConversionException(
             entSeq,
             "Following text doesn't match any entities from the original XML file: $text"
         )
     )
 
-    private fun xref(text: String, tagName: String, entSeq: String): JMdictSimplified.Xref {
+    private fun xref(text: String, tagName: String, entSeq: String): CommonJsonElement.Xref {
         val parts = text.split("・").map { it.trim() }
         return when (parts.size) {
-            1 -> JMdictSimplified.Xref(parts[0], null, null)
+            1 -> CommonJsonElement.Xref(parts[0], null, null)
             2 ->
                 if (parts[1].matches("\\d+".toRegex()))
-                    JMdictSimplified.Xref(parts[0], null, parts[1].toInt())
+                    CommonJsonElement.Xref(parts[0], null, parts[1].toInt())
                 else
-                    JMdictSimplified.Xref(parts[0], parts[1], null)
-            3 -> JMdictSimplified.Xref(parts[0], parts[1], parts[2].toInt())
+                    CommonJsonElement.Xref(parts[0], parts[1], null)
+            3 -> CommonJsonElement.Xref(parts[0], parts[1], parts[2].toInt())
             else -> throw ConversionException(
                 entSeq,
                 "Unexpected number of parts (${parts.size}, expected 1-3) in <$tagName>: $text"

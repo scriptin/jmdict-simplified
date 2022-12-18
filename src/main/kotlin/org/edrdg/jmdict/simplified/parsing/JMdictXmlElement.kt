@@ -9,7 +9,7 @@ package org.edrdg.jmdict.simplified.parsing
  * <!ELEMENT JMdict (entry*)>
  * ~~~
  */
-sealed class JMdictTag(open val name: String) {
+sealed class JMdictXmlElement(open val name: String) {
     /**
      * Dictionary entry
      *
@@ -26,7 +26,7 @@ sealed class JMdictTag(open val name: String) {
         val kEle: List<KEle>,
         val rEle: List<REle>,
         val sense: List<Sense>,
-    ) : JMdictTag("entry")
+    ) : JMdictXmlElement("entry")
 
     /**
      * Entry ID
@@ -37,7 +37,7 @@ sealed class JMdictTag(open val name: String) {
      *
      * A unique numeric sequence number for each entry
      */
-    data class EntSeq(val text: String) : JMdictTag("ent_seq")
+    data class EntSeq(val text: String) : JMdictXmlElement("ent_seq")
 
     /**
      * Kanji spelling (may contain kana)
@@ -61,7 +61,7 @@ sealed class JMdictTag(open val name: String) {
         val keb: Keb,
         val keInf: List<KeInf>,
         val kePri: List<KePri>,
-    ) : JMdictTag("k_ele")
+    ) : JMdictXmlElement("k_ele")
 
     /**
      * ~~~xml
@@ -74,7 +74,7 @@ sealed class JMdictTag(open val name: String) {
      * kanji, kana, related characters such as chouon and kurikaeshi, and
      * in exceptional cases, letters from other alphabets.
      */
-    data class Keb(val text: String) : JMdictTag("keb")
+    data class Keb(val text: String) : JMdictXmlElement("keb")
 
     /**
      * ~~~xml
@@ -85,7 +85,7 @@ sealed class JMdictTag(open val name: String) {
      * orthography of the keb, and will typically indicate some unusual
      * aspect, such as okurigana irregularity.
      */
-    data class KeInf(val text: String) : JMdictTag("ke_inf")
+    data class KeInf(val text: String) : JMdictXmlElement("ke_inf")
 
     /**
      * ~~~xml
@@ -124,7 +124,7 @@ sealed class JMdictTag(open val name: String) {
      * on occasions a priority is only associated with a particular
      * kanji/reading pair.
      */
-    data class KePri(val text: String) : JMdictTag("ke_pri")
+    data class KePri(val text: String) : JMdictXmlElement("ke_pri")
 
     /**
      * Kana/reading
@@ -146,7 +146,7 @@ sealed class JMdictTag(open val name: String) {
         val reRestr: List<ReRestr>,
         val reInf: List<ReInf>,
         val rePri: List<RePri>,
-    ) : JMdictTag("r_ele")
+    ) : JMdictXmlElement("r_ele")
 
     /**
      * ~~~xml
@@ -158,7 +158,7 @@ sealed class JMdictTag(open val name: String) {
      * consistent between the keb and reb elements; e.g. if the keb
      * contains katakana, so too will the reb.
      */
-    data class Reb(val text: String) : JMdictTag("reb")
+    data class Reb(val text: String) : JMdictXmlElement("reb")
 
     /**
      * ~~~xml
@@ -171,7 +171,7 @@ sealed class JMdictTag(open val name: String) {
      * such as foreign place names, gairaigo which can be in kanji or
      * katakana, etc.
      */
-    data class ReNokanji(val text: String?) : JMdictTag("re_nokanji")
+    data class ReNokanji(val text: String?) : JMdictXmlElement("re_nokanji")
 
     /**
      * ~~~xml
@@ -183,7 +183,7 @@ sealed class JMdictTag(open val name: String) {
      * readings apply to all kanji elements. The contents of this element
      * must exactly match those of one of the keb elements.
      */
-    data class ReRestr(val text: String) : JMdictTag("re_restr")
+    data class ReRestr(val text: String) : JMdictXmlElement("re_restr")
 
     /**
      * ~~~xml
@@ -194,7 +194,7 @@ sealed class JMdictTag(open val name: String) {
      * Typically it will be used to indicate some unusual aspect of
      * the reading.
      */
-    data class ReInf(val text: String) : JMdictTag("re_inf")
+    data class ReInf(val text: String) : JMdictXmlElement("re_inf")
 
     /**
      * ~~~xml
@@ -203,7 +203,7 @@ sealed class JMdictTag(open val name: String) {
      *
      * See the comment on ke_pri above.
      */
-    data class RePri(val text: String) : JMdictTag("re_pri")
+    data class RePri(val text: String) : JMdictXmlElement("re_pri")
 
     /**
      * Sense/translation
@@ -229,7 +229,7 @@ sealed class JMdictTag(open val name: String) {
         val lsource: List<Lsource>,
         val dial: List<Dial>,
         val gloss: List<Gloss>,
-    ) : JMdictTag("sense")
+    ) : JMdictXmlElement("sense")
 
     /**
      * ~~~xml
@@ -241,7 +241,7 @@ sealed class JMdictTag(open val name: String) {
      *
      * @see Stagr
      */
-    data class Stagk(val text: String) : JMdictTag("stagk")
+    data class Stagk(val text: String) : JMdictXmlElement("stagk")
 
     /**
      * ~~~xml
@@ -250,7 +250,7 @@ sealed class JMdictTag(open val name: String) {
      *
      * @see Stagk
      */
-    data class Stagr(val text: String) : JMdictTag("stagr")
+    data class Stagr(val text: String) : JMdictXmlElement("stagr")
 
     /**
      * ~~~xml
@@ -262,7 +262,7 @@ sealed class JMdictTag(open val name: String) {
      * in an entry, the part-of-speech of an earlier sense will apply to
      * later senses unless there is a new part-of-speech indicated.
      */
-    data class Pos(val text: String) : JMdictTag("pos")
+    data class Pos(val text: String) : JMdictXmlElement("pos")
 
     /**
      * ~~~xml
@@ -277,7 +277,7 @@ sealed class JMdictTag(open val name: String) {
      * "centre-dot" (0x2126) is placed between the components of the
      * cross-reference. The target keb or reb must not contain a centre-dot.
      */
-    data class Xref(val text: String) : JMdictTag("xref")
+    data class Xref(val text: String) : JMdictXmlElement("xref")
 
     /**
      * ~~~xml
@@ -288,7 +288,7 @@ sealed class JMdictTag(open val name: String) {
      * antonym of the current entry/sense. The content of this element
      * must exactly match that of a keb or reb element in another entry.
      */
-    data class Ant(val text: String) : JMdictTag("ant")
+    data class Ant(val text: String) : JMdictXmlElement("ant")
 
     /**
      * ~~~xml
@@ -299,7 +299,7 @@ sealed class JMdictTag(open val name: String) {
      * When absent, general application is implied. Entity coding for
      * specific fields of application.
      */
-    data class Field(val text: String) : JMdictTag("field")
+    data class Field(val text: String) : JMdictXmlElement("field")
 
     /**
      * ~~~xml
@@ -310,7 +310,7 @@ sealed class JMdictTag(open val name: String) {
      * the entry/sense. As with part-of-speech, information will usually
      * apply to several senses.
      */
-    data class Misc(val text: String) : JMdictTag("misc")
+    data class Misc(val text: String) : JMdictXmlElement("misc")
 
     /**
      * ~~~xml
@@ -322,7 +322,7 @@ sealed class JMdictTag(open val name: String) {
      * be to indicate such things as level of currency of a sense, the
      * regional variations, etc.
      */
-    data class SInf(val text: String) : JMdictTag("s_inf")
+    data class SInf(val text: String) : JMdictXmlElement("s_inf")
 
     enum class LsType(val value: String) {
         FULL("full"), PART("part");
@@ -380,7 +380,7 @@ sealed class JMdictTag(open val name: String) {
          */
         val lsWasei: Boolean,
         val text: String?,
-    ) : JMdictTag("lsource")
+    ) : JMdictXmlElement("lsource")
 
     /**
      * ~~~xml
@@ -390,7 +390,7 @@ sealed class JMdictTag(open val name: String) {
      * For words specifically associated with regional dialects in
      * Japanese, the entity code for that dialect, e.g. ksb for Kansaiben.
      */
-    data class Dial(val text: String) : JMdictTag("dial")
+    data class Dial(val text: String) : JMdictXmlElement("dial")
 
     enum class GType(val value: String) {
         LIT("lit"),
@@ -448,5 +448,5 @@ sealed class JMdictTag(open val name: String) {
          */
         val gType: GType?,
         val text: String?,
-    ) : JMdictTag("gloss")
+    ) : JMdictXmlElement("gloss")
 }

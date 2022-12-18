@@ -50,7 +50,7 @@ open class AnalyzeJMdict(
         // Nothing here
     }
 
-    internal open fun processEntry(entry: JMdictTag.Entry) {
+    internal open fun processEntry(entry: JMdictXmlElement.Entry) {
         // Nothing here
     }
 
@@ -80,7 +80,7 @@ open class AnalyzeJMdict(
         val eventReader = factory.createXMLEventReader(FileInputStream(jmdictFile))
 
         try {
-            val metadata = Parser.parseMetadata(eventReader)
+            val metadata = JMdictParser.parseMetadata(eventReader)
 
             writeln(MarkdownUtils.heading("Dictionary metadata", level = 3))
             writeln()
@@ -104,8 +104,8 @@ open class AnalyzeJMdict(
 
             var entryCount = 0L
             val entriesByLanguage = mutableMapOf<String, Long>()
-            while (Parser.hasNextEntry(eventReader)) {
-                val entry = Parser.parseEntry(eventReader)
+            while (JMdictParser.hasNextEntry(eventReader)) {
+                val entry = JMdictParser.parseEntry(eventReader)
                 processEntry(entry)
                 entryCount += 1
                 entry.sense

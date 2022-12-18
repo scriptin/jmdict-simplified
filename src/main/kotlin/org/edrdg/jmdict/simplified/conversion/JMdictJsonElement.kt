@@ -3,20 +3,7 @@ package org.edrdg.jmdict.simplified.conversion
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-sealed class JMdictSimplified {
-    @Serializable(with = XrefSerializer::class)
-    data class Xref(val part1: String, val part2: String?, val index: Int?) {
-        val size: Int
-            get() = 1 + when {
-                part2 == null && index == null -> 0
-                (part2 != null) xor (index != null) -> 1
-                else -> 2
-            }
-    }
-
-    @Serializable(with = TagSerializer::class)
-    data class Tag(val abbreviation: String)
-
+sealed class JMdictJsonElement : CommonJsonElement() {
     @Serializable
     data class Word(
         val id: String,

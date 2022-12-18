@@ -6,8 +6,8 @@ import com.github.ajalt.clikt.parameters.types.path
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import net.swiftzer.semver.SemVer
-import org.edrdg.jmdict.simplified.conversion.Converter
-import org.edrdg.jmdict.simplified.parsing.JMdictTag
+import org.edrdg.jmdict.simplified.conversion.JMdictConverter
+import org.edrdg.jmdict.simplified.parsing.JMdictXmlElement
 import org.edrdg.jmdict.simplified.parsing.Metadata
 import java.lang.IllegalArgumentException
 import java.nio.file.Path
@@ -112,11 +112,11 @@ class ConvertJMdict : AnalyzeJMdict(help = "Convert JMdict.xml file into JSON") 
         println()
     }
 
-    private var converter: Converter? = null
+    private var converter: JMdictConverter? = null
 
     override fun beforeEntries(metadata: Metadata) {
         super.beforeEntries(metadata)
-        converter = Converter(metadata)
+        converter = JMdictConverter(metadata)
         outputs.forEach {
             it.write(
                 """
@@ -133,7 +133,7 @@ class ConvertJMdict : AnalyzeJMdict(help = "Convert JMdict.xml file into JSON") 
         }
     }
 
-    override fun processEntry(entry: JMdictTag.Entry) {
+    override fun processEntry(entry: JMdictXmlElement.Entry) {
         super.processEntry(entry)
         require(converter != null) {
             "Converter has not been initialized"
