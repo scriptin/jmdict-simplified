@@ -16,9 +16,10 @@ abstract class AnalyzeDictionary<E>(
     open val help: String = "Analyze dictionary file contents",
     private val parser: Parser<E>,
 ) : CliktCommand(help = help) {
-    abstract fun getLanguagesOf(entry: E): Set<String>
+    abstract fun getLanguagesOfXmlEntry(entry: E): Set<String>
 
     abstract val rootTagName: String
+
     init {
         context {
             helpFormatter = CliktHelpFormatter(showRequiredTag = true)
@@ -54,7 +55,7 @@ abstract class AnalyzeDictionary<E>(
         // Nothing here
     }
 
-    internal open fun processEntry(entry: E) {
+    open fun processEntry(entry: E) {
         // Nothing here
     }
 
@@ -112,7 +113,7 @@ abstract class AnalyzeDictionary<E>(
                 val entry = parser.parseEntry(eventReader)
                 processEntry(entry)
                 entryCount += 1
-                getLanguagesOf(entry).forEach { lang ->
+                getLanguagesOfXmlEntry(entry).forEach { lang ->
                     entriesByLanguage.putIfAbsent(lang, 0L)
                     entriesByLanguage.computeIfPresent(lang) { _, n -> n + 1L }
                 }

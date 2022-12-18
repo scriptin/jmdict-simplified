@@ -9,10 +9,10 @@ open class AnalyzeJMdict(
     parser = JMdictParser,
     help = help,
 ) {
-    override fun getLanguagesOf(entry: JMdictXmlElement.Entry): Set<String> =
+    override fun getLanguagesOfXmlEntry(entry: JMdictXmlElement.Entry): Set<String> =
         entry.sense
             .flatMap { sense -> sense.gloss.map { it.lang } }
             .toSet()
 
-    override val rootTagName: String = "JMdict"
+    override val rootTagName = "JMdict"
 }

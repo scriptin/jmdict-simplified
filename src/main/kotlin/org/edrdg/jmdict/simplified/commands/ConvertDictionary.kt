@@ -7,8 +7,6 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import net.swiftzer.semver.SemVer
 import org.edrdg.jmdict.simplified.conversion.Converter
-import org.edrdg.jmdict.simplified.conversion.JMdictConverter
-import org.edrdg.jmdict.simplified.parsing.JMdictXmlElement
 import org.edrdg.jmdict.simplified.parsing.Metadata
 import org.edrdg.jmdict.simplified.parsing.Parser
 import java.lang.IllegalArgumentException
@@ -16,25 +14,37 @@ import java.nio.file.Path
 import java.util.*
 
 abstract class ConvertDictionary<E, W>(
+    val hasCommon: Boolean,
     override val help: String = "Convert dictionary file into JSON",
     parser: Parser<E>,
 ) : AnalyzeDictionary<E>(
     help = help,
     parser = parser,
 ) {
-    internal var converter: Converter<E, W>? = null
+    private var converter: Converter<E, W>? = null
 
     abstract fun buildConverter(metadata: Metadata): Converter<E, W>
+
+    abstract fun getLanguagesOfJsonWord(word: W): Set<String>
+
+    abstract fun filterWordByLanguages(word: W, output: Output): W
+
+    abstract fun filterOutputsFor(word: W, languages: Set<String>): List<Output>
+
+    abstract fun serialize(word: W): String
 
     abstract val dictionaryName: String
 
     private val languages by option(
         "-l", "--lang", "--langs", "--language", "--languages",
         metavar = "LANGUAGES",
-        help = "Comma-separated language IDs: ISO 639-2/B values, possibly separated by dash, " +
-            "or special 'all' value, can have '-common' suffix. " +
-            "Examples: 'all,eng,eng-common' (all, English, English-common), " +
-            "'ger,eng-ger' (German, English/German), 'fre' (French)",
+        help = "Comma-separated language IDs: ISO 639-2/B values, " +
+            "optionally separated by dash (to have multiple languages in a same file), " +
+            "or special 'all' value. " +
+            (if (hasCommon) "Can have '-common' suffix (e.g. 'eng-common') to include only common words. " else "") +
+            "Examples: " +
+            (if (hasCommon) "'all,eng,eng-common' (will produce 3 files: all, English, English-common)" else "'all,eng' (will produce 2 files: all, English)") + ", " +
+            "'ger,eng-ger' (2 files: German, English+German), 'fre' (French)",
     ).split(",").required().validate { languages ->
         languages.forEach { language ->
             val withoutCommon = language.replace("-common$".toRegex(), "")
@@ -61,7 +71,7 @@ abstract class ConvertDictionary<E, W>(
         }
     }
 
-    internal class Output(
+    class Output(
         path: Path,
         val languages: Set<String>,
         val common: Boolean,
@@ -142,6 +152,23 @@ abstract class ConvertDictionary<E, W>(
                 "words": [
                 """.trimIndent().trimEnd('\n', ' ')
             )
+        }
+    }
+
+    private fun convert(entry: E): W {
+        require(converter != null) {
+            "Converter has not been initialized"
+        }
+        return converter!!.convertWord(entry)
+    }
+
+    override fun processEntry(entry: E) {
+        val word = convert(entry)
+        filterOutputsFor(word, getLanguagesOfJsonWord(word)).forEach { output ->
+            val filteredWord = filterWordByLanguages(word, output)
+            val json = serialize(filteredWord)
+            output.write("${if (output.acceptedAtLeastOneEntry) "," else ""}\n$json")
+            output.acceptedAtLeastOneEntry = true
         }
     }
 
