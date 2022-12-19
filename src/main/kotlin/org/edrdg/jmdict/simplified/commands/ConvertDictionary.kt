@@ -183,9 +183,12 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
     }
 
     override fun processEntry(entry: E) {
+        super.processEntry(entry)
         val word = convert(entry)
-        outputs.filter { it.acceptsWord(word) }.forEach { output ->
-            val json = serialize(word.onlyWithLanguages(output.languages))
+        val relevantOutputs = outputs.filter { it.acceptsWord(word) }
+        relevantOutputs.forEach { output ->
+            val filteredWord = word.onlyWithLanguages(output.languages)
+            val json = serialize(filteredWord)
             output.write("${if (output.acceptedAtLeastOneEntry) "," else ""}\n$json")
             output.acceptedAtLeastOneEntry = true
         }
