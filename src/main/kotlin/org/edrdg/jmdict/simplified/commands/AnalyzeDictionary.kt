@@ -53,7 +53,7 @@ abstract class AnalyzeDictionary<E : InputDictionaryEntry>(
         // Nothing here
     }
 
-    open fun processEntry(entry: E) {
+    internal open fun processEntry(entry: E) {
         // Nothing here
     }
 
