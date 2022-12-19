@@ -12,11 +12,22 @@ sealed class JMdictJsonElement : CommonJsonElement() {
         val kanji: List<Kanji>,
         val kana: List<Kana>,
         val sense: List<Sense>,
-    ) : OutputDictionaryWord {
+    ) : OutputDictionaryWord<Word> {
         override val allLanguages: Set<String>
             get() = sense
                 .flatMap { sense -> sense.gloss.map { it.lang } }
                 .toSet()
+
+        override fun onlyWithLanguages(languages: Set<String>): Word =
+            copy(
+                sense = sense.map { s ->
+                    s.copy(
+                        gloss = s.gloss.filter {
+                            languages.contains(it.lang) || languages.contains("all")
+                        }
+                    )
+                }.filter { it.gloss.isNotEmpty() }
+            )
     }
 
     @Serializable

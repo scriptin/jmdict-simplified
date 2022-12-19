@@ -20,17 +20,6 @@ class ConvertJMdict : ConvertDictionary<JMdictXmlElement.Entry, JMdictJsonElemen
 
     override fun buildConverter(metadata: Metadata) = JMdictConverter(metadata)
 
-    override fun filterWordByLanguages(word: JMdictJsonElement.Word, output: Output) =
-        word.copy(
-            sense = word.sense.map { s ->
-                s.copy(
-                    gloss = s.gloss.filter {
-                        output.languages.contains(it.lang) || output.languages.contains("all")
-                    }
-                )
-            }.filter { it.gloss.isNotEmpty() }
-        )
-
     override fun filterOutputsFor(word: JMdictJsonElement.Word, languages: Set<String>): List<Output> {
         val entryIsCommon = word.kanji.any { it.common } || word.kana.any { it.common }
         return outputs.filter { output ->

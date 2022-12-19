@@ -15,7 +15,7 @@ import java.lang.IllegalArgumentException
 import java.nio.file.Path
 import java.util.*
 
-abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryWord>(
+abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryWord<W>>(
     val supportsCommon: Boolean,
     override val help: String = "Convert dictionary file into JSON",
     parser: Parser<E>,
@@ -26,8 +26,6 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
     private var converter: Converter<E, W>? = null
 
     abstract fun buildConverter(metadata: Metadata): Converter<E, W>
-
-    abstract fun filterWordByLanguages(word: W, output: Output): W
 
     abstract fun filterOutputsFor(word: W, languages: Set<String>): List<Output>
 
@@ -165,8 +163,7 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
     override fun processEntry(entry: E) {
         val word = convert(entry)
         filterOutputsFor(word, word.allLanguages).forEach { output ->
-            val filteredWord = filterWordByLanguages(word, output)
-            val json = serialize(filteredWord)
+            val json = serialize(word.onlyWithLanguages(output.languages))
             output.write("${if (output.acceptedAtLeastOneEntry) "," else ""}\n$json")
             output.acceptedAtLeastOneEntry = true
         }

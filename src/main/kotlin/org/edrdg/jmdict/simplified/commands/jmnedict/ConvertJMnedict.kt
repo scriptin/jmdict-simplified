@@ -20,17 +20,6 @@ class ConvertJMnedict : ConvertDictionary<JMnedictXmlElement.Entry, JMnedictJson
 
     override fun buildConverter(metadata: Metadata) = JMnedictConverter(metadata)
 
-    override fun filterWordByLanguages(word: JMnedictJsonElement.Word, output: Output) =
-        word.copy(
-            translation = word.translation.map { t ->
-                t.copy(
-                    translation = t.translation.filter {
-                        output.languages.contains(it.lang) || output.languages.contains("all")
-                    }
-                )
-            }.filter { it.translation.isNotEmpty() }
-        )
-
     override fun filterOutputsFor(word: JMnedictJsonElement.Word, languages: Set<String>): List<Output> =
         outputs.filter { output ->
             val haveCommonLanguages = output.languages.intersect(languages).isNotEmpty()
