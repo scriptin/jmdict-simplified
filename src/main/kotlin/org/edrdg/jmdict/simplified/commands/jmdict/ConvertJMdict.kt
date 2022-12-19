@@ -10,7 +10,7 @@ import org.edrdg.jmdict.simplified.parsing.jmdict.JMdictXmlElement
 import org.edrdg.jmdict.simplified.parsing.Metadata
 
 class ConvertJMdict : ConvertDictionary<JMdictXmlElement.Entry, JMdictJsonElement.Word>(
-    supportsCommon = true,
+    supportsCommonOnlyOutputs = true,
     help = "Convert JMdict.xml file into JSON",
     parser = JMdictParser,
 ) {

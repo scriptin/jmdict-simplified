@@ -16,7 +16,7 @@ import java.nio.file.Path
 import java.util.*
 
 abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryWord<W>>(
-    val supportsCommon: Boolean,
+    val supportsCommonOnlyOutputs: Boolean,
     override val help: String = "Convert dictionary file into JSON",
     parser: Parser<E>,
 ) : AnalyzeDictionary<E>(
@@ -37,9 +37,15 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
         help = "Comma-separated language IDs: ISO 639-2/B values, " +
             "optionally separated by dash (to have multiple languages in a same file), " +
             "or special 'all' value. " +
-            (if (supportsCommon) "Can have '-common' suffix (e.g. 'eng-common') to include only common words. " else "") +
+            (if (supportsCommonOnlyOutputs)
+                "Can have '-common' suffix (e.g. 'eng-common') to include only common words. "
+            else
+                "") +
             "Examples: " +
-            (if (supportsCommon) "'all,eng,eng-common' (will produce 3 files: all, English, English-common)" else "'all,eng' (will produce 2 files: all, English)") + ", " +
+            (if (supportsCommonOnlyOutputs)
+                "'all,eng,eng-common' (will produce 3 files: all, English, English-common)"
+            else
+                "'all,eng' (will produce 2 files: all, English)") + ", " +
             "'ger,eng-ger' (2 files: German, English+German), 'fre' (French)",
     ).split(",").required().validate { languages ->
         languages.forEach { language ->
@@ -99,7 +105,7 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
         }
     }
 
-    internal val outputs by lazy {
+    private val outputs by lazy {
         languages.map { language ->
             val fileName = "$dictionaryName-$language-$version.json"
             Output(
@@ -108,7 +114,7 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
                     .replace("-common$".toRegex(), "")
                     .split("-")
                     .toSet(),
-                commonOnly = if (supportsCommon) language.endsWith("-common") else false,
+                commonOnly = if (supportsCommonOnlyOutputs) language.endsWith("-common") else false,
             )
         }
     }
