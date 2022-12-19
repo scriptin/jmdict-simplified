@@ -11,7 +11,6 @@ import org.edrdg.jmdict.simplified.conversion.OutputDictionaryWord
 import org.edrdg.jmdict.simplified.parsing.InputDictionaryEntry
 import org.edrdg.jmdict.simplified.parsing.Metadata
 import org.edrdg.jmdict.simplified.parsing.Parser
-import java.nio.file.Path
 import java.util.*
 import kotlin.IllegalArgumentException
 
@@ -83,42 +82,10 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
         }
     }
 
-    class Output(
-        path: Path,
-        val languages: Set<String>,
-        val commonOnly: Boolean,
-    ) {
-        private val fileWriter = path.toFile().writer()
-
-        fun write(text: String) {
-            fileWriter.write(text)
-        }
-
-        fun close() {
-            fileWriter.close()
-        }
-
-        private var acceptedEntry = false
-
-        var acceptedAtLeastOneEntry
-            get() = acceptedEntry
-            set(value) {
-                if (!acceptedEntry && value) acceptedEntry = true
-            }
-
-        fun <W : OutputDictionaryWord<W>> acceptsWord(word: W): Boolean {
-            val shareSomeLanguages = languages.intersect(word.allLanguages).isNotEmpty()
-            // For non-only-common outputs, all words must be accepted
-            // Otherwise, for only-common outputs, allow only common words
-            val matchesByCommon = !commonOnly || word.isCommon
-            return (shareSomeLanguages || languages.contains("all")) && matchesByCommon
-        }
-    }
-
     private val outputs by lazy {
         languages.map { language ->
             val fileName = "$dictionaryName-$language-$version.json"
-            Output(
+            DictionaryOutputWriter(
                 path = outputDir.resolve(fileName),
                 languages = language
                     .replace("-common$".toRegex(), "")
