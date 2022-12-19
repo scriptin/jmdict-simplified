@@ -12,12 +12,10 @@ import javax.xml.namespace.QName
 import javax.xml.stream.XMLInputFactory
 import kotlin.math.round
 
-abstract class AnalyzeDictionary<E>(
+abstract class AnalyzeDictionary<E : InputDictionaryEntry>(
     open val help: String = "Analyze dictionary file contents",
     private val parser: Parser<E>,
 ) : CliktCommand(help = help) {
-    abstract fun getLanguagesOfXmlEntry(entry: E): Set<String>
-
     abstract val rootTagName: String
 
     init {
@@ -113,7 +111,7 @@ abstract class AnalyzeDictionary<E>(
                 val entry = parser.parseEntry(eventReader)
                 processEntry(entry)
                 entryCount += 1
-                getLanguagesOfXmlEntry(entry).forEach { lang ->
+                entry.allLanguages.forEach { lang ->
                     entriesByLanguage.putIfAbsent(lang, 0L)
                     entriesByLanguage.computeIfPresent(lang) { _, n -> n + 1L }
                 }

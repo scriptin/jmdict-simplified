@@ -8,7 +8,7 @@ import org.edrdg.jmdict.simplified.parsing.Metadata
 class JMdictConverter(metadata: Metadata) : Converter<JMdictXmlElement.Entry, JMdictJsonElement.Word>() {
     override val entities = metadata.entities.entries.associate { (k, v) -> v to k }
 
-    override fun convertWord(xmlEntry: JMdictXmlElement.Entry) = JMdictJsonElement.Word(
+    override fun convert(xmlEntry: JMdictXmlElement.Entry) = JMdictJsonElement.Word(
         id = xmlEntry.entSeq.text,
         kanji = xmlEntry.kEle.map { kanji(it, xmlEntry.entSeq.text) },
         kana = xmlEntry.rEle.map { kana(it, xmlEntry.entSeq.text) },

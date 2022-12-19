@@ -18,16 +18,6 @@ class ConvertJMnedict : ConvertDictionary<JMnedictXmlElement.Entry, JMnedictJson
 
     override val rootTagName = "JMnedict"
 
-    override fun getLanguagesOfXmlEntry(entry: JMnedictXmlElement.Entry): Set<String> =
-        entry.trans
-            .flatMap { trans -> trans.transDet.map { it.lang } }
-            .toSet()
-
-    override fun getLanguagesOfJsonWord(word: JMnedictJsonElement.Word): Set<String> =
-        word.translation
-            .flatMap { translation -> translation.translation.map { it.lang } }
-            .toSet()
-
     override fun buildConverter(metadata: Metadata) = JMnedictConverter(metadata)
 
     override fun filterWordByLanguages(word: JMnedictJsonElement.Word, output: Output) =

@@ -3,6 +3,7 @@ package org.edrdg.jmdict.simplified.conversion.jmdict
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.edrdg.jmdict.simplified.conversion.CommonJsonElement
+import org.edrdg.jmdict.simplified.conversion.OutputDictionaryWord
 
 sealed class JMdictJsonElement : CommonJsonElement() {
     @Serializable
@@ -11,7 +12,12 @@ sealed class JMdictJsonElement : CommonJsonElement() {
         val kanji: List<Kanji>,
         val kana: List<Kana>,
         val sense: List<Sense>,
-    )
+    ) : OutputDictionaryWord {
+        override val allLanguages: Set<String>
+            get() = sense
+                .flatMap { sense -> sense.gloss.map { it.lang } }
+                .toSet()
+    }
 
     @Serializable
     data class Kanji(

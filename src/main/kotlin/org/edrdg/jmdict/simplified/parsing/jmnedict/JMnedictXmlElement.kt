@@ -1,5 +1,7 @@
 package org.edrdg.jmdict.simplified.parsing.jmnedict
 
+import org.edrdg.jmdict.simplified.parsing.InputDictionaryEntry
+
 /**
  * Tags from the original XML files.
  *
@@ -28,7 +30,12 @@ sealed class JMnedictXmlElement(open val name: String) {
         val kEle: List<KEle>,
         val rEle: List<REle>,
         val trans: List<Trans>,
-    ) : JMnedictXmlElement("entry")
+    ) : JMnedictXmlElement("entry"), InputDictionaryEntry {
+        override val allLanguages: Set<String>
+            get() = trans
+                .flatMap { trans -> trans.transDet.map { it.lang } }
+                .toSet()
+    }
 
     /**
      * Entry ID

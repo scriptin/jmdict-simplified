@@ -7,13 +7,15 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import net.swiftzer.semver.SemVer
 import org.edrdg.jmdict.simplified.conversion.Converter
+import org.edrdg.jmdict.simplified.conversion.OutputDictionaryWord
+import org.edrdg.jmdict.simplified.parsing.InputDictionaryEntry
 import org.edrdg.jmdict.simplified.parsing.Metadata
 import org.edrdg.jmdict.simplified.parsing.Parser
 import java.lang.IllegalArgumentException
 import java.nio.file.Path
 import java.util.*
 
-abstract class ConvertDictionary<E, W>(
+abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryWord>(
     val supportsCommon: Boolean,
     override val help: String = "Convert dictionary file into JSON",
     parser: Parser<E>,
@@ -24,8 +26,6 @@ abstract class ConvertDictionary<E, W>(
     private var converter: Converter<E, W>? = null
 
     abstract fun buildConverter(metadata: Metadata): Converter<E, W>
-
-    abstract fun getLanguagesOfJsonWord(word: W): Set<String>
 
     abstract fun filterWordByLanguages(word: W, output: Output): W
 
@@ -159,12 +159,12 @@ abstract class ConvertDictionary<E, W>(
         require(converter != null) {
             "Converter has not been initialized"
         }
-        return converter!!.convertWord(entry)
+        return converter!!.convert(entry)
     }
 
     override fun processEntry(entry: E) {
         val word = convert(entry)
-        filterOutputsFor(word, getLanguagesOfJsonWord(word)).forEach { output ->
+        filterOutputsFor(word, word.allLanguages).forEach { output ->
             val filteredWord = filterWordByLanguages(word, output)
             val json = serialize(filteredWord)
             output.write("${if (output.acceptedAtLeastOneEntry) "," else ""}\n$json")

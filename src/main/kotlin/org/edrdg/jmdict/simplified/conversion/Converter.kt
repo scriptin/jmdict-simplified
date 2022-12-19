@@ -1,7 +1,9 @@
 package org.edrdg.jmdict.simplified.conversion
 
-abstract class Converter<E, W> {
-    abstract fun convertWord(xmlEntry: E): W
+import org.edrdg.jmdict.simplified.parsing.InputDictionaryEntry
+
+abstract class Converter<E : InputDictionaryEntry, W : OutputDictionaryWord> {
+    abstract fun convert(xmlEntry: E): W
 
     abstract val entities: Map<String, String>
 
