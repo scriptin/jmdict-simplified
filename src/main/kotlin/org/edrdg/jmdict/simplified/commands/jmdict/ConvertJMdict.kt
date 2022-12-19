@@ -20,11 +20,11 @@ class ConvertJMdict : ConvertDictionary<JMdictXmlElement.Entry, JMdictJsonElemen
 
     override fun buildConverter(metadata: Metadata) = JMdictConverter(metadata)
 
-    override fun filterOutputsFor(word: JMdictJsonElement.Word, languages: Set<String>): List<Output> {
-        val entryIsCommon = word.kanji.any { it.common } || word.kana.any { it.common }
+    override fun getRelevantOutputsFor(word: JMdictJsonElement.Word): List<Output> {
+        val wordIsCommon = word.kanji.any { it.common } || word.kana.any { it.common }
         return outputs.filter { output ->
-            val haveCommonLanguages = output.languages.intersect(languages).isNotEmpty()
-            (haveCommonLanguages || output.languages.contains("all")) && output.common == entryIsCommon
+            val haveCommonLanguages = output.languages.intersect(word.allLanguages).isNotEmpty()
+            (haveCommonLanguages || output.languages.contains("all")) && output.common == wordIsCommon
         }
     }
 

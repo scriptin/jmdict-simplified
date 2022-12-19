@@ -27,7 +27,7 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
 
     abstract fun buildConverter(metadata: Metadata): Converter<E, W>
 
-    abstract fun filterOutputsFor(word: W, languages: Set<String>): List<Output>
+    abstract fun getRelevantOutputsFor(word: W): List<Output>
 
     abstract fun serialize(word: W): String
 
@@ -162,7 +162,7 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
 
     override fun processEntry(entry: E) {
         val word = convert(entry)
-        filterOutputsFor(word, word.allLanguages).forEach { output ->
+        getRelevantOutputsFor(word).forEach { output ->
             val json = serialize(word.onlyWithLanguages(output.languages))
             output.write("${if (output.acceptedAtLeastOneEntry) "," else ""}\n$json")
             output.acceptedAtLeastOneEntry = true
