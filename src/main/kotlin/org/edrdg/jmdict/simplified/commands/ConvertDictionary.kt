@@ -31,11 +31,31 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
     abstract val dictionaryName: String
 
     private fun checkCommonOnly(language: String) {
-        if (!supportsCommonOnlyOutputs && language.endsWith("-common")) {
+        require(supportsCommonOnlyOutputs || !language.endsWith("-common")) {
+            "This dictionary type does not support common-only version, but you have " +
+                "provided a language specification '$language'"
+        }
+    }
+
+    private fun checkLanguageCode(code: String, language: String) {
+        try {
+            Locale(code)
+        } catch (e: Exception) {
             throw IllegalArgumentException(
-                "This dictionary type does not support common-only version, but you have " +
-                    "provided a language specification '$language'"
+                "Unrecognized language code '$code' in the language specification '$language'",
+                e,
             )
+        }
+    }
+
+    private fun checkLanguageCodesUnique(codes: List<String>, language: String) {
+        val partsCount = codes.groupingBy { it }.eachCount()
+        require(partsCount.values.all { it == 1 }) {
+            val duplicates = partsCount.toList().filter { it.second > 1 }.map { it.first }
+            val duplicatesString = duplicates.joinToString("', '")
+            "Language code${if (duplicates.size > 1) "s" else ""} '$duplicatesString' " +
+                "appear${if (duplicates.size > 1) "" else "s"} more than once " +
+                "in the language specification '$language'"
         }
     }
 
@@ -61,24 +81,8 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
             val withoutCommon = language.replace("-common$".toRegex(), "")
             if (withoutCommon == "all") return@forEach
             val parts = withoutCommon.split("-")
-            parts.forEach {
-                try {
-                    Locale(it)
-                } catch (e: Exception) {
-                    throw IllegalArgumentException(
-                        "Unrecognized language code '$it' in the language specification '$language'",
-                        e,
-                    )
-                }
-            }
-            val partsCount = parts.groupingBy { it }.eachCount()
-            require(partsCount.values.all { it == 1 }) {
-                val duplicates = partsCount.toList().filter { it.second > 1 }.map { it.first }
-                "Language code${if (duplicates.size > 1) "s" else ""} " +
-                    "${duplicates.joinToString("', '", prefix = "'", postfix = "'")} " +
-                    "appear${if (duplicates.size > 1) "" else "s"} more than once " +
-                    "in the language specification '$language'"
-            }
+            parts.forEach { checkLanguageCode(it, language) }
+            checkLanguageCodesUnique(parts, language)
         }
     }
 
