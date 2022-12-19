@@ -20,11 +20,5 @@ class ConvertJMnedict : ConvertDictionary<JMnedictXmlElement.Entry, JMnedictJson
 
     override fun buildConverter(metadata: Metadata) = JMnedictConverter(metadata)
 
-    override fun getRelevantOutputsFor(word: JMnedictJsonElement.Word): List<Output> =
-        outputs.filter { output ->
-            val haveCommonLanguages = output.languages.intersect(word.allLanguages).isNotEmpty()
-            haveCommonLanguages || output.languages.contains("all")
-        }
-
     override fun serialize(word: JMnedictJsonElement.Word): String = Json.encodeToString(word)
 }

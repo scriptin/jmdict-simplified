@@ -27,8 +27,6 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
 
     abstract fun buildConverter(metadata: Metadata): Converter<E, W>
 
-    abstract fun getRelevantOutputsFor(word: W): List<Output>
-
     abstract fun serialize(word: W): String
 
     abstract val dictionaryName: String
@@ -72,7 +70,7 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
     class Output(
         path: Path,
         val languages: Set<String>,
-        val common: Boolean,
+        val commonOnly: Boolean,
     ) {
         private val fileWriter = path.toFile().writer()
 
@@ -91,6 +89,14 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
             set(value) {
                 if (!acceptedEntry && value) acceptedEntry = true
             }
+
+        fun <W : OutputDictionaryWord<W>> acceptsWord(word: W): Boolean {
+            val shareSomeLanguages = languages.intersect(word.allLanguages).isNotEmpty()
+            // For non-only-common outputs, all words must be accepted
+            // Otherwise, for only-common outputs, allow only common words
+            val matchesByCommon = !commonOnly || word.isCommon
+            return (shareSomeLanguages || languages.contains("all")) && matchesByCommon
+        }
     }
 
     internal val outputs by lazy {
@@ -102,7 +108,7 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
                     .replace("-common$".toRegex(), "")
                     .split("-")
                     .toSet(),
-                common = if (supportsCommon) language.endsWith("-common") else false,
+                commonOnly = if (supportsCommon) language.endsWith("-common") else false,
             )
         }
     }
@@ -143,7 +149,7 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
                 {
                 "version": ${Json.encodeToString(version)},
                 "languages": ${Json.encodeToString(it.languages.toList().sorted())},
-                "commonOnly": ${Json.encodeToString(it.common)},
+                "commonOnly": ${Json.encodeToString(it.commonOnly)},
                 "dictDate": ${Json.encodeToString(metadata.date)},
                 "dictRevisions": ${Json.encodeToString(metadata.revisions)},
                 "tags": ${Json.encodeToString(metadata.entities)},
@@ -162,7 +168,7 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
 
     override fun processEntry(entry: E) {
         val word = convert(entry)
-        getRelevantOutputsFor(word).forEach { output ->
+        outputs.filter { it.acceptsWord(word) }.forEach { output ->
             val json = serialize(word.onlyWithLanguages(output.languages))
             output.write("${if (output.acceptedAtLeastOneEntry) "," else ""}\n$json")
             output.acceptedAtLeastOneEntry = true

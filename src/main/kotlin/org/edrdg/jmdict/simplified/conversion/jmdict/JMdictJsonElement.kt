@@ -28,6 +28,9 @@ sealed class JMdictJsonElement : CommonJsonElement() {
                     )
                 }.filter { it.gloss.isNotEmpty() }
             )
+
+        override val isCommon: Boolean
+            get() = kanji.any { it.common } || kana.any { it.common }
     }
 
     @Serializable

@@ -20,13 +20,5 @@ class ConvertJMdict : ConvertDictionary<JMdictXmlElement.Entry, JMdictJsonElemen
 
     override fun buildConverter(metadata: Metadata) = JMdictConverter(metadata)
 
-    override fun getRelevantOutputsFor(word: JMdictJsonElement.Word): List<Output> {
-        val wordIsCommon = word.kanji.any { it.common } || word.kana.any { it.common }
-        return outputs.filter { output ->
-            val haveCommonLanguages = output.languages.intersect(word.allLanguages).isNotEmpty()
-            (haveCommonLanguages || output.languages.contains("all")) && output.common == wordIsCommon
-        }
-    }
-
     override fun serialize(word: JMdictJsonElement.Word): String = Json.encodeToString(word)
 }
