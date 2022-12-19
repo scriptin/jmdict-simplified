@@ -11,9 +11,9 @@ import org.edrdg.jmdict.simplified.conversion.OutputDictionaryWord
 import org.edrdg.jmdict.simplified.parsing.InputDictionaryEntry
 import org.edrdg.jmdict.simplified.parsing.Metadata
 import org.edrdg.jmdict.simplified.parsing.Parser
-import java.lang.IllegalArgumentException
 import java.nio.file.Path
 import java.util.*
+import kotlin.IllegalArgumentException
 
 abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryWord<W>>(
     val supportsCommonOnlyOutputs: Boolean,
@@ -30,6 +30,15 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
     abstract fun serialize(word: W): String
 
     abstract val dictionaryName: String
+
+    private fun checkCommonOnly(language: String) {
+        if (!supportsCommonOnlyOutputs && language.endsWith("-common")) {
+            throw IllegalArgumentException(
+                "This dictionary type does not support common-only version, but you have " +
+                    "provided a language specification '$language'"
+            )
+        }
+    }
 
     private val languages by option(
         "-l", "--languages",
@@ -49,6 +58,7 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
             "'ger,eng-ger' (2 files: German, English+German), 'fre' (French)",
     ).split(",").required().validate { languages ->
         languages.forEach { language ->
+            checkCommonOnly(language)
             val withoutCommon = language.replace("-common$".toRegex(), "")
             if (withoutCommon == "all") return@forEach
             val parts = withoutCommon.split("-")
