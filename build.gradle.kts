@@ -2,7 +2,6 @@ import de.undercouch.gradle.tasks.download.Download
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
-import kotlin.streams.toList
 
 group = "org.edrdg.jmdict.simplified"
 version = "3.2.0-SNAPSHOT"
@@ -184,17 +183,6 @@ val jmnedictHasChanged: Task by tasks.creating {
         val newChecksum = getFileHash(jmnedictPath).trim()
         println(if (previousChecksum == newChecksum) "NO" else "YES")
     }
-}
-
-fun getTags(inputFilePath: String): List<Pair<String, String>> {
-    val regex = """<!ENTITY\s+(.+)\s+"([^"]+)">""".toRegex()
-    return file(inputFilePath).bufferedReader().lines()
-        .filter { it.matches(regex) }
-        .map { line ->
-            val groups = regex.find(line)!!.groupValues
-            Pair(groups[1], groups[2])
-        }
-        .toList()
 }
 
 val createDictJsonDir: Task by tasks.creating {
