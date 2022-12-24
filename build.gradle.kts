@@ -1,9 +1,4 @@
 import de.undercouch.gradle.tasks.download.Download
-import org.basex.core.Context
-import org.basex.core.cmd.CreateDB
-import org.basex.core.cmd.DropDB
-import org.basex.query.QueryProcessor
-import org.basex.query.value.item.Item
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -11,6 +6,11 @@ import kotlin.streams.toList
 
 group = "org.edrdg.jmdict.simplified"
 version = "3.2.0-SNAPSHOT"
+
+val jmdictLanguages = listOf("all", "eng", "eng-common")
+val jmdictReportFile = "jmdict-release-info.md"
+val jmnedictLanguages = listOf("all") // There is only English
+val jmnedictReportFile = "jmnedict-release-info.md"
 
 plugins {
     id("de.undercouch.download") version "3.4.3"
@@ -21,20 +21,26 @@ plugins {
 
 application {
     mainClass.set("org.edrdg.jmdict.simplified.MainKt")
-    applicationDefaultJvmArgs = listOf("-Djdk.xml.entityExpansionLimit=0")
+}
+
+tasks {
+    val uberJar = register<Jar>("uberJar") {
+        // We need this for Gradle optimization to work
+        dependsOn.addAll(listOf("compileJava", "compileKotlin", "processResources"))
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        manifest { attributes(mapOf("Main-Class" to application.mainClass)) }
+        val sourcesMain = sourceSets.main.get()
+        val runtime = configurations.runtimeClasspath.get()
+            .map { if (it.isDirectory) it else zipTree(it) }
+        from(runtime + sourcesMain.output)
+    }
+    build {
+        dependsOn(uberJar)
+    }
 }
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
-}
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        "classpath"(group = "org.basex", name = "basex", version = "9.1")
-    }
 }
 
 repositories {
@@ -190,227 +196,6 @@ fun getTags(inputFilePath: String): List<Pair<String, String>> {
         .toList()
 }
 
-fun generateTagsXQuery(tags: List<Pair<String, String>>): String {
-    val cases = tags.map { (tag, description) ->
-        "  case \"$description\" return \"$tag\""
-    }
-    val pairs = tags.map { (tag, description) ->
-        "  <j:string key=\"$tag\">${description.replace("[`']".toRegex(), "&apos;")}</j:string>"
-    }
-    return """
-        |xquery version "3.0";
-        |module namespace tags = "tags";
-        |
-        |import module namespace j = "http://www.w3.org/2005/xpath-functions";
-        |
-        |(: This file is generated, do not edit manually! :)
-        |
-        |declare function tags:convert-entity(${'$'}word-id as xs:string, ${'$'}text as xs:string) as xs:string? {
-        |  switch(${'$'}text)
-        |${cases.joinToString("\n")}
-        |  default return error(
-        |    xs:QName("unknown-tag"),
-        |    concat("Unknown tag '", ${'$'}text, "' on entity ", ${'$'}word-id)
-        |  )
-        |};
-        |
-        |declare variable ${'$'}tags:tags := <j:map key="tags">
-        |${pairs.joinToString("\n")}
-        |</j:map>;
-        |""".trimMargin()
-}
-
-val jmdictTags: Task by tasks.creating {
-    group = "Tags"
-    description = "Generate JMdict tag.xq file"
-    val jmdictPath: String by jmdictExtract.extra
-    doLast {
-        file("$projectDir/src/jmdict/tags.xq").writeText(generateTagsXQuery(getTags(jmdictPath)))
-    }
-}
-
-val jmnedictTags: Task by tasks.creating {
-    group = "Tags"
-    description = "Generate JMnedict tag.xq file"
-    val jmnedictPath: String by jmnedictExtract.extra
-    doLast {
-        file("$projectDir/src/jmnedict/tags.xq").writeText(generateTagsXQuery(getTags(jmnedictPath)))
-    }
-}
-
-/**
- * (Re)generate tags.xq for all dictionaries
- */
-val tags: Task by tasks.creating {
-    group = "Tags"
-    description = "Generate all tag files"
-    dependsOn(jmdictTags, jmnedictTags)
-}
-
-val defaultVars = mapOf("version" to version)
-
-fun runXQuery(
-    inputFilePath: String,
-    queryFilePath: String,
-    outputFilePath: String,
-    vars: Map<String, Any> = defaultVars
-) {
-    val dbName = "doc"
-    val context = Context()
-    try {
-        val xqFile = File(queryFilePath)
-        val outputFile = File(outputFilePath)
-        if (!outputFile.exists()) {
-            outputFile.createNewFile()
-        }
-        DropDB(dbName).execute(context)
-        CreateDB(dbName, inputFilePath).execute(context)
-        QueryProcessor(
-            xqFile.readText(),
-            xqFile.absolutePath,
-            context
-        ).use { processor ->
-            vars.forEach { (k, v) -> processor.bind(k, v) }
-            val iter = processor.iter()
-            processor.getSerializer(outputFile.outputStream()).use { serializer ->
-                var item: Item? = iter.next()
-                while (item != null) {
-                    serializer.serialize(item)
-                    item = iter.next()
-                }
-            }
-        }
-    } finally {
-        DropDB(dbName).execute(context)
-    }
-}
-
-val jmdictFullConvert: Task by tasks.creating {
-    group = "Convert"
-    description = "Convert JMdict full version from XML to JSON"
-    val jmdictPath: String by jmdictExtract.extra
-    val fileName = "jmdict-eng-$version.json"
-    val filePath = "$buildDir/$fileName"
-    extra["jmdictFullJsonName"] = fileName
-    extra["jmdictFullJsonPath"] = filePath
-    doLast {
-        runXQuery(jmdictPath, "$projectDir/src/jmdict/convert-dictionary.xq", filePath)
-    }
-}
-
-val jmdictCommonConvert: Task by tasks.creating {
-    group = "Convert"
-    description = "Convert JMdict common-only version from XML to JSON"
-    val jmdictPath: String by jmdictExtract.extra
-    val fileName = "jmdict-eng-common-$version.json"
-    val filePath = "$buildDir/$fileName"
-    extra["jmdictCommonJsonName"] = fileName
-    extra["jmdictCommonJsonPath"] = filePath
-    doLast {
-        runXQuery(jmdictPath, "$projectDir/src/jmdict/convert-dictionary-common.xq", filePath)
-    }
-}
-
-fun jmnedictConvertWrapper(): String {
-    val fileName = "jmnedict-part-0-$version.json"
-    val filePath = "$buildDir/$fileName"
-    val jmnedictPath: String by jmnedictExtract.extra
-    runXQuery(jmnedictPath, "$projectDir/src/jmnedict/convert-dictionary.xq", filePath)
-    return filePath
-}
-
-fun jmnedictConvertEntriesRange(idx: Int, start: Long, end: Long): String {
-    val fileName = "jmnedict-part-${idx + 1}-$version.json"
-    val filePath = "$buildDir/$fileName"
-    val jmnedictPath: String by jmnedictExtract.extra
-    runXQuery(
-        jmnedictPath,
-        "$projectDir/src/jmnedict/convert-entries-range.xq",
-        filePath,
-        defaultVars.plus(mapOf("start" to start, "end" to end))
-    )
-    return filePath
-}
-
-fun jmnedictGenerateFiles(partsCount: Int, partSize: Long): Pair<String, List<String>> {
-    val progressTotal = partsCount + 1
-    println("Converting: 1/$progressTotal")
-    val wrapperFile = jmnedictConvertWrapper()
-    val parts = mutableListOf<String>()
-    for (i in 0 until partsCount) {
-        println("Converting: ${i + 2}/$progressTotal")
-        val start = i * partSize
-        val end = start + partSize
-        parts.add(jmnedictConvertEntriesRange(i, start, end))
-    }
-    return Pair(wrapperFile, parts.toList())
-}
-
-fun jmnedictConcat(f: File, wrapperFile: String, parts: List<String>) {
-    val offset = "  "
-    val startRegex = "^$offset\"words\"\\s*:\\s*\\[\\s*$".toRegex()
-    val endRegex = "^$offset\\]\\s*$".toRegex()
-
-    var started: Boolean
-    var ended = false
-    var needsNewLine = false
-
-    val totalProgress = parts.size + 1
-    println("Concatenating: 1/$totalProgress")
-    file(wrapperFile).bufferedReader().lines().forEachOrdered { line ->
-        if (!ended) {
-            ended = startRegex.matches(line)
-            f.appendText(if (needsNewLine) "\n$line" else line)
-        }
-        needsNewLine = true
-    }
-
-    for (i in parts.indices) {
-        println("Concatenating: ${i + 2}/$totalProgress")
-        val part = parts[i]
-        val needsComma = i != (parts.size - 1)
-        started = false
-        ended = false
-        file(part).bufferedReader().lines().forEachOrdered { line ->
-            if (started && !ended) {
-                ended = endRegex.matches(line)
-                if (!ended) {
-                    f.appendText("\n$line")
-                } else if (needsComma) {
-                    f.appendText(",")
-                }
-            }
-            if (!started) {
-                started = startRegex.matches(line)
-            }
-        }
-    }
-    f.appendText("\n$offset]")
-    f.appendText("\n}\n")
-}
-
-val jmnedictConvert: Task by tasks.creating {
-    group = "Convert"
-    description = "Convert JMnedict from XML to JSON"
-    val fileName = "jmnedict-$version.json"
-    val filePath = "$buildDir/$fileName"
-    extra["jmnedictJsonName"] = fileName
-    extra["jmnedictJsonPath"] = filePath
-    doLast {
-        val (wrapperFile, parts) = jmnedictGenerateFiles(8, 100_000L)
-        val f = file(filePath)
-        f.delete()
-        f.createNewFile()
-        jmnedictConcat(f, wrapperFile, parts)
-    }
-}
-
-val convert: Task by tasks.creating {
-    group = "Convert"
-    description = "Convert all dictionaries from XML to JSON"
-    dependsOn(jmdictFullConvert, jmdictCommonConvert, jmnedictConvert)
-}
-
 val createDistDir: Task by tasks.creating {
     val distDir = "$buildDir/dist"
     extra["distDir"] = distDir
@@ -419,98 +204,48 @@ val createDistDir: Task by tasks.creating {
     }
 }
 
-val jmdictFullZip by tasks.creating(Zip::class) {
-    group = "Distribution"
-    description = "Create JMdict full version distribution archive (zip)"
-    val jmdictFullJsonName: String by jmdictFullConvert.extra
-    val jmdictFullJsonPath: String by jmdictFullConvert.extra
+val jmdictConvert: Task by tasks.creating(Exec::class) {
+    group = "Convert"
+    description = "Convert JMdict"
+    dependsOn(createDistDir, tasks.getByName("uberJar"))
     val distDir: String by createDistDir.extra
-    archiveFileName.set("$jmdictFullJsonName.zip")
-    destinationDirectory.set(file(distDir))
-    from(file(jmdictFullJsonPath))
+    val jmdictPath: String by jmdictExtract.extra
+    commandLine = listOf(
+        "java",
+        "-Djdk.xml.entityExpansionLimit=0",
+        "-jar",
+        (tasks.getByName("uberJar") as Jar).archiveFile.get().asFile.path,
+        "convert-jmdict",
+        "--version=$version",
+        "--languages=${jmdictLanguages.joinToString(",")}",
+        "--report=$distDir${File.separator}$jmdictReportFile",
+        jmdictPath,
+        distDir,
+    )
 }
 
-val jmdictFullTar by tasks.creating(Tar::class) {
-    group = "Distribution"
-    description = "Create JMdict full version distribution archive (tar+gzip)"
-    val jmdictFullJsonName: String by jmdictFullConvert.extra
-    val jmdictFullJsonPath: String by jmdictFullConvert.extra
+val jmnedictConvert: Task by tasks.creating(Exec::class) {
+    group = "Convert"
+    description = "Convert JMnedict"
+    dependsOn(createDistDir, tasks.getByName("uberJar"))
     val distDir: String by createDistDir.extra
-    archiveFileName.set("$jmdictFullJsonName.tgz")
-    compression = Compression.GZIP
-    destinationDirectory.set(file(distDir))
-    from(file(jmdictFullJsonPath))
+    val jmnedictPath: String by jmnedictExtract.extra
+    commandLine = listOf(
+        "java",
+        "-Djdk.xml.entityExpansionLimit=0",
+        "-jar",
+        (tasks.getByName("uberJar") as Jar).archiveFile.get().asFile.path,
+        "convert-jmnedict",
+        "--version=$version",
+        "--languages=${jmnedictLanguages.joinToString(",")}",
+        "--report=$distDir${File.separator}$jmnedictReportFile",
+        jmnedictPath,
+        distDir,
+    )
 }
 
-val jmdictCommonZip by tasks.creating(Zip::class) {
-    group = "Distribution"
-    description = "Create JMdict common-only version distribution archive (zip)"
-    val jmdictCommonJsonName: String by jmdictCommonConvert.extra
-    val jmdictCommonJsonPath: String by jmdictCommonConvert.extra
-    val distDir: String by createDistDir.extra
-    archiveFileName.set("$jmdictCommonJsonName.zip")
-    destinationDirectory.set(file(distDir))
-    from(file(jmdictCommonJsonPath))
-}
-
-val jmdictCommonTar by tasks.creating(Tar::class) {
-    group = "Distribution"
-    description = "Create JMdict common-only version distribution archive (tar+gzip)"
-    val jmdictCommonJsonName: String by jmdictCommonConvert.extra
-    val jmdictCommonJsonPath: String by jmdictCommonConvert.extra
-    val distDir: String by createDistDir.extra
-    archiveFileName.set("$jmdictCommonJsonName.tgz")
-    compression = Compression.GZIP
-    destinationDirectory.set(file(distDir))
-    from(file(jmdictCommonJsonPath))
-}
-
-val jmnedictZip by tasks.creating(Zip::class) {
-    group = "Distribution"
-    description = "Create JMnedict distribution archive (zip)"
-    val jmnedictJsonName: String by jmnedictConvert.extra
-    val jmnedictJsonPath: String by jmnedictConvert.extra
-    val distDir: String by createDistDir.extra
-    archiveFileName.set("$jmnedictJsonName.zip")
-    destinationDirectory.set(file(distDir))
-    from(file(jmnedictJsonPath))
-}
-
-val jmnedictTar by tasks.creating(Tar::class) {
-    group = "Distribution"
-    description = "Create JMnedict distribution archive (tar+gzip)"
-    val jmnedictJsonName: String by jmnedictConvert.extra
-    val jmnedictJsonPath: String by jmnedictConvert.extra
-    val distDir: String by createDistDir.extra
-    archiveFileName.set("$jmnedictJsonName.tgz")
-    compression = Compression.GZIP
-    destinationDirectory.set(file(distDir))
-    from(file(jmnedictJsonPath))
-}
-
-/**
- * Create distribution archives of all dictionaries in zip format
- */
-val zip: Task by tasks.creating {
-    group = "Distribution"
-    description = "Create distribution archives (zip)"
-    dependsOn(jmdictFullZip, jmdictCommonZip, jmnedictZip)
-}
-
-/**
- * Create distribution archives of all dictionaries in tar+gzip format
- */
-val tar: Task by tasks.creating {
-    group = "Distribution"
-    description = "Create distribution archives (tar+gzip)"
-    dependsOn(jmdictFullTar, jmdictCommonTar, jmnedictTar)
-}
-
-/**
- * Create distribution archives of all dictionaries in all formats
- */
-val dist: Task by tasks.creating {
-    group = "Distribution"
-    description = "Create distribution archives (all formats)"
-    dependsOn(zip, tar)
+val convert: Task by tasks.creating {
+    group = "Convert"
+    description = "Convert JMdict and JMnedict"
+    dependsOn(jmdictConvert, jmnedictConvert)
 }
