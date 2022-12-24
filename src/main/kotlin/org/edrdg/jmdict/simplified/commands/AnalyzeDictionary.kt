@@ -6,8 +6,8 @@ import com.github.ajalt.clikt.output.CliktHelpFormatter
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
-import org.edrdg.jmdict.simplified.processing.AnalyzingDictionaryProcessor
 import org.edrdg.jmdict.simplified.parsing.*
+import org.edrdg.jmdict.simplified.processing.DryRun
 
 open class AnalyzeDictionary<E : InputDictionaryEntry>(
     help: String = "Analyze dictionary file contents",
@@ -29,12 +29,11 @@ open class AnalyzeDictionary<E : InputDictionaryEntry>(
     internal val dictionaryXmlFile by argument().file(mustExist = true, canBeDir = false)
 
     override fun run() {
-        val processor = AnalyzingDictionaryProcessor(
+        DryRun(
             dictionaryXmlFile = dictionaryXmlFile,
-            reportFile = reportFile,
-            parser = parser,
             rootTagName = rootTagName,
-        )
-        processor.run()
+            parser = parser,
+            reportFile = reportFile,
+        ).run()
     }
 }

@@ -9,31 +9,29 @@ import org.edrdg.jmdict.simplified.parsing.InputDictionaryEntry
 import org.edrdg.jmdict.simplified.parsing.Metadata
 import org.edrdg.jmdict.simplified.parsing.Parser
 import java.io.File
-import java.nio.file.Path
 
-class ConvertingDictionaryProcessor<E : InputDictionaryEntry, W : OutputDictionaryWord<W>>(
+/**
+ * Parses, analyzes, and converts to JSON a dictionary XML file.
+ * Can produce a report file.
+ */
+class Convert<E : InputDictionaryEntry, W : OutputDictionaryWord<W>>(
     override val dictionaryXmlFile: File,
-    override val reportFile: File?,
-    override val parser: Parser<E>,
     override val rootTagName: String,
+    override val parser: Parser<E>,
+    override val reportFile: File?,
     private val dictionaryName: String,
     private val version: String,
-    private val outputDir: Path,
     private val languages: List<String>,
     private val outputs: List<DictionaryOutputWriter>,
     private val converter: Converter<E, W>,
-) : AnalyzingDictionaryProcessor<E>(
+) : DryRun<E>(
     dictionaryXmlFile = dictionaryXmlFile,
-    reportFile = reportFile,
-    parser = parser,
     rootTagName = rootTagName,
+    parser = parser,
+    reportFile = reportFile,
 ) {
-    override fun printMoreInfo() {
-        super.printMoreInfo()
-        println("Output directory:")
-        println(" - $outputDir")
-        println()
-
+    override fun reportFiles() {
+        super.reportFiles()
         println("Output files:")
         languages.forEach {
             println(" - $dictionaryName-$it-$version.json")
@@ -72,8 +70,11 @@ class ConvertingDictionaryProcessor<E : InputDictionaryEntry, W : OutputDictiona
         }
     }
 
-    override fun afterEntries() {
-        super.afterEntries()
+    override fun afterEntries(
+        entryCount: Long,
+        entriesByLanguage: Map<String, Long>,
+    ) {
+        super.afterEntries(entryCount, entriesByLanguage)
         outputs.forEach {
             it.write(
                 """

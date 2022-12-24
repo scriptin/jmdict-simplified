@@ -4,7 +4,7 @@ import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.*
 import com.github.ajalt.clikt.parameters.types.path
 import net.swiftzer.semver.SemVer
-import org.edrdg.jmdict.simplified.processing.ConvertingDictionaryProcessor
+import org.edrdg.jmdict.simplified.processing.Convert
 import org.edrdg.jmdict.simplified.conversion.Converter
 import org.edrdg.jmdict.simplified.conversion.OutputDictionaryWord
 import org.edrdg.jmdict.simplified.parsing.InputDictionaryEntry
@@ -110,18 +110,16 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
     private val outputDir by argument().path(canBeFile = false, mustBeWritable = true)
 
     override fun run() {
-        val processor = ConvertingDictionaryProcessor(
+        Convert(
             dictionaryXmlFile = dictionaryXmlFile,
-            reportFile = reportFile,
-            parser = parser,
             rootTagName = rootTagName,
+            parser = parser,
+            reportFile = reportFile,
             dictionaryName = dictionaryName,
             version = version,
-            outputDir = outputDir,
             languages = languages,
             outputs = outputs,
             converter = converter,
-        )
-        processor.run()
+        ).run()
     }
 }
