@@ -11,4 +11,6 @@ interface OutputDictionaryWord<W : OutputDictionaryWord<W>> {
      */
     val isCommon: Boolean
         get() = false
+
+    fun toJsonString(): String
 }

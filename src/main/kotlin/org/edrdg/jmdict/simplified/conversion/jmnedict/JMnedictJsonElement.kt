@@ -1,6 +1,8 @@
 package org.edrdg.jmdict.simplified.conversion.jmnedict
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.edrdg.jmdict.simplified.conversion.CommonJsonElement
 import org.edrdg.jmdict.simplified.conversion.OutputDictionaryWord
 
@@ -27,6 +29,8 @@ sealed class JMnedictJsonElement : CommonJsonElement() {
                     )
                 }.filter { it.translation.isNotEmpty() }
             )
+
+        override fun toJsonString() = Json.encodeToString(this)
     }
 
     @Serializable

@@ -2,6 +2,8 @@ package org.edrdg.jmdict.simplified.conversion.jmdict
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.edrdg.jmdict.simplified.conversion.CommonJsonElement
 import org.edrdg.jmdict.simplified.conversion.OutputDictionaryWord
 
@@ -31,6 +33,8 @@ sealed class JMdictJsonElement : CommonJsonElement() {
 
         override val isCommon: Boolean
             get() = kanji.any { it.common } || kana.any { it.common }
+
+        override fun toJsonString() = Json.encodeToString(this)
     }
 
     @Serializable
