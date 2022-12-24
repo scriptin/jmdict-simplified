@@ -3,33 +3,27 @@ package org.edrdg.jmdict.simplified.commands
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.*
 import com.github.ajalt.clikt.parameters.types.path
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import net.swiftzer.semver.SemVer
+import org.edrdg.jmdict.simplified.commands.processor.ConvertingDictionaryProcessor
 import org.edrdg.jmdict.simplified.conversion.Converter
 import org.edrdg.jmdict.simplified.conversion.OutputDictionaryWord
 import org.edrdg.jmdict.simplified.parsing.InputDictionaryEntry
-import org.edrdg.jmdict.simplified.parsing.Metadata
 import org.edrdg.jmdict.simplified.parsing.Parser
 import java.util.*
 import kotlin.IllegalArgumentException
 
 abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryWord<W>>(
-    val supportsCommonOnlyOutputs: Boolean,
-    override val help: String = "Convert dictionary file into JSON",
-    parser: Parser<E>,
+    help: String = "Convert dictionary file into JSON",
+    private val supportsCommonOnlyOutputs: Boolean,
+    private val parser: Parser<E>,
+    private val rootTagName: String,
+    private val dictionaryName: String,
+    private val converter: Converter<E, W>,
 ) : AnalyzeDictionary<E>(
     help = help,
     parser = parser,
+    rootTagName = rootTagName,
 ) {
-    private var converter: Converter<E, W>? = null
-
-    abstract fun buildConverter(metadata: Metadata): Converter<E, W>
-
-    abstract fun serialize(word: W): String
-
-    abstract val dictionaryName: String
-
     private fun checkCommonOnly(language: String) {
         require(supportsCommonOnlyOutputs || !language.endsWith("-common")) {
             "This dictionary type does not support common-only version, but you have " +
@@ -115,70 +109,19 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
 
     private val outputDir by argument().path(canBeFile = false, mustBeWritable = true)
 
-    override fun printMoreInfo() {
-        println("Output directory:")
-        println(" - $outputDir")
-        println()
-
-        println("Output files:")
-        languages.forEach {
-            println(" - $dictionaryName-$it-$version.json")
-        }
-        println()
-    }
-
-    override fun beforeEntries(metadata: Metadata) {
-        super.beforeEntries(metadata)
-        converter = buildConverter(metadata)
-        outputs.forEach {
-            it.write(
-                """
-                {
-                "version": ${Json.encodeToString(version)},
-                "languages": ${Json.encodeToString(it.languages.toList().sorted())},
-                "commonOnly": ${Json.encodeToString(it.commonOnly)},
-                "dictDate": ${Json.encodeToString(metadata.date)},
-                "dictRevisions": ${Json.encodeToString(metadata.revisions)},
-                "tags": ${Json.encodeToString(metadata.entities)},
-                "words": [
-                """.trimIndent().trimEnd('\n', ' ')
-            )
-        }
-    }
-
-    private fun convert(entry: E): W {
-        require(converter != null) {
-            "Converter has not been initialized"
-        }
-        return converter!!.convert(entry)
-    }
-
-    override fun processEntry(entry: E) {
-        super.processEntry(entry)
-        val word = convert(entry)
-        val relevantOutputs = outputs.filter { it.acceptsWord(word) }
-        relevantOutputs.forEach { output ->
-            val filteredWord = word.onlyWithLanguages(output.languages)
-            val json = serialize(filteredWord)
-            output.write("${if (output.acceptedAtLeastOneEntry) "," else ""}\n$json")
-            output.acceptedAtLeastOneEntry = true
-        }
-    }
-
-    override fun afterEntries() {
-        super.afterEntries()
-        outputs.forEach {
-            it.write(
-                """
-                ]
-                }
-                """.trimIndent()
-            )
-        }
-    }
-
-    override fun finish() {
-        super.finish()
-        outputs.forEach { it.close() }
+    override fun run() {
+        val processor = ConvertingDictionaryProcessor(
+            dictionaryXmlFile = dictionaryXmlFile,
+            reportFile = reportFile,
+            parser = parser,
+            rootTagName = rootTagName,
+            dictionaryName = dictionaryName,
+            version = version,
+            outputDir = outputDir,
+            languages = languages,
+            outputs = outputs,
+            converter = converter,
+        )
+        processor.run()
     }
 }

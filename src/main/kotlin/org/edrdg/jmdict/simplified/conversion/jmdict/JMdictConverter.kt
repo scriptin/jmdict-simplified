@@ -5,9 +5,7 @@ import org.edrdg.jmdict.simplified.conversion.Converter
 import org.edrdg.jmdict.simplified.parsing.jmdict.JMdictXmlElement
 import org.edrdg.jmdict.simplified.parsing.Metadata
 
-class JMdictConverter(metadata: Metadata) : Converter<JMdictXmlElement.Entry, JMdictJsonElement.Word>() {
-    override val entities = metadata.entities.entries.associate { (k, v) -> v to k }
-
+class JMdictConverter : Converter<JMdictXmlElement.Entry, JMdictJsonElement.Word>() {
     override fun convert(xmlEntry: JMdictXmlElement.Entry) = JMdictJsonElement.Word(
         id = xmlEntry.entSeq.text,
         kanji = xmlEntry.kEle.map { kanji(it, xmlEntry.entSeq.text) },

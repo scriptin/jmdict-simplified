@@ -1,11 +1,23 @@
 package org.edrdg.jmdict.simplified.conversion
 
 import org.edrdg.jmdict.simplified.parsing.InputDictionaryEntry
+import org.edrdg.jmdict.simplified.parsing.Metadata
 
 abstract class Converter<E : InputDictionaryEntry, W : OutputDictionaryWord<W>> {
+    private var _metadata: Metadata? = null
+
+    fun setMetadata(m: Metadata) {
+        this._metadata = m
+    }
+
     abstract fun convert(xmlEntry: E): W
 
-    abstract val entities: Map<String, String>
+    private val entities by lazy {
+        require(_metadata != null) {
+            "Metadata must be set"
+        }
+        _metadata!!.entities.entries.associate { (k, v) -> v to k }
+    }
 
     fun entityToTag(text: String, entSeq: String) = CommonJsonElement.Tag(
         entities[text] ?: throw ConversionException(
