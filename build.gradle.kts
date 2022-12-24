@@ -57,19 +57,19 @@ dependencies {
     implementation("net.swiftzer.semver:semver:1.2.0")
 }
 
-val createDataDir: Task by tasks.creating {
-    val dataDir = "$buildDir/data"
-    extra["dataDir"] = dataDir
+val createDictXmlDir: Task by tasks.creating {
+    val dictXmlDir = "$buildDir/dict-xml"
+    extra["dictXmlDir"] = dictXmlDir
     doLast {
-        mkdir(dataDir)
+        mkdir(dictXmlDir)
     }
 }
 
 val jmdictDownload by tasks.creating(Download::class) {
     group = "Download"
     description = "Download JMdict source XML archive"
-    val dataDir: String by createDataDir.extra
-    val filePath = "$dataDir/JMdict.gz"
+    val dictXmlDir: String by createDictXmlDir.extra
+    val filePath = "$dictXmlDir/JMdict.gz"
     src("http://ftp.edrdg.org/pub/Nihongo/JMdict.gz")
     dest(filePath)
     extra["archivePath"] = filePath
@@ -81,9 +81,9 @@ val jmdictExtract: Task by tasks.creating {
     group = "Extract"
     description = "Extract JMdict source XML from an archive"
     dependsOn(jmdictDownload)
-    val dataDir: String by createDataDir.extra
+    val dictXmlDir: String by createDictXmlDir.extra
     val archivePath: String by jmdictDownload.extra
-    val filePath = "$dataDir/JMdict.xml"
+    val filePath = "$dictXmlDir/JMdict.xml"
     extra["jmdictPath"] = filePath
     doLast {
         resources.gzip(archivePath).read().copyTo(file(filePath).outputStream())
@@ -93,8 +93,8 @@ val jmdictExtract: Task by tasks.creating {
 val jmnedictDownload by tasks.creating(Download::class) {
     group = "Download"
     description = "Download JMnedict source XML archive"
-    val dataDir: String by createDataDir.extra
-    val filePath = "$dataDir/JMnedict.xml.gz"
+    val dictXmlDir: String by createDictXmlDir.extra
+    val filePath = "$dictXmlDir/JMnedict.xml.gz"
     src("http://ftp.edrdg.org/pub/Nihongo/JMnedict.xml.gz")
     dest(filePath)
     extra["archivePath"] = filePath
@@ -106,9 +106,9 @@ val jmnedictExtract: Task by tasks.creating {
     group = "Extract"
     description = "Extract JMnedict source XML from an archive"
     dependsOn(jmnedictDownload)
-    val dataDir: String by createDataDir.extra
+    val dictXmlDir: String by createDictXmlDir.extra
     val archivePath: String by jmnedictDownload.extra
-    val filePath = "$dataDir/JMnedict.xml"
+    val filePath = "$dictXmlDir/JMnedict.xml"
     extra["jmnedictPath"] = filePath
     doLast {
         resources.gzip(archivePath).read().copyTo(file(filePath).outputStream())
@@ -197,19 +197,19 @@ fun getTags(inputFilePath: String): List<Pair<String, String>> {
         .toList()
 }
 
-val createDistDir: Task by tasks.creating {
-    val distDir = "$buildDir/dist"
-    extra["distDir"] = distDir
+val createDictJsonDir: Task by tasks.creating {
+    val dictJsonDir = "$buildDir/dict-json"
+    extra["dictJsonDir"] = dictJsonDir
     doLast {
-        mkdir(distDir)
+        mkdir(dictJsonDir)
     }
 }
 
 val jmdictConvert: Task by tasks.creating(Exec::class) {
     group = "Convert"
     description = "Convert JMdict"
-    dependsOn(createDistDir, tasks.getByName("uberJar"))
-    val distDir: String by createDistDir.extra
+    dependsOn(createDictJsonDir, tasks.getByName("uberJar"))
+    val dictJsonDir: String by createDictJsonDir.extra
     val jmdictPath: String by jmdictExtract.extra
     commandLine = listOf(
         "java",
@@ -219,17 +219,17 @@ val jmdictConvert: Task by tasks.creating(Exec::class) {
         "convert-jmdict",
         "--version=$version",
         "--languages=${jmdictLanguages.joinToString(",")}",
-        "--report=$distDir${File.separator}$jmdictReportFile",
+        "--report=$dictJsonDir${File.separator}$jmdictReportFile",
         jmdictPath,
-        distDir,
+        dictJsonDir,
     )
 }
 
 val jmnedictConvert: Task by tasks.creating(Exec::class) {
     group = "Convert"
     description = "Convert JMnedict"
-    dependsOn(createDistDir, tasks.getByName("uberJar"))
-    val distDir: String by createDistDir.extra
+    dependsOn(createDictJsonDir, tasks.getByName("uberJar"))
+    val dictJsonDir: String by createDictJsonDir.extra
     val jmnedictPath: String by jmnedictExtract.extra
     commandLine = listOf(
         "java",
@@ -239,9 +239,9 @@ val jmnedictConvert: Task by tasks.creating(Exec::class) {
         "convert-jmnedict",
         "--version=$version",
         "--languages=${jmnedictLanguages.joinToString(",")}",
-        "--report=$distDir${File.separator}$jmnedictReportFile",
+        "--report=$dictJsonDir${File.separator}$jmnedictReportFile",
         jmnedictPath,
-        distDir,
+        dictJsonDir,
     )
 }
 
@@ -254,12 +254,12 @@ val convert: Task by tasks.creating {
 val zipAll: Task by tasks.creating {
     group = "Distribution"
     description = "Zip all JSON files"
-    val distDir: String by createDistDir.extra
-    fileTree(distDir)
+    val dictJsonDir: String by createDictJsonDir.extra
+    fileTree(dictJsonDir)
         .filter { it.isFile && it.extension == "json" }
         .forEachIndexed { idx, file ->
             dependsOn.add(tasks.create("zip$idx", Zip::class) {
-                from(distDir) { include(file.name) }
+                from(dictJsonDir) { include(file.name) }
                 archiveFileName.set("${file.name}.zip")
             })
         }
@@ -268,12 +268,12 @@ val zipAll: Task by tasks.creating {
 val tarAll: Task by tasks.creating {
     group = "Distribution"
     description = "Tar+gzip all JSON files"
-    val distDir: String by createDistDir.extra
-    fileTree(distDir)
+    val dictJsonDir: String by createDictJsonDir.extra
+    fileTree(dictJsonDir)
         .filter { it.isFile && it.extension == "json" }
         .forEachIndexed { idx, file ->
             dependsOn.add(tasks.create("tar$idx", Tar::class) {
-                from(distDir) { include(file.name) }
+                from(dictJsonDir) { include(file.name) }
                 archiveFileName.set("${file.name}.tgz")
             })
         }
