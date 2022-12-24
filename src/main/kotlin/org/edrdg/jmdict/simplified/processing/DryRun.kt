@@ -99,6 +99,7 @@ open class DryRun<E : InputDictionaryEntry>(
     }
 
     open fun finish() {
+        reportFileWriter?.close()
         eventReader.close()
     }
 
