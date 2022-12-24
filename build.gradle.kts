@@ -24,6 +24,7 @@ application {
 }
 
 tasks {
+    // See <https://www.baeldung.com/kotlin/gradle-executable-jar>
     val uberJar = register<Jar>("uberJar") {
         // We need this for Gradle optimization to work
         dependsOn.addAll(listOf("compileJava", "compileKotlin", "processResources"))
@@ -212,7 +213,7 @@ val jmdictConvert: Task by tasks.creating(Exec::class) {
     val jmdictPath: String by jmdictExtract.extra
     commandLine = listOf(
         "java",
-        "-Djdk.xml.entityExpansionLimit=0",
+        "-Djdk.xml.entityExpansionLimit=0", // To avoid errors about # of entities in XML files
         "-jar",
         (tasks.getByName("uberJar") as Jar).archiveFile.get().asFile.path,
         "convert-jmdict",
@@ -232,7 +233,7 @@ val jmnedictConvert: Task by tasks.creating(Exec::class) {
     val jmnedictPath: String by jmnedictExtract.extra
     commandLine = listOf(
         "java",
-        "-Djdk.xml.entityExpansionLimit=0",
+        "-Djdk.xml.entityExpansionLimit=0", // To avoid errors about # of entities in XML files
         "-jar",
         (tasks.getByName("uberJar") as Jar).archiveFile.get().asFile.path,
         "convert-jmnedict",
