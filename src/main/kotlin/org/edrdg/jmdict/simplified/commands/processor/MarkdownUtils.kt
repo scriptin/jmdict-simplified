@@ -1,4 +1,4 @@
-package org.edrdg.jmdict.simplified.commands
+package org.edrdg.jmdict.simplified.commands.processor
 
 object MarkdownUtils {
     fun heading(text: String, level: Int): String {

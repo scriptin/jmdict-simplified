@@ -1,6 +1,5 @@
 package org.edrdg.jmdict.simplified.commands.processor
 
-import org.edrdg.jmdict.simplified.commands.MarkdownUtils
 import org.edrdg.jmdict.simplified.parsing.InputDictionaryEntry
 import org.edrdg.jmdict.simplified.parsing.Metadata
 import org.edrdg.jmdict.simplified.parsing.Parser
