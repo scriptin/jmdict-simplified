@@ -4,7 +4,7 @@ import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.*
 import com.github.ajalt.clikt.parameters.types.path
 import net.swiftzer.semver.SemVer
-import org.edrdg.jmdict.simplified.commands.processor.ConvertingDictionaryProcessor
+import org.edrdg.jmdict.simplified.processing.ConvertingDictionaryProcessor
 import org.edrdg.jmdict.simplified.conversion.Converter
 import org.edrdg.jmdict.simplified.conversion.OutputDictionaryWord
 import org.edrdg.jmdict.simplified.parsing.InputDictionaryEntry

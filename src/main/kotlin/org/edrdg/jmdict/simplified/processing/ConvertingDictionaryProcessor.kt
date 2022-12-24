@@ -1,4 +1,4 @@
-package org.edrdg.jmdict.simplified.commands.processor
+package org.edrdg.jmdict.simplified.processing
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

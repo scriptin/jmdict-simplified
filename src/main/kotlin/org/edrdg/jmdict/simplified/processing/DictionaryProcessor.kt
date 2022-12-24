@@ -1,4 +1,4 @@
-package org.edrdg.jmdict.simplified.commands.processor
+package org.edrdg.jmdict.simplified.processing
 
 import org.edrdg.jmdict.simplified.parsing.InputDictionaryEntry
 import org.edrdg.jmdict.simplified.parsing.Metadata
