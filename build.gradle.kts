@@ -250,3 +250,37 @@ val convert: Task by tasks.creating {
     description = "Convert JMdict and JMnedict"
     dependsOn(jmdictConvert, jmnedictConvert)
 }
+
+val zipAll: Task by tasks.creating {
+    group = "Distribution"
+    description = "Zip all JSON files"
+    val distDir: String by createDistDir.extra
+    fileTree(distDir)
+        .filter { it.isFile && it.extension == "json" }
+        .forEachIndexed { idx, file ->
+            dependsOn.add(tasks.create("zip$idx", Zip::class) {
+                from(distDir) { include(file.name) }
+                archiveFileName.set("${file.name}.zip")
+            })
+        }
+}
+
+val tarAll: Task by tasks.creating {
+    group = "Distribution"
+    description = "Tar+gzip all JSON files"
+    val distDir: String by createDistDir.extra
+    fileTree(distDir)
+        .filter { it.isFile && it.extension == "json" }
+        .forEachIndexed { idx, file ->
+            dependsOn.add(tasks.create("tar$idx", Tar::class) {
+                from(distDir) { include(file.name) }
+                archiveFileName.set("${file.name}.tgz")
+            })
+        }
+}
+
+val archive: Task by tasks.creating {
+    group = "Distribution"
+    description = "Create archives of all JSON files"
+    dependsOn(zipAll, tarAll)
+}
