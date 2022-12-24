@@ -9,6 +9,7 @@ import org.edrdg.jmdict.simplified.parsing.InputDictionaryEntry
 import org.edrdg.jmdict.simplified.parsing.Metadata
 import org.edrdg.jmdict.simplified.parsing.Parser
 import java.io.File
+import java.nio.file.Path
 
 /**
  * Parses, analyzes, and converts to JSON a dictionary XML file.
@@ -22,6 +23,7 @@ class Convert<E : InputDictionaryEntry, W : OutputDictionaryWord<W>>(
     private val dictionaryName: String,
     private val version: String,
     private val languages: List<String>,
+    private val outputDirectory: Path,
     private val outputs: List<DictionaryOutputWriter>,
     private val converter: Converter<E, W>,
 ) : DryRun<E>(
@@ -32,6 +34,8 @@ class Convert<E : InputDictionaryEntry, W : OutputDictionaryWord<W>>(
 ) {
     override fun reportFiles() {
         super.reportFiles()
+        println("Output directory: $outputDirectory")
+        println()
         println("Output files:")
         languages.forEach {
             println(" - $dictionaryName-$it-$version.json")

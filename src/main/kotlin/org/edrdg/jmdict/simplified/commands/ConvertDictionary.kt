@@ -84,7 +84,7 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
         languages.map { language ->
             val fileName = "$dictionaryName-$language-$version.json"
             DictionaryOutputWriter(
-                path = outputDir.resolve(fileName),
+                path = outputDirectory.resolve(fileName),
                 languages = language
                     .replace("-common$".toRegex(), "")
                     .split("-")
@@ -107,7 +107,7 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
         }
     }
 
-    private val outputDir by argument().path(canBeFile = false, mustBeWritable = true)
+    private val outputDirectory by argument().path(canBeFile = false, mustBeWritable = true)
 
     override fun run() {
         Convert(
@@ -118,6 +118,7 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
             dictionaryName = dictionaryName,
             version = version,
             languages = languages,
+            outputDirectory = outputDirectory,
             outputs = outputs,
             converter = converter,
         ).run()

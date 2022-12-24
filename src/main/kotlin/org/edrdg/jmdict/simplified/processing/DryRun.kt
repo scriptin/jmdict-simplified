@@ -35,13 +35,11 @@ open class DryRun<E : InputDictionaryEntry>(
     }
 
     open fun reportFiles() {
-        println("Input file:")
-        println(" - $dictionaryXmlFile")
+        println("Input file: $dictionaryXmlFile")
         println()
 
         if (reportFile != null) {
-            println("Report file:")
-            println(" - $reportFile")
+            println("Report file: $reportFile")
             println()
         }
     }
