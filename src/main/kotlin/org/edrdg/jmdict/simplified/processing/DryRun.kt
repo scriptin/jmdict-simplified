@@ -1,8 +1,6 @@
 package org.edrdg.jmdict.simplified.processing
 
-import org.edrdg.jmdict.simplified.parsing.InputDictionaryEntry
-import org.edrdg.jmdict.simplified.parsing.Metadata
-import org.edrdg.jmdict.simplified.parsing.Parser
+import org.edrdg.jmdict.simplified.parsing.*
 import org.edrdg.jmdict.simplified.parsing.openTag
 import java.io.File
 import java.io.FileInputStream
@@ -69,7 +67,16 @@ open class DryRun<E : InputDictionaryEntry>(
         writeln()
     }
 
-    open fun processEntry(entry: E) {}
+    private var entryCount: Long = 0L
+    private val entriesByLanguage = mutableMapOf<String, Long>()
+
+    open fun processEntry(entry: E) {
+        entryCount += 1
+        entry.allLanguages.forEach { lang ->
+            entriesByLanguage.putIfAbsent(lang, 0L)
+            entriesByLanguage.computeIfPresent(lang) { _, n -> n + 1L }
+        }
+    }
 
     private fun getEntriesSummaryTable(
         entryCount: Long,
@@ -85,10 +92,7 @@ open class DryRun<E : InputDictionaryEntry>(
         )
     }
 
-    open fun afterEntries(
-        entryCount: Long,
-        entriesByLanguage: Map<String, Long>,
-    ) {
+    open fun afterEntries() {
         writeln(MarkdownUtils.heading("Entries by language", level = 3))
         writeln()
         writeln(getEntriesSummaryTable(entryCount, entriesByLanguage))
@@ -103,25 +107,15 @@ open class DryRun<E : InputDictionaryEntry>(
     fun run() {
         try {
             reportFiles()
-
             val metadata = parser.parseMetadata(eventReader)
             beforeEntries(metadata)
-
             eventReader.openTag(QName(rootTagName), "root opening tag")
-
-            var entryCount = 0L
-            val entriesByLanguage = mutableMapOf<String, Long>()
             while (parser.hasNextEntry(eventReader)) {
                 val entry = parser.parseEntry(eventReader)
                 processEntry(entry)
-                entryCount += 1
-                entry.allLanguages.forEach { lang ->
-                    entriesByLanguage.putIfAbsent(lang, 0L)
-                    entriesByLanguage.computeIfPresent(lang) { _, n -> n + 1L }
-                }
             }
-
-            afterEntries(entryCount, entriesByLanguage)
+            eventReader.closeTag(QName(rootTagName), "root closing tag")
+            afterEntries()
         } finally {
             finish()
         }

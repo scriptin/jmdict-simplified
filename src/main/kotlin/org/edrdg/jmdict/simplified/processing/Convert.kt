@@ -70,11 +70,8 @@ class Convert<E : InputDictionaryEntry, W : OutputDictionaryWord<W>>(
         }
     }
 
-    override fun afterEntries(
-        entryCount: Long,
-        entriesByLanguage: Map<String, Long>,
-    ) {
-        super.afterEntries(entryCount, entriesByLanguage)
+    override fun afterEntries() {
+        super.afterEntries()
         outputs.forEach {
             it.write(
                 """
