@@ -243,9 +243,6 @@ val convert: Task by tasks.creating {
     dependsOn(jmdictConvert, jmnedictConvert)
 }
 
-val dtf: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss", Locale.ENGLISH)
-val timestamp: String = dtf.format(LocalDateTime.now(ZoneOffset.UTC))
-
 val zipAll: Task by tasks.creating {
     group = "Distribution"
     description = "Zip all JSON files"
@@ -255,9 +252,7 @@ val zipAll: Task by tasks.creating {
         .forEachIndexed { idx, file ->
             dependsOn.add(tasks.create("zip$idx", Zip::class) {
                 from(dictJsonDir) { include(file.name) }
-                archiveFileName.set(
-                    "${file.name.replace(Regex("\\.json$"), "+$timestamp.json")}.zip",
-                )
+                archiveFileName.set("${file.name}.zip")
             })
         }
 }
@@ -271,9 +266,7 @@ val tarAll: Task by tasks.creating {
         .forEachIndexed { idx, file ->
             dependsOn.add(tasks.create("tar$idx", Tar::class) {
                 from(dictJsonDir) { include(file.name) }
-                archiveFileName.set(
-                    "${file.name.replace(Regex("\\.json$"), "+$timestamp.json")}.tgz",
-                )
+                archiveFileName.set("${file.name}.tgz")
             })
         }
 }
