@@ -21,7 +21,7 @@ JMnedict has only one version.
 
 ## Requirements for running the scripts
 
-- Java 8+ (not JDK, just Java itself)
+- Java 17 (JRE only, JDK is not necessary) - you can use [Azul Zulu OpenJDK](https://www.azul.com/downloads/?version=java-17-lts&package=jre)
 
 You don't need to have Gradle installed, just use the Gradle wrapper provided in this repository: `gradlew` (for Linux/Mac) or `gradlew.bat` (for Windows)
 
@@ -34,10 +34,9 @@ Use included scripts: `gradlew` for Linux/Mac OS, `gradlew.bat` for Windows.
 Tasks to convert dictionary files and create distribution archives:
 
 - `./gradlew clean` - clean all build artifacts to start a fresh build, in cases when you need to re-download and convert from scratch
-- `./gradlew download` - download and extract source dictionary XML files
-- `./gradlew tags` - (after re-downloading source XML files) regenerate `src/jmdict/tag.xq` and `src/jmnedict/tag.xq`. Without these tags the `convert` command will not work
-- `./gradlew convert` - convert all dictionaries to JSON
-- `./gradlew dist` - create distribution archives
+- `./gradlew download` - download and extract source dictionary XML files into `build/dict-xml`
+- `./gradlew convert` - convert all dictionaries to JSON in `build/dict-json`
+- `./gradlew archive` - create distribution archives (zip, tar+gzip) in `build/distributions`
 
 Utility tasks (for CI/CD workflows):
 
@@ -47,19 +46,16 @@ Utility tasks (for CI/CD workflows):
 - `./gradlew updateChecksums` - update checksum files in `checksums/` directory.
   Run after creating distribution archives and commit checksum files into the repository,
   so that next time CI/CD workflow knows if it needs to rebuild anything.
+- `./gradlew userJar` - create an Uber JAR for standalone use (w/o Gradle).
+  The JAR program shows help messages and should be intuitive to use if you know how to run it.
 
 There are also more specific tasks, run `./gradlew tasks` for details
 
 ## Troubleshooting
 
-- Make sure `java` is available on your `$PATH` environment variable
-- Make sure you run `tags` command before running `convert` when you first close this repository
-- In cases when conversion fails, it may be due to JVM memory limitations.
-  You can set a value for `-Xmx` variable in `gradle.properties` (e.g. `-Xmx6g` for 6 GB).
-  Note that [RAM limit for GitHub actions is 7 GB][gh-actions-hardware].
+- Make sure to run `convert` task before running `acrhive`
+- If running Gradle fails, make sure `java` is available on your `$PATH` environment variable
 - Run Gradle with `--stacktrace`, `--info`, or `--debug` arguments to see more details
-
-[gh-actions-hardware]: https://docs.github.com/en/actions/reference/virtual-environments-for-github-hosted-runners#supported-runners-and-hardware-resources
 
 ## Format of JMdict
 
