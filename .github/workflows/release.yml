@@ -124,4 +124,4 @@ jobs:
         uses: EndBug/add-and-commit@v9
         with:
           add: "checksums/*.sha256"
-          message: Update checksum files @ ${{ BUILD_TIME }}
+          message: Update checksum files @ ${{ env.BUILD_TIME }}
