@@ -2,6 +2,10 @@ import de.undercouch.gradle.tasks.download.Download
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.ZoneOffset
+import java.util.Locale
 
 group = "org.edrdg.jmdict.simplified"
 version = "3.2.0-SNAPSHOT"
@@ -239,6 +243,9 @@ val convert: Task by tasks.creating {
     dependsOn(jmdictConvert, jmnedictConvert)
 }
 
+val dtf: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss", Locale.ENGLISH)
+val timestamp: String = dtf.format(LocalDateTime.now(ZoneOffset.UTC))
+
 val zipAll: Task by tasks.creating {
     group = "Distribution"
     description = "Zip all JSON files"
@@ -248,7 +255,9 @@ val zipAll: Task by tasks.creating {
         .forEachIndexed { idx, file ->
             dependsOn.add(tasks.create("zip$idx", Zip::class) {
                 from(dictJsonDir) { include(file.name) }
-                archiveFileName.set("${file.name}.zip")
+                archiveFileName.set(
+                    "${file.name.replace(Regex("\\.json$"), "+$timestamp.json")}.zip",
+                )
             })
         }
 }
@@ -262,7 +271,9 @@ val tarAll: Task by tasks.creating {
         .forEachIndexed { idx, file ->
             dependsOn.add(tasks.create("tar$idx", Tar::class) {
                 from(dictJsonDir) { include(file.name) }
-                archiveFileName.set("${file.name}.tgz")
+                archiveFileName.set(
+                    "${file.name.replace(Regex("\\.json$"), "+$timestamp.json")}.tgz",
+                )
             })
         }
 }
