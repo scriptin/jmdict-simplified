@@ -56,29 +56,27 @@ jobs:
           echo "BUILD_VERSION_METADATA=$build_version_metadata" >> $GITHUB_ENV
           echo "BUILD_TAG=$build_tag" >> $GITHUB_ENV
           echo "BUILD_TIME=$build_time_human" >> $GITHUB_ENV
-      - name: Set release notes
-        if: env.SOMETHING_UPDATED == 'YES'
+      - name: Set release notes for scheduled releases
+        if: env.SOMETHING_UPDATED == 'YES' && !inputs.release_notes
         shell: bash
         run: |
-          if [[ -z "$INPUT_RELEASE_NOTES" ]]; then
-            # $INPUT_RELEASE_NOTES is empty - we're in a scheduled build
-            if [[ "$JMDICT_UPDATED" = "YES" ]] && [[ "$JMNEDICT_UPDATED" = "YES" ]]; then
-              RELEASE_NOTES="JMdict and JMnedict were updated."
-            elif [[ "$JMDICT_UPDATED" = "YES" ]]; then
-              RELEASE_NOTES="JMdict was updated."
-            elif [[ "$JMNEDICT_UPDATED" = "YES" ]]; then
-              RELEASE_NOTES="JMnedict was updated."
-            else
-              # this should not happen, but just in case
-              RELEASE_NOTES="Distribution files were updated."
-            fi
-            WARNING="NOTE: This is a scheduled automated release. It may not have been reviewed by a human."
-            RELEASE_NOTES="$RELEASE_NOTES\n\n$WARNING"
+          if [[ "$JMDICT_UPDATED" = "YES" ]] && [[ "$JMNEDICT_UPDATED" = "YES" ]]; then
+            RELEASE_NOTES="JMdict and JMnedict were updated."
+          elif [[ "$JMDICT_UPDATED" = "YES" ]]; then
+            RELEASE_NOTES="JMdict was updated."
+          elif [[ "$JMNEDICT_UPDATED" = "YES" ]]; then
+            RELEASE_NOTES="JMnedict was updated."
           else
-            # $INPUT_RELEASE_NOTES is NOT empty - we're in a manually triggered build
-            RELEASE_NOTES=$INPUT_RELEASE_NOTES
+            # this should not happen, but just in case
+            RELEASE_NOTES="Distribution files were updated."
           fi
+          WARNING="NOTE: This is a scheduled automated release. It may not have been reviewed by a human."
+          RELEASE_NOTES="$RELEASE_NOTES\n\n$WARNING"
           echo "RELEASE_NOTES=$RELEASE_NOTES" >> $GITHUB_ENV
+      - name: Set release notes for manual releases
+        if: env.SOMETHING_UPDATED == 'YES' && inputs.release_notes
+        env:
+          RELEASE_NOTES: ${{ inputs.release_notes }}
       - name: Rename archives # add version build timestamp as version metadata
         if: env.SOMETHING_UPDATED == 'YES'
         run: |
