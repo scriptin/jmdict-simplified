@@ -75,8 +75,10 @@ jobs:
           echo "RELEASE_NOTES=$RELEASE_NOTES" >> $GITHUB_ENV
       - name: Set release notes for manual releases
         if: env.SOMETHING_UPDATED == 'YES' && inputs.release_notes
-        env:
-          RELEASE_NOTES: ${{ inputs.release_notes }}
+        shell: bash
+        run: |
+          RELEASE_NOTES=${{ inputs.release_notes }}
+          echo "RELEASE_NOTES=$RELEASE_NOTES" >> $GITHUB_ENV
       - name: Rename archives # add version build timestamp as version metadata
         if: env.SOMETHING_UPDATED == 'YES'
         run: |
