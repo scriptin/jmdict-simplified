@@ -97,13 +97,22 @@ type XrefShortWithoutIndex = [kanjiOrKana: string];
 type Xref = XrefFull | XrefShortWithIndex | XrefShortWithoutIndex;
 
 /**
- * tag - All tags are listed in a separate section of the file, see the description of root JSON object.
+ * tag - All tags are listed in a separate section of the file.
+ * See the descriptions of the root JSON objects of each dictionary.
+ *
  * Examples:
  * - `"v5uru"` - "Godan verb - Uru old class verb (old form of Eru)"
  * - `"n"` - "noun (common) (futsuumeishi)",
  * - `"tv"` - "television"
  */
 type Tag = string;
+
+/**
+ * Language code, ISO 639-2 standard.
+ * See <https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes>
+ * See <https://en.wikipedia.org/wiki/ISO_639-2>
+ */
+type Language = string;
 
 
 //////////////////
@@ -312,11 +321,9 @@ type JMdictSense = {
  */
 type JMdictLanguageSource = {
     /**
-     * Language code, ISO 639-2 standard.
-     * See <https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes>
-     * See <https://en.wikipedia.org/wiki/ISO_639-2>
+     * Language of this translation
      */
-    lang: string;
+    lang: Language;
 
     /**
      * Indicates whether the sense element fully or partially
@@ -325,9 +332,7 @@ type JMdictLanguageSource = {
     full: boolean;
 
     /**
-     * Indicates that the Japanese word has been constructed
-     * from words in the source language, and not from an actual
-     * phrase in that language.
+     * Indicates that the word is wasei-eigo.
      * See <https://en.wikipedia.org/wiki/Wasei-eigo>
      */
     wasei: boolean;
@@ -508,10 +513,9 @@ type JMnedictTranslation = {
 
 type JMnedictTranslationTranslation = {
     /**
-     * Language code, ISO 639-2 standard
-     * See also {@link JMdictLanguageSource#lang}
+     * Language of this translation
      */
-    lang: string;
+    lang: Language;
 
     /**
      * A translation word/phrase
