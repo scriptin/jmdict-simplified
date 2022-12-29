@@ -13,10 +13,14 @@ Original XML files are less than ideal in terms of format.
 (My opinion only, the JMdict/Jmnedict project in general is absolutely awesome!)
 This project provides the following changes and improvements:
 
-1. JSON format instead of XML
+1. JSON format instead of XML. Because the original format used some "advanced" XML features,
+   such as entities and DOCTYPE, it could be quite difficult to use in some tech stacks,
+   e.g. when your programming language of choice has no libraries for parsing some syntax
 2. Regular structure for every item in every collection, no "same as in previous" implicit values.
    This is a problem with original XML files because users' code has to keep track
-   of various parts of state while traversing collections
+   of various parts of state while traversing collections. In this project, I tried to make every
+   item of every collection "self-contained," with all the fields having all the values,
+   without a need to refer to preceding items
 3. Human-readable names for fields instead of cryptic abbreviations with no explanations
 4. Avoiding `null` (with few exceptions) and missing fields, preferring empty arrays.
    See <http://thecodelesscode.com/case/6> for the inspiration for this
