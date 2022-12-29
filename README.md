@@ -1,17 +1,25 @@
 # JMdict and JMnedict, but in JSON
 
-> TL;DR: [JMdict](http://www.edrdg.org/jmdict/j_jmdict.html) and [JMnedict](http://www.edrdg.org/enamdict/enamdict_doc.html) in JSON format with more comprehensible structure and (hopefully) better documentation.
-
-**[LATEST RELEASE](https://github.com/scriptin/jmdict-simplified/releases/latest) - INCLUDES PRE-BUILT JSON FILES**, you don't have to run the conversion yourself.
+> TL;DR: [JMdict][] and [JMnedict][] in JSON format
+> with more comprehensible structure
+> and (hopefully) better documentation.
+>
+> **[LATEST RELEASE of JSON files][latest-release]** -
+> you don't have to run the conversion script yourself!
 
 ## Why?
 
-Original XML files are less than ideal. This project provides the following changes and improvements:
+Original XML files are less than ideal in terms of format.
+(My opinion only, the JMdict/Jmnedict project in general is absolutely awesome!)
+This project provides the following changes and improvements:
 
-1. JSON format.
-2. Regular structure for every item in every collection, no "same as in previous" implicit values. This is a problem with original XML files because your code has to track parts of state while traversing collections.
-3. Human-readable names for fields. No more cryptic abbreviations with no explainations.
-4. [Array fields are never `null` or missing, always empty arrays.](http://thecodelesscode.com/case/6)
+1. JSON format instead of XML
+2. Regular structure for every item in every collection, no "same as in previous" implicit values.
+   This is a problem with original XML files because users' code has to keep track
+   of various parts of state while traversing collections
+3. Human-readable names for fields instead of cryptic abbreviations with no explanations
+4. Avoiding `null` (with few exceptions) and missing fields, preferring empty arrays.
+   See <http://thecodelesscode.com/case/6> for the inspiration for this
 
 ## Full and "common" versions
 
@@ -27,7 +35,7 @@ You don't need to have Gradle installed, just use the Gradle wrapper provided in
 
 ## Building dictionaries
 
-NOTE: You can grab the pre-built JSON files in the [latest release](https://github.com/scriptin/jmdict-simplified/releases/latest).
+NOTE: You can grab the pre-built JSON files in the [latest release][latest-release]
 
 Use included scripts: `gradlew` for Linux/Mac OS, `gradlew.bat` for Windows.
 
@@ -538,5 +546,8 @@ Source files of this project (excluding distribution archives containing JSON fi
 are available under [Creative Commons Attribution-ShareAlike License v4.0][CC-BY-SA-4].
 See [LICENSE.txt](LICENSE.txt)
 
+[JMdict]: http://www.edrdg.org/jmdict/j_jmdict.html
+[JMnedict]: http://www.edrdg.org/enamdict/enamdict_doc.html
+[latest-release]: https://github.com/scriptin/jmdict-simplified/releases/latest
 [EDRDG-license]: http://www.edrdg.org/edrdg/licence.html
 [CC-BY-SA-4]: http://creativecommons.org/licenses/by-sa/4.0/
