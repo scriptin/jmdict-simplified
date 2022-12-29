@@ -25,11 +25,21 @@ This project provides the following changes and improvements:
 4. Avoiding `null` (with few exceptions) and missing fields, preferring empty arrays.
    See <http://thecodelesscode.com/case/6> for the inspiration for this
 
-## Full and "common" versions
+## Full, "common-only", and language-specific versions
 
-There are two versions of the JMdict dictionary: full and "common"-only. Dictionary entries are considered "common" if `/k_ele/ke_pri` or `/r_ele/re_pri` elements in original file contain one of these markers: "news1", "ichi1", "spec1", "spec2", "gai1". Common-only distributions are much smaller.
+There are two main types of JSON files for the JMdict dictionary:
 
-JMnedict has only one version.
+- full - same as original files, with no omissions of entries
+- "common-only" - containing only dictionary entries considered "common" -
+  if `/k_ele/ke_pri` or `/r_ele/re_pri` elements in original XML files contain
+  one of these markers: "news1", "ichi1", "spec1", "spec2", "gai1".
+  Common-only distributions are much smaller.
+  They are marked with "common" keyword in file names, see the [latest release][latest-release]
+
+Also, JMdict has language-specific versions with language codes in file names.
+
+JMnedict has only one version, since it's (currently) English-only,
+and has no "common" indicators on entries.
 
 ## Requirements for running the scripts
 
