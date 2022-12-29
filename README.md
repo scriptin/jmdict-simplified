@@ -57,100 +57,473 @@ There are also more specific tasks, run `./gradlew tasks` for details
 - If running Gradle fails, make sure `java` is available on your `$PATH` environment variable
 - Run Gradle with `--stacktrace`, `--info`, or `--debug` arguments to see more details
 
-## Format of JMdict
+## Format
 
-### Custom types
+The following are [TypeScript types](https://www.typescriptlang.org/) for JSON files produced by this project.
+You can also find Kotlin types in [JMdictJsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/jmdict/JMdictJsonElement.kt)
+and [JMnedictJsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/jmnedict/JMnedictJsonElement.kt),
+although they contain some stuff you might not need.
 
-- `xref` (array of numbers/strings) := one of the following structures:
+```typescript
+/////////////////////////////////////////////////
+// Shared custom types for JMdict and JMnedict //
+/////////////////////////////////////////////////
 
-    - [kanji, kana, sense_index] - full format, which lists both kanji (or other non-kana characters) and kana writings which this sense applies to, as well as index of a sense (counting from 1)
-    - [kanji/kana, sense_index] - just one writing (kanji or kana) and sense index
-    - [kanji/kana] - just one writing (kanji or kana)
+/**
+ * xref - Full format, which lists both kanji (or other non-kana characters)
+ * and kana writings which this sense applies to,
+ * as well as index of a sense (counting from 1)
+ */
+type XrefFull = [kanji: string, kana: string, senseIndex: number];
 
-    Examples: `["丸", "まる", 1]`, `["○", "まる", 1]`, `["二重丸", "にじゅうまる"]`, `["漢数字"]`, etc.
+/**
+ * xref - Just one writing (kanji or kana) and sense index
+ */
+type XrefShortWithIndex = [kanjiOrKana: string, senseIndex: number];
 
-- `tag` (string) := all tags are listed in a separate section of the file, see the description of root JSON object
+/**
+ * xref - Just one writing (kanji or kana)
+ */
+type XrefShortWithoutIndex = [kanjiOrKana: string];
 
-### Root JSON object
+/**
+ * xref - Cross-reference
+ * Examples:
+ * - `["丸", "まる", 1]` - refers to the word "丸", read as "まる" ("maru"), specifically the 1st sense element
+ * - `["○", "まる", 1]` - same, but "○" is a special character for the word "丸"
+ * - `["二重丸", "にじゅうまる"]` - refers to the word "二重丸", read as "にじゅうまる" ("nijoumaru")
+ * - `["漢数字"]` - refers to the word "漢数字", with any reading
+ */
+type Xref = XrefFull | XrefShortWithIndex | XrefShortWithoutIndex;
 
-- `version` (string) := [Semantic version](http://semver.org/) of this project (not the dictionary itself)
-- `dictDate` (string) := Creation date of JMdict file, as it appears in a comment with format "JMdict created: YYYY-MM-DD" in the original XML file header
-- `dictRevisions` (array of string) := Revisions of JMdict file, as they appear in comments before DOCTYPE in the original XML file header. These only contain actual version (e.g., "1.08"), not a full comment. Original comments also mention changes made, but this is omitted in the resulting JSON files
-- `tags` (object) := all tags: parts of speech, names of dialects, fields of application, etc. All those things are expressed as XML entities in the original file. Keys of this objects are tags per se, values are descriptions, slightly modified from the original file
-- `words` (array of objects) :=
-    - `id` (string) := unique identifier
-    - `kanji` (array of objects) := kanji (and other non-kana) writings
-        - `common` (boolean) := `true` if this particular spelling is common. This field combines all the `*_pri` fields from original files in a same way as [jisho.org][] and other on-line dictionaries do ("common" word markers). It gets rid of bunch of `*_pri` fields which are not typically used. Words marked with "news1", "ichi1", "spec1", "spec2", "gai1" in the original file are treated as common, which may or may not be true according other sources.
-        - `text` (string) := any non-kana-only writing, may contain kanji, kana, and some other characters
-        - `tags` (array of tags) := tags applied to this writing
-    - `kana` (array of objects) := kana-only (with few exceptions) writings, typically considered as "readings", but these can be a word writings by themselves
-        - `common` (boolean) := same as for kanji elements
-        - `text` (string) := kana-only writing, may only accidentally contain middle-dot and other punctuation-like characters
-        - `tags` (array of tags) := same as for kanji
-        - `appliesToKanji` (array of strings) := list of kanji writings within this word which this kana version applies to. `"*"` means "all", empty array means "none"
-    - `sense` (array of objects) := senses (translations + some related data) for this words
-        - `partOfSpeech` (array of tags) := all parts of speech for this sense. Unlike the original dictionary file, this field is never empty/missing. In the original file, part-of-speech from earlier sense elements may apply to following elements, in which case latter don't have defined part-of-speech
-        - `appliesToKanji` (array of strings) := list of kanji writings within this word which this sense applies to. `"*"` means "all", empty array means "none"
-        - `appliesToKana` (array of strings) := list of kana writings within this word which this sense applies to. `"*"` means "all", empty array means "none"
-        - `related` (array of xrefs) := xrefs to related words
-        - `antonym` (array of xrefs) := xrefs to antonyms of this word
-        - `field` (array of tags) := fields of application
-        - `dialect` (array of tags) := dialects
-        - `misc` (array of tags) := other related tags
-        - `info` (array of strings) := other info
-        - `languageSource` (array of objects) := source language info for borrowed words and wasei-eigo
-            - `lang` (string) := language code from the ISO 639-2 standard
-            - `full` (boolean) := indicates whether the sense element fully or partially describes the source word or phrase of the loanword
-            - `wasei` (boolean) := indicates that the Japanese word has been constructed from words in the source language, and not from an actual phrase in that language. See [Wasei-eigo](https://en.wikipedia.org/wiki/Wasei-eigo)
-            - `text` (string or null) := text in the language defined by a `lang` element, or `null`
-        - `gloss` (array of objects) := translations
-            - `type` (string or null) := type of translation, one of `"literal"`, `"figurative"`, `"explanation"`, `"trademark"`, or `null`. Most words have `null` values, meaning this attribute was absent in the original XML entry. The original documents do not describe the meaning of this attribute being absent.
-            - `lang` (string) := language code from the ISO 639-2 standard
-            - `text` (string) := a word or phrase
+/**
+ * tag - All tags are listed in a separate section of the file, see the description of root JSON object.
+ * Examples:
+ * - `"v5uru"` - "Godan verb - Uru old class verb (old form of Eru)"
+ * - `"n"` - "noun (common) (futsuumeishi)",
+ * - `"tv"` - "television"
+ */
+type Tag = string;
 
-Notes:
 
-1. All fields in all objects are always present, none ever omitted
-2. Array fields are never `null` or missing, only empty
-3. The only places which allow `null` values are `sense->languageSource->text` and `sense->gloss->type` in word element
+//////////////////
+// JMdict types //
+//////////////////
 
-## Format of JMnedict
+/**
+ * JMdict root object
+ */
+type JMdict = {
+    /**
+     * Semantic version of this project (not the dictionary itself).
+     * For the dictionary revisions, see `dictRevisions` field below
+     * See <https://semver.org/>
+     */
+    version: string;
 
-### Custom types
+    /**
+     * Creation date of JMdict file, as it appears in a comment
+     * with format "JMdict created: YYYY-MM-DD" in the original XML file header
+     */
+    dictDate: string;
 
-Same as for JMdict
+    /**
+     * Revisions of JMdict file, as they appear in comments
+     * in the original XML file header. These only contain
+     * actual version (e.g., "1.08"), not a full comment.
+     * Original comments also mention changes made,
+     * but this is omitted in the resulting JSON files
+     */
+    dictRevisions: string[];
 
-### Root JSON object
+    /**
+     * Tags: parts of speech, names of dialects, fields of application, etc.
+     * All those things are expressed as XML entities in the original file.
+     * Keys of this object are tags per se, and values are descriptions,
+     * slightly modified from the original file
+     */
+    tags: {
+        [tag: Tag]: string;
+    };
 
-- `version` (string) := [Semantic version](http://semver.org/) of this project (not the dictionary itself)
-- `dictDate` (string) := Creation date of JMnedict file, as it appears in a comment with format "JMnedict created: YYYY-MM-DD" in the original XML file header
-- `dictRevisions` (array of string) := Revisions of JMnedict file, as they appear in comments before DOCTYPE in the original XML file header. These only contain actual version (e.g., "1.08"), not a full comment. Original comments also mention changes made, but this is omitted in the resulting JSON files
-- `tags` (object) := all tags: parts of speech, names of dialects, fields of application, etc. All those things are expressed as XML entities in the original file. Keys of this objects are tags per se, values are descriptions, slightly modified from the original file
-- `words` (array of objects) :=
-    - `id` (string) := unique identifier
-    - `kanji` (array of objects) := kanji (and other non-kana) writings
-        - `text` (string) := any non-kana-only writing, may contain kanji, kana, and some other characters
-        - `tags` (array of tags) := tags applied to this writing
-    - `kana` (array of objects) := kana-only (with few exceptions) writings, typically considered as "readings", but these can be a word writings by themselves
-        - `text` (string) := kana-only writing, may only accidentally contain middle-dot and other punctuation-like characters
-        - `tags` (array of tags) := same as for kanji
-        - `appliesToKanji` (array of strings) := list of kanji writings within this word which this kana version applies to. `"*"` means "all", empty array means "none"
-    - `translation` (array of objects) := translations + some related data for this words
-        - `type` (array of tags) := name types, as specified in tags
-        - `related` (array of xrefs) := xrefs to related words
-        - `translation` (array of objects) := actual translations
-            - `lang` (string) := language code from the ISO 639-2 standard
-            - `text` (string) := a word or phrase
+    /**
+     * List of dictionary entries/words
+     */
+    words: JMdictWord[];
+};
 
-Differences from JMdict format:
+/**
+ * JMdict entry/word
+ */
+type JMdictWord = {
+    /**
+     * Unique identifier of an entry
+     */
+    id: string;
 
-1. `kanji` and `kana` have no `common` flag because in this dictionary priority data is missing (`ke_pri` and `re_pri` fields)
-2. `translation` instead of `gloss`
-3. `translation->translation->lang` seems to be always empty because the original XML file has no data in corresponding attributes, even though documentation says otherwise
+    /**
+     * Kanji (and other non-kana) writings.
+     * Note that some words are only spelled with kana, so this may be empty.
+     */
+    kanji: JMdictKanji[];
+
+    /**
+     * Kana-only writings of words.
+     * If a kanji is also present, these can be considered as "readings",
+     * but there are words written with kana only.
+     */
+    kana: JMdictKana[];
+
+    /**
+     * Senses = translations + some related data
+     */
+    sense: JMdictSense[];
+};
+
+type JMdictKanji = {
+    /**
+     * `true` if this particular word is considered common.
+     * This field combines all the `*_pri` fields
+     * from original files in a same way as <https://jisho.org>
+     * and other on-line dictionaries do (typically, some words have
+     * "common" markers/tags). It gets rid of bunch of `*_pri` fields
+     * which are not typically used. Words marked with "news1", "ichi1",
+     * "spec1", "spec2", "gai1" in the original file are treated as common,
+     * which may or may not be true according to other sources.
+     */
+    common: boolean;
+
+    /**
+     * The word itself, as spelled with any non-kana-only writing.
+     * May contain kanji, kana (but not only kana!), and some other characters.
+     * Example: "ＣＤプレイヤー" - none of these symbols are kanji,
+     * but "ＣＤ" is not kana, so it will be in this field. The corresponding
+     * kana text will be "シーディープレイヤー", where "シーディー" is how the "ＣＤ"
+     * is spelled in Japanese kana.
+     */
+    text: string;
+
+    /**
+     * Tags applicable to this writing
+     */
+    tags: Tag[];
+};
+
+type JMdictKana = {
+    /**
+     * Same as {@link JMdictKanji#common}.
+     * In this case, it shows that this particular kana transcription of a word
+     * is considered common. For example, when a word can be read in multiple ways,
+     * some of them may be more common than others.
+     */
+    common: boolean;
+
+    /**
+     * Kana-only writing, may only accidentally contain middle-dot
+     * and other punctuation-like characters.
+     */
+    text: string;
+
+    /**
+     * Same as {@link JMdictKanji#tags}
+     */
+    tags: Tag[];
+
+    /**
+     * List of kanji spellings of this word which this particular kana version applies to.
+     * `"*"` means "all", an empty array means "none".
+     * This field is useful for words will multiple kanji variants - some of them may be read
+     * differently than others.
+     */
+    appliesToKanji: string[];
+};
+
+type JMdictSense = {
+    /**
+     * All parts of speech for this sense.
+     * Unlike the original dictionary XML files, this field is never empty/missing.
+     * In the original files, part-of-speech from the previous sense elements may apply
+     * to the sunsequent elements: e.g. in the 1st and 2nd elements are both nouns,
+     * then only the 1st will state that explicitly. This requires users to check the whole
+     * list of senses to correctly determine part of speech for any particular sense.
+     * In this project, this field is "normalized" - parts of speech are present in every element,
+     * even if they are all the same.
+     */
+    partOfSpeech: Tag[];
+
+    /**
+     * List of kanji writings within this word which this sense applies to.
+     * `"*"` means "all", empty array means "none".
+     * See also {@link JMdictKana#appliesToKanji}
+     */
+    appliesToKanji: string[];
+
+    /**
+     * List of kana writings within this word which this sense applies to.
+     * "*"` means "all", empty array means "none".
+     * See also `appliesToKanji` field above and {@link JMdictKana#appliesToKanji}.
+     */
+    appliesToKana: string[];
+
+    /**
+     * References to related words
+     */
+    related: Xref[];
+
+    /**
+     * References to antonyms of this word
+     */
+    antonym: Xref[];
+
+    /**
+     * List of fields of application of this word.
+     * E.g. `"math"` means that this word is related to or used in Mathematics.
+     */
+    field: Tag[];
+
+    /**
+     * List of dialects where this word is used
+     */
+    dialect: Tag[];
+
+    /**
+     * Miscellania - list of other tags, anything which doesn't fit into other tag fields above
+     */
+    misc: Tag[];
+
+    /**
+     * Other information about this word
+     */
+    info: string[];
+
+    /**
+     * Source language information for borrowed words and wasei-eigo
+     */
+    languageSource: JMdictLanguageSource[];
+
+    /**
+     * Translations of this word
+     */
+    gloss: JMdictGloss[];
+};
+
+/**
+ * Source language information for borrowed words and wasei-eigo
+ */
+type JMdictLanguageSource = {
+    /**
+     * Language code, ISO 639-2 standard.
+     * See <https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes>
+     * See <https://en.wikipedia.org/wiki/ISO_639-2>
+     */
+    lang: string;
+
+    /**
+     * Indicates whether the sense element fully or partially
+     * describes the source word or phrase of the loanword
+     */
+    full: boolean;
+
+    /**
+     * Indicates that the Japanese word has been constructed
+     * from words in the source language, and not from an actual
+     * phrase in that language.
+     * See <https://en.wikipedia.org/wiki/Wasei-eigo>
+     */
+    wasei: boolean;
+
+    /**
+     * Text in the language defined by a `lang` field, or `null`
+     */
+    text: string | null;
+};
+
+/**
+ * Type of translation
+ */
+enum JMdictGlossType {
+    literal = "literal",
+    figurative = "figurative",
+    explanation = "explanation",
+    trademark = "trademark", // e.g. name of a company or product
+}
+
+/**
+ * Translation of a word
+ */
+type JMdictGloss = {
+    /**
+     * Type of translation.
+     * Most words have `null` values, meaning this attribute was absent in the original XML entry.
+     * Jmdict documentation does not describe the meaning of this attribute being absent.
+     */
+    type: JMdictGlossType | null;
+
+    /**
+     * Language code, ISO 639-2 standard
+     * See also {@link JMdictLanguageSource#lang}
+     */
+    lang: string;
+
+    /**
+     * A translation word/phrase
+     */
+    text: string;
+};
+
+
+////////////////////
+// Jmnedict types //
+////////////////////
+
+/**
+ * JMnedict root object
+ *
+ * Differences from JMdict format:
+ *
+ * 1. `kanji` and `kana` have no `common` flag because in this dictionary
+ *    priority data is missing (`ke_pri` and `re_pri` fields)
+ * 2. `translation` instead of `gloss`
+ * 3. `translation->translation->lang` seems to be always empty because
+ *    the original XML files have no data in corresponding attributes,
+ *    even though documentation says otherwise. In this JSON version,
+ *    `"eng"` (English) is always present as a default
+ */
+type JMnedict = {
+    /**
+     * Semantic version of this project (not the dictionary itself).
+     * See <https://semver.org/>
+     */
+    version: string;
+
+    /**
+     * Creation date of JMnedict file, as it appears in a comment
+     * with format "JMnedict created: YYYY-MM-DD" in the original XML file header
+     */
+    dictDate: string;
+
+    /**
+     * Revisions of JMnedict file, as they appear in comments
+     * in the original XML file header. These only contain
+     * actual version (e.g., "1.08"), not a full comment.
+     * Original comments also mention changes made,
+     * but this is omitted in the resulting JSON files
+     */
+    dictRevisions: string[];
+
+    /**
+     * Tags: parts of speech, names of dialects, fields of application, etc.
+     * All those things are expressed as XML entities in the original file.
+     * Keys of this object are the tags per se, and values are descriptions,
+     * slightly modified from the original file.
+     */
+    tags: {
+        [tag: Tag]: string;
+    };
+
+    /**
+     * List of dictionary entries/words
+     */
+    words: JMnedictWord[];
+};
+
+/**
+ * JMdict entry/word
+ */
+type JMnedictWord = {
+    /**
+     * Unique identifier of an entry
+     */
+    id: string;
+
+    /**
+     * Kanji (and other non-kana) writings.
+     * Note that some words are only spelled with kana, so this may be empty.
+     */
+    kanji: JMnedictKanji[];
+
+    /**
+     * Kana-only writings of words.
+     * If a kanji is also present, these can be considered as "readings",
+     * but there are words written with kana only.
+     */
+    kana: JMnedictKana[];
+
+    /**
+     * Translations + some related data
+     */
+    translation: JMnedictTranslation[];
+};
+
+type JMnedictKanji = {
+    /**
+     * The word itself, as spelled with any non-kana-only writing.
+     * See {@link JMdictKanji#text}
+     */
+    text: string;
+
+    /**
+     * Tags applicable to this writing
+     */
+    tags: Tag[];
+};
+
+type JMnedictKana = {
+    /**
+     * Kana-only writing, may only accidentally contain middle-dot
+     * and other punctuation-like characters.
+     */
+    text: string;
+
+    /**
+     * Same as {@link JMnedictKanji#tags}
+     */
+    tags: Tag[];
+
+    /**
+     * List of kanji spellings of this word which this particular kana version applies to.
+     * `"*"` means "all", an empty array means "none".
+     * This field is useful for words will multiple kanji variants - some of them may be read
+     * differently than others.
+     */
+    appliesToKanji: string[];
+};
+
+type JMnedictTranslation = {
+    /**
+     * Name types, as specified in {@link JMnedict#tags}
+     */
+    type: Tag[];
+
+    /**
+     * References to related words
+     */
+    related: Xref[];
+
+    /**
+     * Translations
+     */
+    translation: JMnedictTranslationTranslation[];
+};
+
+type JMnedictTranslationTranslation = {
+    /**
+     * Language code, ISO 639-2 standard
+     * See also {@link JMdictLanguageSource#lang}
+     */
+    lang: string;
+
+    /**
+     * A translation word/phrase
+     */
+    text: string;
+}
+
+```
 
 ## License
 
-Original XML files, **JMdict_e.xml** and **JMnedict.xml** are property of the Electronic Dictionary Research and Development Group, and are used in conformance with the Group's [licence](http://www.edrdg.org/edrdg/licence.html). Project started in 1991 by [Jim Breen](http://www.csse.monash.edu.au/~jwb/).
+Original XML files, **JMdict.xml**, **JMdict_e.xml** and **JMnedict.xml** are property of the Electronic Dictionary Research and Development Group, and are used in conformance with the Group's [licence](http://www.edrdg.org/edrdg/licence.html). Project started in 1991 by [Jim Breen](http://www.csse.monash.edu.au/~jwb/).
 
 All derived files are distributed under the same license, as the original license requires it.
 
