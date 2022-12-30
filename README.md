@@ -354,7 +354,8 @@ type JMdictSense = {
     info: string[];
 
     /**
-     * Source language information for borrowed words and wasei-eigo
+     * Source language information for borrowed words and wasei-eigo.
+     * Will be empty for words with Japanese origin (which is most of the entries)
      */
     languageSource: JMdictLanguageSource[];
 
@@ -365,7 +366,9 @@ type JMdictSense = {
 };
 
 /**
- * Source language information for borrowed words and wasei-eigo
+ * Source language information for borrowed words and wasei-eigo.
+ * For borrowed words this will contain the original word/phrase,
+ * in the source language
  */
 type JMdictLanguageSource = {
     /**
