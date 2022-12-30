@@ -23,9 +23,11 @@ This project provides the following changes and improvements:
    of various parts of state while traversing collections. In this project, I tried to make every
    item of every collection "self-contained," with all the fields having all the values,
    without a need to refer to preceding items
-3. Human-readable names for fields instead of cryptic abbreviations with no explanations
-4. Avoiding `null` (with few exceptions) and missing fields, preferring empty arrays.
+3. Avoiding `null` (with few exceptions) and missing fields, preferring empty arrays.
    See <http://thecodelesscode.com/case/6> for the inspiration for this
+4. Human-readable names for fields instead of cryptic abbreviations with no explanations
+5. Documentation in 1 file instead of browsing obscure HTML pages scattered across multiple sites.
+   In my opinion, the documentation is the weakest part of JMDict/JMnedict project
 
 ## Full, "common-only", and language-specific versions
 
