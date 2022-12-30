@@ -388,6 +388,15 @@ type JMdictLanguageSource = {
 };
 
 /**
+ * Gender
+ */
+enum JMdictGender {
+    masculine = "masculine",
+    feminine = "feminine",
+    neuter = "neuter",
+}
+
+/**
  * Type of translation
  */
 enum JMdictGlossType {
@@ -402,17 +411,23 @@ enum JMdictGlossType {
  */
 type JMdictGloss = {
     /**
+     * Language of this translation
+     */
+    lang: Language;
+
+    /**
+     * Gender.
+     * Typically for a noun in the target language.
+     * When `null`, the gender is either not relevant or hasn't been provided.
+     */
+    gender: JMdictGender | null;
+
+    /**
      * Type of translation.
      * Most words have `null` values, meaning this attribute was absent in the original XML entry.
      * Jmdict documentation does not describe the meaning of this attribute being absent.
      */
     type: JMdictGlossType | null;
-
-    /**
-     * Language code, ISO 639-2 standard
-     * See also {@link JMdictLanguageSource#lang}
-     */
-    lang: string;
 
     /**
      * A translation word/phrase
