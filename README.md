@@ -94,6 +94,20 @@ You can also find Kotlin types in [JMdictJsonElement.kt](src/main/kotlin/org/edr
 and [JMnedictJsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/jmnedict/JMnedictJsonElement.kt),
 although they contain some stuff you might not need.
 
+Main concepts:
+
+- "Kanji" and "kana" versions of words are not always equivalent
+  to "spellings" and "readings" correspondingly. Some words are kana-only.
+  You should treat "kanji" and "kana" more like different ways of spelling,
+  although when kanji versions are present, kana versions are indeed "readings"
+- Some kana versions only apply to particular kanji versions, i.e. different spellings
+  of the same word can be read in different ways. You'll see the `appliesToKanji` field
+  being filled with a particular version in such cases
+- "Sense" in JMdict refers to translations along with some other information.
+  Sometimes, some "senses" only apply to some particular kanji/kana versions of a word,
+  that's why you'll see fields `appliesToKanji` and `appliesToKana`.
+  In JMnedict, translations are simply called "translations," there are no "senses"
+
 ```typescript
 /////////////////////////////////////////////////
 // Shared custom types for JMdict and JMnedict //
