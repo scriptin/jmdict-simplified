@@ -297,14 +297,17 @@ type JMdictKana = {
 
 type JMdictSense = {
     /**
-     * All parts of speech for this sense.
-     * Unlike the original dictionary XML files, this field is never empty/missing.
-     * In the original files, part-of-speech from the previous sense elements may apply
-     * to the sunsequent elements: e.g. in the 1st and 2nd elements are both nouns,
-     * then only the 1st will state that explicitly. This requires users to check the whole
-     * list of senses to correctly determine part of speech for any particular sense.
-     * In this project, this field is "normalized" - parts of speech are present in every element,
-     * even if they are all the same.
+     * Parts of speech for this sense.
+     *
+     * In the original files, part-of-speech from the previous sense elements
+     * may apply to the sunsequent elements: e.g. if the 1st and 2nd elements
+     * are both nouns, then only the 1st will state that explicitly.
+     * This requires users to check the whole list of senses to correctly
+     * determine part of speech for any particular sense.
+     *
+     * Unlike the original XML files, this field is never empty/missing.
+     * Here, this field is "normalized" - parts of speech are present
+     * in every element, even if they are all the same.
      */
     partOfSpeech: Tag[];
 
@@ -318,7 +321,7 @@ type JMdictSense = {
     /**
      * List of kana writings within this word which this sense applies to.
      * "*"` means "all", empty array means "none".
-     * See also `appliesToKanji` field above and {@link JMdictKana#appliesToKanji}.
+     * See also `appliesToKanji` field and {@link JMdictKana#appliesToKanji}.
      */
     appliesToKana: string[];
 
@@ -344,7 +347,7 @@ type JMdictSense = {
     dialect: Tag[];
 
     /**
-     * Miscellania - list of other tags, anything which doesn't fit into other tag fields above
+     * Miscellania - list of other tags which don't fit into other tag fields
      */
     misc: Tag[];
 
@@ -355,7 +358,7 @@ type JMdictSense = {
 
     /**
      * Source language information for borrowed words and wasei-eigo.
-     * Will be empty for words with Japanese origin (which is most of the entries)
+     * Will be empty for words with Japanese origin (most of JMdict entries)
      */
     languageSource: JMdictLanguageSource[];
 
