@@ -132,10 +132,14 @@ type XrefShortWithoutIndex = [kanjiOrKana: string];
 
 /**
  * xref - Cross-reference
+ *
  * Examples:
- * - `["丸", "まる", 1]` - refers to the word "丸", read as "まる" ("maru"), specifically the 1st sense element
- * - `["○", "まる", 1]` - same, but "○" is a special character for the word "丸"
- * - `["二重丸", "にじゅうまる"]` - refers to the word "二重丸", read as "にじゅうまる" ("nijoumaru")
+ * - `["丸", "まる", 1]` - refers to the word "丸", read as "まる" ("maru"),
+ *   specifically the 1st sense element
+ * - `["○", "まる", 1]` - same as prevous, but "○" is a special character
+ *    for the word "丸"
+ * - `["二重丸", "にじゅうまる"]` - refers to the word "二重丸",
+ *   read as "にじゅうまる" ("nijoumaru")
  * - `["漢数字"]` - refers to the word "漢数字", with any reading
  */
 type Xref = XrefFull | XrefShortWithIndex | XrefShortWithoutIndex;
