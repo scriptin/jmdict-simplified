@@ -2,10 +2,12 @@
 
 > TL;DR: [JMdict][] and [JMnedict][] in JSON format
 > with more comprehensible structure
-> and (hopefully) better documentation.
->
-> **[LATEST RELEASE of JSON files][latest-release]** -
-> you don't have to run the conversion script yourself!
+> and (hopefully) better documentation
+
+**[LATEST RELEASE of JSON files][latest-release]** -
+you don't have to run the conversion script yourself!
+
+Releases are automatically scheduled, see [release.yml](.github/workflows/release.yml)
 
 ## Why?
 
