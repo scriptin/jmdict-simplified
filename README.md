@@ -41,17 +41,18 @@ Also, JMdict has language-specific versions with language codes in file names.
 JMnedict has only one version, since it's (currently) English-only,
 and has no "common" indicators on entries.
 
-## Requirements for running the scripts
+## Requirements for running the conversion script
 
-- Java 17 (JRE only, JDK is not necessary) - you can use [Azul Zulu OpenJDK](https://www.azul.com/downloads/?version=java-17-lts&package=jre)
+- Java 17 (JRE only, JDK is not necessary) - you can use [Azul Zulu OpenJDK][AzulJava17]
 
-You don't need to have Gradle installed, just use the Gradle wrapper provided in this repository: `gradlew` (for Linux/Mac) or `gradlew.bat` (for Windows)
+You don't need to install Gradle, just use the Gradle wrapper provided in this repository:
+`gradlew` (for Linux/Mac) or `gradlew.bat` (for Windows)
 
-## Building dictionaries
+## Converting XML dictionaries
 
 NOTE: You can grab the pre-built JSON files in the [latest release][latest-release]
 
-Use included scripts: `gradlew` for Linux/Mac OS, `gradlew.bat` for Windows.
+Use included scripts: `gradlew` (for Linux/Mac OS) or `gradlew.bat` (for Windows).
 
 Tasks to convert dictionary files and create distribution archives:
 
@@ -62,10 +63,13 @@ Tasks to convert dictionary files and create distribution archives:
 
 Utility tasks (for CI/CD workflows):
 
-- `./gradlew --quiet jmdictHasChanged` and `./gradlew --quiet jmnedictHasChanged` - check if JMdict or JMnedict has changed
-  by comparing checksums of downloaded files (run after `download` task!) with those stored in checksum files.
-  Outputs `YES` or `NO`. The `--quiet` is needed to put values into shell variables without extra output from Gradle.
-- `./gradlew updateChecksums` - update checksum files in `checksums/` directory.
+- `./gradlew --quiet jmdictHasChanged` and `./gradlew --quiet jmnedictHasChanged` -
+  check if JMdict or JMnedict has changed by comparing checksums
+  of downloaded files with those stored in the [checksums](checksums).
+  Outputs `YES` or `NO`.
+  The `--quiet` is needed to put values into shell variables without extra output from Gradle.
+  Run this only after `download` task!
+- `./gradlew updateChecksums` - update checksum files in the [checksums](checksums).
   Run after creating distribution archives and commit checksum files into the repository,
   so that next time CI/CD workflow knows if it needs to rebuild anything.
 - `./gradlew userJar` - create an Uber JAR for standalone use (w/o Gradle).
@@ -563,5 +567,6 @@ See [LICENSE.txt](LICENSE.txt)
 [JMdict]: http://www.edrdg.org/jmdict/j_jmdict.html
 [JMnedict]: http://www.edrdg.org/enamdict/enamdict_doc.html
 [latest-release]: https://github.com/scriptin/jmdict-simplified/releases/latest
+[AzulJava17]: https://www.azul.com/downloads/?version=java-17-lts&package=jre
 [EDRDG-license]: http://www.edrdg.org/edrdg/licence.html
 [CC-BY-SA-4]: http://creativecommons.org/licenses/by-sa/4.0/
