@@ -1,3 +1,11 @@
+# Version 3.2.0
+
+- Converter is fully rewritten from XQuery to Kotlin - XQuery parser was limited by memory and couldn't process large files
+- Converter now supports language filtering, i.e. can produce language-specific versions (not only English)
+- Converter is now capable of generating multiple output files in parallel
+- Fixed an error with non-case-sensitive XML entities
+- Documentation is updated to include TypeScript types, cleaner explanations, missing fields, etc.
+
 # Version 3.1.0
 
 - Added conversion for `g_type` attribute on `gloss` elements (words->sense->gloss->type)
