@@ -9,6 +9,8 @@ you don't have to run the conversion script yourself!
 
 Releases are automatically scheduled, see [release.yml](.github/workflows/release.yml)
 
+Found a bug? Need a new feature? See [CONTRIBUTING.md](CONTRIBUTING.md)
+
 ## Why?
 
 Original XML files are less than ideal in terms of format.
