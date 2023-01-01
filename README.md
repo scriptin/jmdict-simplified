@@ -1,15 +1,13 @@
-# JMdict and JMnedict, but in JSON
+# jmdict-simplified
 
-> TL;DR: [JMdict][] and [JMnedict][] in JSON format
-> with more comprehensible structure
-> and (hopefully) better documentation
+### [JMdict][] and [JMnedict][] in JSON format
 
-**[LATEST RELEASE of JSON files][latest-release]** -
-you don't have to run the conversion script yourself!
+with more comprehensible structure and beginner-friendly documentation
 
-Releases are automatically scheduled, see [release.yml](.github/workflows/release.yml)
+[![Download JSON files](https://img.shields.io/static/v1?label=Download&message=JSON%20files&color=blue&style=for-the-badge)](latest-release)
 
-Found a bug? Need a new feature? See [CONTRIBUTING.md](CONTRIBUTING.md)
+- Releases are automatically scheduled for every Monday. See [release.yml](.github/workflows/release.yml)
+- Found a bug? Need a new feature? See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Why?
 
