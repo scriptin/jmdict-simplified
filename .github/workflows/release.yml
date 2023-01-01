@@ -2,7 +2,7 @@ name: Release
 
 on:
   schedule:
-    - cron: '0 12 1-31/2 * *' # Every odd day (1st, 3rd, 5th, ..., 31st) at 12:00 PM
+    - cron: '0 12 ? * MON' # At 12:00 PM every Monday
   workflow_dispatch:
     inputs:
       release_notes:
