@@ -4,7 +4,7 @@
 
 with more comprehensible structure and beginner-friendly documentation
 
-[![Download JSON files](https://img.shields.io/static/v1?label=Download&message=JSON%20files&color=blue&style=for-the-badge)](latest-release)
+[![Download JSON files](https://img.shields.io/static/v1?label=Download&message=JSON%20files&color=blue&style=for-the-badge)][latest-release]
 
 - Releases are automatically scheduled for every Monday. See [release.yml](.github/workflows/release.yml)
 - Found a bug? Need a new feature? See [CONTRIBUTING.md](CONTRIBUTING.md)
