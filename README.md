@@ -400,21 +400,21 @@ type JMdictLanguageSource = {
 /**
  * Gender
  */
-enum JMdictGender {
-    masculine = "masculine",
-    feminine = "feminine",
-    neuter = "neuter",
-}
+type JMdictGender
+    = "masculine"
+    | "feminine"
+    | "neuter"
+    ;
 
 /**
  * Type of translation
  */
-enum JMdictGlossType {
-    literal = "literal",
-    figurative = "figurative",
-    explanation = "explanation",
-    trademark = "trademark", // e.g. name of a company or product
-}
+type JMdictGlossType
+    = "literal"
+    | "figurative"
+    | "explanation"
+    | "trademark" // e.g. name of a company or a product
+    ;
 
 /**
  * Translation of a word
