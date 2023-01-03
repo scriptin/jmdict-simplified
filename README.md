@@ -26,7 +26,7 @@ This project provides the following changes and improvements:
 3. Avoiding `null` (with few exceptions) and missing fields, preferring empty arrays.
    See <http://thecodelesscode.com/case/6> for the inspiration for this
 4. Human-readable names for fields instead of cryptic abbreviations with no explanations
-5. Documentation in 1 file instead of browsing obscure HTML pages scattered across multiple sites.
+5. Documentation in a single file instead of browsing obscure pages across multiple sites.
    In my opinion, the documentation is the weakest part of JMDict/JMnedict project
 
 ## Full, "common-only", and language-specific versions
@@ -37,7 +37,8 @@ There are two main types of JSON files for the JMdict dictionary:
 - "common-only" - containing only dictionary entries considered "common" -
   if `/k_ele/ke_pri` or `/r_ele/re_pri` elements in original XML files contain
   one of these markers: "news1", "ichi1", "spec1", "spec2", "gai1".
-  Common-only distributions are much smaller.
+  This corresponds to how online dictionaries such as <https://jisho.org>
+  classify words as "common". Common-only distributions are much smaller.
   They are marked with "common" keyword in file names, see the [latest release][latest-release]
 
 Also, JMdict has language-specific versions with language codes in file names.
@@ -60,9 +61,10 @@ Use included scripts: `gradlew` (for Linux/Mac OS) or `gradlew.bat` (for Windows
 
 Tasks to convert dictionary files and create distribution archives:
 
-- `./gradlew clean` - clean all build artifacts to start a fresh build, in cases when you need to re-download and convert from scratch
-- `./gradlew download` - download and extract source dictionary XML files into `build/dict-xml`
-- `./gradlew convert` - convert all dictionaries to JSON in `build/dict-json`
+- `./gradlew clean` - clean all build artifacts to start a fresh build,
+  in cases when you need to re-download and convert from scratch
+- `./gradlew download` - download and extract original dictionary XML files into `build/dict-xml`
+- `./gradlew convert` - convert all dictionaries to JSON and place into `build/dict-json`
 - `./gradlew archive` - create distribution archives (zip, tar+gzip) in `build/distributions`
 
 Utility tasks (for CI/CD workflows):
@@ -70,36 +72,36 @@ Utility tasks (for CI/CD workflows):
 - `./gradlew --quiet jmdictHasChanged` and `./gradlew --quiet jmnedictHasChanged` -
   check if JMdict or JMnedict has changed by comparing checksums
   of downloaded files with those stored in the [checksums](checksums).
-  Outputs `YES` or `NO`.
-  The `--quiet` is needed to put values into shell variables without extra output from Gradle.
-  Run this only after `download` task!
-- `./gradlew updateChecksums` - update checksum files in the [checksums](checksums).
+  Outputs `YES` or `NO`. Run this only after `download` task!
+  The `--quiet` is to silence Gradle logs, e.g. when you need to put values into environments variables.
+- `./gradlew updateChecksums` - update checksum files in the [checksums](checksums) directory.
   Run after creating distribution archives and commit checksum files into the repository,
   so that next time CI/CD workflow knows if it needs to rebuild anything.
-- `./gradlew userJar` - create an Uber JAR for standalone use (w/o Gradle).
+- `./gradlew userJar` - create an Uber JAR for standalone use (i.e. w/o Gradle).
   The JAR program shows help messages and should be intuitive to use if you know how to run it.
 
 There are also more specific tasks, run `./gradlew tasks` for details
 
 ## Troubleshooting
 
-- Make sure to run `convert` task before running `acrhive`
+- Make sure to run tasks in order: `download`, then `convert`, then `archive`
 - If running Gradle fails, make sure `java` is available on your `$PATH` environment variable
 - Run Gradle with `--stacktrace`, `--info`, or `--debug` arguments to see more details
+  if you get an error
 
 ## Format
 
-The following are [TypeScript types](https://www.typescriptlang.org/) for JSON files produced by this project.
+The following are [TypeScript](https://www.typescriptlang.org/) types for JSON files produced by this project.
 You can also find Kotlin types in [JMdictJsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/jmdict/JMdictJsonElement.kt)
 and [JMnedictJsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/jmnedict/JMnedictJsonElement.kt),
-although they contain some stuff you might not need.
+although they contain some methods and annotations you might not need.
 
 Main concepts:
 
 - "Kanji" and "kana" versions of words are not always equivalent
   to "spellings" and "readings" correspondingly. Some words are kana-only.
-  You should treat "kanji" and "kana" more like different ways of spelling,
-  although when kanji versions are present, kana versions are indeed "readings"
+  You should treat "kanji" and "kana" as different ways of spelling,
+  although when kanji versions are present, kana versions are indeed "readings" for those
 - Some kana versions only apply to particular kanji versions, i.e. different spellings
   of the same word can be read in different ways. You'll see the `appliesToKanji` field
   being filled with a particular version in such cases
@@ -596,9 +598,9 @@ type JMnedictTranslationTranslation = {
 
 ## License
 
-Original XML files, **JMdict.xml**, **JMdict_e.xml**, and **JMnedict.xml**
-are property of the Electronic Dictionary Research and Development Group,
-and are used in conformance with the Group's [licence][EDRDG-license].
+Original XML files - **JMdict.xml**, **JMdict_e.xml**, and **JMnedict.xml** -
+are the property of the Electronic Dictionary Research and Development Group,
+and are used in conformance with the Group's [license][EDRDG-license].
 Project started in 1991 by Jim Breen.
 
 All derived files are distributed under the same license, as the original license requires it.
