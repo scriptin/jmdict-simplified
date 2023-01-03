@@ -52,6 +52,7 @@ class JMdictConverter : Converter<JMdictXmlElement.Entry, JMdictJsonElement.Word
                 antonym = sense.ant.map { xref(it.text, "ant", entSeq) },
                 field = sense.field.map { entityToTag(it.text, entSeq) },
                 dialect = sense.dial.map { entityToTag(it.text, entSeq) },
+                misc = sense.misc.map { entityToTag(it.text, entSeq) },
                 info = sense.sInf.map { it.text },
                 languageSource = sense.lsource.map {
                     JMdictJsonElement.LanguageSource(

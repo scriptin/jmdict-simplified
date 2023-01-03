@@ -8,7 +8,7 @@ import java.time.ZoneOffset
 import java.util.Locale
 
 group = "org.edrdg.jmdict.simplified"
-version = "3.2.0"
+version = "3.2.1-SNAPSHOT"
 
 val jmdictLanguages = listOf("all", "eng", "eng-common")
 val jmdictReportFile = "jmdict-release-info.md"

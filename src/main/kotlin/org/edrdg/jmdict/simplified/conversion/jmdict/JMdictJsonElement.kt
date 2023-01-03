@@ -61,6 +61,7 @@ sealed class JMdictJsonElement : CommonJsonElement() {
         val antonym: List<Xref>,
         val field: List<Tag>,
         val dialect: List<Tag>,
+        val misc: List<Tag>,
         val info: List<String>,
         val languageSource: List<LanguageSource>,
         val gloss: List<Gloss>,
