@@ -1,3 +1,7 @@
+# Version 3.2.1
+
+- Bugfix #22: add missing "misc" tags on sense elements in JMdict
+
 # Version 3.2.0
 
 - Converter is fully rewritten from XQuery to Kotlin - XQuery parser was limited by memory and couldn't process large files
