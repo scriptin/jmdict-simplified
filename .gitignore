@@ -1,8 +1,27 @@
+# IDEs
 .idea
 *.iml
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
 
-# Ignore Gradle project-specific cache directory
+# Gradle cache directory
 .gradle
 
-# Ignore Gradle build output directory
+# Build outputs
 build
+node/packages/**/dist
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Node
+node_modules
+
+# System Files
+.DS_Store
+Thumbs.db

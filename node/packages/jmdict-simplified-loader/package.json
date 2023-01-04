@@ -1,0 +1,20 @@
+{
+  "name": "@scriptin/jmdict-simplified-loader",
+  "private": true,
+  "version": "0.0.0",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rm -rf dist/ && tsc index.ts --declaration --outDir dist"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "@scriptin/jmdict-simplified-types": "*",
+    "@types/node": "^18.11.18",
+    "stream-json": "^1.7.5"
+  }
+}
