@@ -120,17 +120,17 @@ Main concepts:
  * and kana writings which this sense applies to,
  * as well as index of a sense (counting from 1)
  */
-type XrefFull = [kanji: string, kana: string, senseIndex: number];
+export type XrefFull = [kanji: string, kana: string, senseIndex: number];
 
 /**
  * xref - Just one writing (kanji or kana) and sense index
  */
-type XrefShortWithIndex = [kanjiOrKana: string, senseIndex: number];
+export type XrefShortWithIndex = [kanjiOrKana: string, senseIndex: number];
 
 /**
  * xref - Just one writing (kanji or kana)
  */
-type XrefShortWithoutIndex = [kanjiOrKana: string];
+export type XrefShortWithoutIndex = [kanjiOrKana: string];
 
 /**
  * xref - Cross-reference
@@ -144,7 +144,7 @@ type XrefShortWithoutIndex = [kanjiOrKana: string];
  *   read as "にじゅうまる" ("nijoumaru")
  * - `["漢数字"]` - refers to the word "漢数字", with any reading
  */
-type Xref = XrefFull | XrefShortWithIndex | XrefShortWithoutIndex;
+export type Xref = XrefFull | XrefShortWithIndex | XrefShortWithoutIndex;
 
 /**
  * tag - All tags are listed in a separate section of the file.
@@ -155,24 +155,19 @@ type Xref = XrefFull | XrefShortWithIndex | XrefShortWithoutIndex;
  * - `"n"` - "noun (common) (futsuumeishi)",
  * - `"tv"` - "television"
  */
-type Tag = string;
+export type Tag = string;
 
 /**
  * Language code, ISO 639-2 standard.
  * See <https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes>
  * See <https://en.wikipedia.org/wiki/ISO_639-2>
  */
-type Language = string;
-
-
-//////////////////
-// JMdict types //
-//////////////////
+export type Language = string;
 
 /**
- * JMdict root object
+ * Dictionary metadata, such as revisions and tags.
  */
-type JMdict = {
+export interface DictionaryMetadata {
   /**
    * Semantic version of this project (not the dictionary itself).
    * For the dictionary revisions, see `dictRevisions` field below
@@ -204,7 +199,17 @@ type JMdict = {
   tags: {
     [tag: Tag]: string;
   };
+};
 
+
+//////////////////
+// JMdict types //
+//////////////////
+
+/**
+ * JMdict root object
+ */
+export interface JMdict extends DictionaryMetadata {
   /**
    * List of dictionary entries/words
    */
@@ -214,7 +219,7 @@ type JMdict = {
 /**
  * JMdict entry/word
  */
-type JMdictWord = {
+export type JMdictWord = {
   /**
    * Unique identifier of an entry
    */
@@ -239,7 +244,7 @@ type JMdictWord = {
   sense: JMdictSense[];
 };
 
-type JMdictKanji = {
+export type JMdictKanji = {
   /**
    * `true` if this particular word is considered common.
    * This field combines all the `*_pri` fields
@@ -268,7 +273,7 @@ type JMdictKanji = {
   tags: Tag[];
 };
 
-type JMdictKana = {
+export type JMdictKana = {
   /**
    * Same as {@link JMdictKanji#common}.
    * In this case, it shows that this particular kana transcription of a word
@@ -297,7 +302,7 @@ type JMdictKana = {
   appliesToKanji: string[];
 };
 
-type JMdictSense = {
+export type JMdictSense = {
   /**
    * Parts of speech for this sense.
    *
@@ -375,7 +380,7 @@ type JMdictSense = {
  * For borrowed words this will contain the original word/phrase,
  * in the source language
  */
-type JMdictLanguageSource = {
+export type JMdictLanguageSource = {
   /**
    * Language of this translation
    */
@@ -402,16 +407,16 @@ type JMdictLanguageSource = {
 /**
  * Gender
  */
-type JMdictGender
+export type JMdictGender
   = "masculine"
   | "feminine"
   | "neuter"
   ;
 
 /**
- * Type of translation
+ * export type of translation
  */
-type JMdictGlossType
+export type JMdictGlossType
   = "literal"
   | "figurative"
   | "explanation"
@@ -421,7 +426,7 @@ type JMdictGlossType
 /**
  * Translation of a word
  */
-type JMdictGloss = {
+export type JMdictGloss = {
   /**
    * Language of this translation
    */
@@ -435,7 +440,7 @@ type JMdictGloss = {
   gender: JMdictGender | null;
 
   /**
-   * Type of translation.
+   * export type of translation.
    * Most words have `null` values, meaning this attribute was absent in the original XML entry.
    * Jmdict documentation does not describe the meaning of this attribute being absent.
    */
@@ -465,38 +470,7 @@ type JMdictGloss = {
  *    even though documentation says otherwise. In this JSON version,
  *    `"eng"` (English) is always present as a default
  */
-type JMnedict = {
-  /**
-   * Semantic version of this project (not the dictionary itself).
-   * See <https://semver.org/>
-   */
-  version: string;
-
-  /**
-   * Creation date of JMnedict file, as it appears in a comment
-   * with format "JMnedict created: YYYY-MM-DD" in the original XML file header
-   */
-  dictDate: string;
-
-  /**
-   * Revisions of JMnedict file, as they appear in comments
-   * in the original XML file header. These only contain
-   * actual version (e.g., "1.08"), not a full comment.
-   * Original comments also mention changes made,
-   * but this is omitted in the resulting JSON files
-   */
-  dictRevisions: string[];
-
-  /**
-   * Tags: parts of speech, names of dialects, fields of application, etc.
-   * All those things are expressed as XML entities in the original file.
-   * Keys of this object are the tags per se, and values are descriptions,
-   * slightly modified from the original file.
-   */
-  tags: {
-    [tag: Tag]: string;
-  };
-
+export interface JMnedict extends DictionaryMetadata {
   /**
    * List of dictionary entries/words
    */
@@ -506,7 +480,7 @@ type JMnedict = {
 /**
  * JMdict entry/word
  */
-type JMnedictWord = {
+export type JMnedictWord = {
   /**
    * Unique identifier of an entry
    */
@@ -531,7 +505,7 @@ type JMnedictWord = {
   translation: JMnedictTranslation[];
 };
 
-type JMnedictKanji = {
+export type JMnedictKanji = {
   /**
    * The word itself, as spelled with any non-kana-only writing.
    * See {@link JMdictKanji#text}
@@ -544,7 +518,7 @@ type JMnedictKanji = {
   tags: Tag[];
 };
 
-type JMnedictKana = {
+export type JMnedictKana = {
   /**
    * Kana-only writing, may only accidentally contain middle-dot
    * and other punctuation-like characters.
@@ -565,7 +539,7 @@ type JMnedictKana = {
   appliesToKanji: string[];
 };
 
-type JMnedictTranslation = {
+export type JMnedictTranslation = {
   /**
    * Name types, as specified in {@link JMnedict#tags}
    */
@@ -582,7 +556,7 @@ type JMnedictTranslation = {
   translation: JMnedictTranslationTranslation[];
 };
 
-type JMnedictTranslationTranslation = {
+export type JMnedictTranslationTranslation = {
   /**
    * Language of this translation
    */
