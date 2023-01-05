@@ -44,6 +44,8 @@ async function validate(filePath) {
         validateWord(word);
         if (validateWord.errors && validateWord.errors.length) {
           console.error(`Invalid word [id=${word.id}]: `, validateWord.errors);
+          console.log(JSON.stringify(word, null, '  '));
+          loader.parser.pause();
           reject();
         }
       })
