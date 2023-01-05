@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.0.0",
   "license": "MIT",
-  "type": "module",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "node copy-types.js && rm -rf dist/ && tsc"
