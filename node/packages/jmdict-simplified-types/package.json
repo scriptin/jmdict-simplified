@@ -6,7 +6,7 @@
   "type": "module",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "node copy-types.js && rm -rf dist/ && tsc index.ts --declaration --emitDeclarationOnly --outDir dist"
+    "build": "node copy-types.js && rm -rf dist/ && tsc"
   },
   "devDependencies": {
     "typescript": "^4.9.4"

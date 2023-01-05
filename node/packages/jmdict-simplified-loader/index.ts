@@ -4,10 +4,10 @@ import makeParser from 'stream-json';
 import type { DictionaryMetadata, JMdictWord } from '@scriptin/jmdict-simplified-types';
 
 export interface JMdictLoader {
-  onMetadata(handler: (metadata: DictionaryMetadata) => void);
-  onWord(handler: (word: JMdictWord) => void);
-  onEnd(handler: () => void);
-  onError(handler: (error: Error | string) => void);
+  onMetadata(handler: (metadata: DictionaryMetadata) => void): void;
+  onWord(handler: (word: JMdictWord) => void): void;
+  onEnd(handler: () => void): void;
+  onError(handler: (error: Error | string) => void): void;
 }
 
 export function parseJmdict(path: string): JMdictLoader {
