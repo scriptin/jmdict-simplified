@@ -176,6 +176,16 @@ export interface DictionaryMetadata {
   version: string;
 
   /**
+   * List of languages in this files
+   */
+  languages: Language[];
+
+  /**
+   * `true` if this file contains only common kana/kanji versions
+   */
+  commonOnly: boolean;
+
+  /**
    * Creation date of JMdict file, as it appears in a comment
    * with format "JMdict created: YYYY-MM-DD" in the original XML file header
    */
