@@ -22,14 +22,6 @@ const typesEnd = lines.findIndex(
   (line, index) => /^```\s*$/.test(line) && index > typesStart,
 );
 
-const packageJson = readFileSync(
-  join(__dirname, 'package.json'),
-  defaultFileOpts,
-);
-const packageObject = JSON.parse(packageJson);
-
-const typesLines = [`declare module "${packageObject.name}";`].concat(
-  lines.slice(typesStart + 1, typesEnd),
-);
+const typesLines = lines.slice(typesStart + 1, typesEnd);
 
 writeFileSync(`${__dirname}/index.ts`, typesLines.join('\n'), defaultFileOpts);
