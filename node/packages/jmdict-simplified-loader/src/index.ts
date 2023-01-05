@@ -178,7 +178,7 @@ function parseWords<W extends JMdictWord | JMnedictWord>(
   });
 }
 
-export function parseDictionary<W extends JMdictWord | JMnedictWord>(
+export function loadDictionary<W extends JMdictWord | JMnedictWord>(
   filePath: string,
 ): DictionaryLoader<W> {
   const parser = createReadStream(filePath).pipe(
