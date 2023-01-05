@@ -31,7 +31,7 @@ abstract class Converter<E : InputDictionaryEntry, W : OutputDictionaryWord<W>> 
         return when (parts.size) {
             1 -> CommonJsonElement.Xref(parts[0], null, null)
             2 ->
-                if (parts[1].matches("\\d+".toRegex()))
+                if (parts[1].toIntOrNull() != null)
                     CommonJsonElement.Xref(parts[0], null, parts[1].toInt())
                 else
                     CommonJsonElement.Xref(parts[0], parts[1], null)
