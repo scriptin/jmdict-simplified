@@ -2,7 +2,11 @@
   "name": "@scriptin/jmdict-simplified-root",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build": "npx nx run-many --target=build",
+    "build:nocache": "npx nx run-many --target=build --skip-nx-cache",
+    "validate": "node validate-dict.js"
+  },
   "private": true,
   "devDependencies": {
     "@nrwl/nx-cloud": "latest",
