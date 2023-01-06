@@ -21,6 +21,8 @@ const JMnedictWord = schema.createSchema('JMnedictWord');
 // console.log(JSON.stringify(JMdictWord, null, '  '));
 // console.log(JSON.stringify(JMnedictWord, null, '  '));
 
+let hasErrors = false;
+
 async function validate(filePath) {
   return new Promise((resolve, reject) => {
     const fileName = filePath.split(sep).pop();
@@ -36,17 +38,19 @@ async function validate(filePath) {
       .onMetadata((metadata) => {
         validateMetadata(metadata);
         if (validateMetadata.errors && validateMetadata.errors.length) {
+          hasErrors = true;
           console.error('Invalid metadata: ', validateMetadata.errors);
-          reject();
+          // This Error will be caught in `parser.on('error')` handler below
+          loader.parser.destroy(new Error('Invalid dictionary metadata'));
         }
       })
       .onWord((word) => {
         validateWord(word);
         if (validateWord.errors && validateWord.errors.length) {
+          hasErrors = true;
           console.error(`Invalid word [id=${word.id}]: `, validateWord.errors);
           console.log(JSON.stringify(word, null, '  '));
-          loader.parser.pause();
-          reject();
+          loader.parser.destroy(new Error('Invalid dictionary entry'));
         }
       })
       .onEnd(() => resolve());
@@ -62,7 +66,7 @@ async function validateAll(files) {
     const isJMdict = file.startsWith('jmdict');
     const isJMnedict = file.startsWith('jmnedict');
     if (!isJMdict && !isJMnedict) continue;
-    console.log('Validating', file);
+    console.log(`Validating ${file}...`);
     try {
       await validate(join(JSON_DIR, file));
       console.log('PASS');
@@ -73,4 +77,11 @@ async function validateAll(files) {
   }
 }
 
-validateAll(files).then(() => console.log('DONE'));
+validateAll(files).then(() => {
+  if (hasErrors) {
+    console.log('Finished with errors');
+    process.exit(1);
+  } else {
+    console.log('Finished successfully');
+  }
+});
