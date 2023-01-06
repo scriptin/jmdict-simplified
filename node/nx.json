@@ -16,6 +16,9 @@
   },
   "targetDefaults": {
     "build": {
+      "inputs": [
+        { "runtime": "sed -n '/```typescript/,/```/p' ../README.md" }
+      ],
       "dependsOn": ["^build"]
     }
   }
