@@ -1,15 +1,21 @@
 const { readdirSync } = require('fs');
 const { join, sep } = require('path');
 
-const tsj = require('ts-json-schema-generator');
+const { createGenerator } = require('ts-json-schema-generator');
 const Ajv = require('ajv');
+
 const { loadDictionary } = require('@scriptin/jmdict-simplified-loader');
 
-const JSON_DIR = join(__dirname, '..', 'build', 'dict-json');
-const files = readdirSync(JSON_DIR).filter((f) => f.endsWith('.json'));
+// Make sure to build this package first, or this file may be missing/outdated
+const typesFile = join(
+  __dirname,
+  'packages',
+  'jmdict-simplified-types',
+  'index.ts',
+);
 
-const schema = tsj.createGenerator({
-  path: join(__dirname, 'packages', 'jmdict-simplified-types', 'index.ts'),
+const schema = createGenerator({
+  path: typesFile,
   type: '*',
 });
 
@@ -21,8 +27,11 @@ const JMnedictWord = schema.createSchema('JMnedictWord');
 // console.log(JSON.stringify(JMdictWord, null, '  '));
 // console.log(JSON.stringify(JMnedictWord, null, '  '));
 
-let hasErrors = false;
-
+/**
+ * Validate a JSON dictionary file
+ * @param {string} filePath
+ * @returns {Promise<void>} Rejects with an error if validation failed
+ */
 async function validate(filePath) {
   return new Promise((resolve, reject) => {
     const fileName = filePath.split(sep).pop();
@@ -38,7 +47,6 @@ async function validate(filePath) {
       .onMetadata((metadata) => {
         validateMetadata(metadata);
         if (validateMetadata.errors && validateMetadata.errors.length) {
-          hasErrors = true;
           console.error('Invalid metadata: ', validateMetadata.errors);
           // This Error will be caught in `parser.on('error')` handler below
           loader.parser.destroy(new Error('Invalid dictionary metadata'));
@@ -47,7 +55,6 @@ async function validate(filePath) {
       .onWord((word) => {
         validateWord(word);
         if (validateWord.errors && validateWord.errors.length) {
-          hasErrors = true;
           console.error(`Invalid word [id=${word.id}]: `, validateWord.errors);
           console.log(JSON.stringify(word, null, '  '));
           loader.parser.destroy(new Error('Invalid dictionary entry'));
@@ -61,27 +68,37 @@ async function validate(filePath) {
   });
 }
 
-async function validateAll(files) {
+/**
+ * Validate all JSON dictionary files in a directory
+ * @param {string} baseDir Base directory containing JSON dictionary files
+ * @returns {Promise<boolean>}
+ */
+async function validateAll(baseDir) {
+  const files = readdirSync(baseDir).filter((f) => f.endsWith('.json'));
   for (const file of files) {
     const isJMdict = file.startsWith('jmdict');
     const isJMnedict = file.startsWith('jmnedict');
     if (!isJMdict && !isJMnedict) continue;
     console.log(`Validating ${file}...`);
     try {
-      await validate(join(JSON_DIR, file));
+      await validate(join(baseDir, file));
       console.log('PASS');
     } catch (e) {
       console.log('FAIL');
       console.error(e);
+      return false;
     }
   }
+  return true;
 }
 
-validateAll(files).then(() => {
-  if (hasErrors) {
+const jsonDictionariesDirectory = join(__dirname, '..', 'build', 'dict-json');
+
+validateAll(jsonDictionariesDirectory).then((success) => {
+  if (success) {
+    console.log('Finished successfully');
+  } else {
     console.log('Finished with errors');
     process.exit(1);
-  } else {
-    console.log('Finished successfully');
   }
 });
