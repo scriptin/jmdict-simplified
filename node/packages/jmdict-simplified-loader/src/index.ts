@@ -142,12 +142,15 @@ function parseWords<W extends JMdictWord | JMnedictWord>(
 ) {
   let word: Partial<W> = {};
   const path: Path = [];
-  parser.on('data', ({ name, value }: DataChunk) => {
+  let objectDepth = 0;
+  parser.on('data', function parserDataHandler({ name, value }: DataChunk) {
     switch (name) {
       case 'startObject':
+        objectDepth += 1;
         if (path.length) put(word, path, {});
         return;
       case 'endObject':
+        objectDepth -= 1;
         updatePathAfterValue(path);
         if (path.length === 0) {
           handler(word as W);
@@ -163,6 +166,11 @@ function parseWords<W extends JMdictWord | JMnedictWord>(
         path.push(0);
         return;
       case 'endArray':
+        if (objectDepth == 0) {
+          // Encountered an end of a words array
+          parser.off('data', parserDataHandler);
+          return;
+        }
         path.pop();
         updatePathAfterValue(path);
         return;
