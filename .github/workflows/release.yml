@@ -9,6 +9,11 @@ on:
         description: 'Release notes'
         required: true
         default: 'Updated to the latest version of the source dictionary files'
+      dry_run:
+        description: 'Do not publish a release, do not commit checksums'
+        required: true
+        type: boolean
+        default: false
 
 jobs:
   release:
@@ -107,7 +112,7 @@ jobs:
             mv $f ${f/$BUILD_VERSION_NUMBER/$BUILD_TAG}
           done
       - name: Create release
-        if: env.SOMETHING_UPDATED == 'YES'
+        if: env.SOMETHING_UPDATED == 'YES' && !inputs.dry_run
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -138,7 +143,7 @@ jobs:
         if: env.SOMETHING_UPDATED == 'YES'
         run: ./gradlew updateChecksums
       - name: Commit XML files checksums
-        if: env.SOMETHING_UPDATED == 'YES'
+        if: env.SOMETHING_UPDATED == 'YES' && !inputs.dry_run
         uses: EndBug/add-and-commit@v9
         with:
           add: "checksums/*.sha256"
