@@ -116,21 +116,24 @@ Main concepts:
 /////////////////////////////////////////////////
 
 /**
- * xref - Full format, which lists both kanji (or other non-kana characters)
- * and kana writings which this sense applies to,
- * as well as index of a sense (counting from 1)
+ * xref - Full reference format: word (kanji+kana) + reading (kana-only) + sense index (starting from 1)
  */
-export type XrefFull = [kanji: string, kana: string, senseIndex: number];
+export type XrefWordReadingIndex = [kanji: string, kana: string, senseIndex: number];
 
 /**
- * xref - Just one writing (kanji or kana) and sense index
+ * xref - Shorter reference format: word + reading, without sense index
  */
-export type XrefShortWithIndex = [kanjiOrKana: string, senseIndex: number];
+export type XrefWordReading = [kanji: string, kana: string];
 
 /**
- * xref - Just one writing (kanji or kana)
+ * xref - Shorter reference format: word (can be kana-only or contain kanji) + sense index
  */
-export type XrefShortWithoutIndex = [kanjiOrKana: string];
+export type XrefWordIndex = [kanjiOrKana: string, senseIndex: number];
+
+/**
+ * xref - Shortest reference format: just the word (can be kana-only or contain kanji)
+ */
+export type XrefWord = [kanjiOrKana: string];
 
 /**
  * xref - Cross-reference
@@ -144,7 +147,7 @@ export type XrefShortWithoutIndex = [kanjiOrKana: string];
  *   read as "にじゅうまる" ("nijoumaru")
  * - `["漢数字"]` - refers to the word "漢数字", with any reading
  */
-export type Xref = XrefFull | XrefShortWithIndex | XrefShortWithoutIndex;
+export type Xref = XrefWordReadingIndex | XrefWordReading | XrefWordIndex | XrefWord;
 
 /**
  * tag - All tags are listed in a separate section of the file.
@@ -577,7 +580,6 @@ export type JMnedictTranslationTranslation = {
    */
   text: string;
 }
-
 ```
 
 ## License
