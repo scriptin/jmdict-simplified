@@ -1,3 +1,10 @@
+# Version 3.3.0
+
+- Added missing field descriptions in readme
+- Added one more Xref type variant
+- Added Node.js modules for JSON schema validation of dictionary JSON files
+- Updated the documentation
+
 # Version 3.2.1
 
 - Bugfix #22: add missing "misc" tags on sense elements in JMdict
