@@ -39,6 +39,25 @@ jobs:
       - name: Convert dictionaries
         if: env.SOMETHING_UPDATED == 'YES'
         run: ./gradlew convert
+      - name: Setup Node.js
+        if: env.SOMETHING_UPDATED == 'YES'
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - name: Install NPM dependencies
+        if: env.SOMETHING_UPDATED == 'YES'
+        working-directory: node
+        run: npm ci
+      - name: Build Node packages
+        if: env.SOMETHING_UPDATED == 'YES'
+        working-directory: node
+        env:
+          NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+        run: npm run build
+      - name: Validate dictionary JSON files
+        if: env.SOMETHING_UPDATED == 'YES'
+        working-directory: node
+        run: npm run validate
       - name: Create archives
         if: env.SOMETHING_UPDATED == 'YES'
         run: ./gradlew archive
