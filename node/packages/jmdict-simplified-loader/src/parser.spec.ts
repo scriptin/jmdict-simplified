@@ -1,6 +1,6 @@
 import { Readable } from 'stream';
 
-import { parseMetadata, put, updatePathAfterValue } from './parser';
+import { parseMetadata, parseWords, put, updatePathAfterValue } from './parser';
 // @ts-ignore
 import makeParser from 'stream-json';
 
@@ -116,6 +116,37 @@ describe('parseMetadata', () => {
         expect.objectContaining({ words: [] }),
       );
       expect(handler).not.toBeCalledWith(expect.objectContaining(ignored));
+    });
+  });
+});
+
+describe('parseWords', () => {
+  it('parses an array of arbitrary objects', () => {
+    const obj1 = {};
+    const obj2 = { a: 1, b: '', c: true, d: false, e: null, f: {}, g: [] };
+    const obj3 = {
+      foo: ['bar', 'baz'],
+    };
+    const obj4 = {
+      foo: {
+        bar: 1,
+        baz: 2,
+      },
+    };
+    const arr = [obj1, obj2, obj3, obj4];
+    const serializedJson = JSON.stringify(arr);
+    const s = new Readable();
+    const parser = s.pipe(makeParser({ packValues: true }));
+    s.push(serializedJson);
+    s.push(null);
+    const handler = jest.fn();
+    parseWords(parser, handler);
+    parser.on('end', () => {
+      expect(handler).toBeCalledTimes(4);
+      expect(handler).nthCalledWith(1, expect.objectContaining(obj1));
+      expect(handler).nthCalledWith(2, expect.objectContaining(obj2));
+      expect(handler).nthCalledWith(3, expect.objectContaining(obj3));
+      expect(handler).nthCalledWith(4, expect.objectContaining(obj4));
     });
   });
 });

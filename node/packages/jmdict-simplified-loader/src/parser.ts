@@ -121,7 +121,7 @@ export function parseWords<W extends JMdictWord | JMnedictWord>(
       case 'endObject':
         objectDepth -= 1;
         updatePathAfterValue(path);
-        if (path.length === 0) {
+        if (objectDepth === 0) {
           handler(word as W);
           word = {};
         }
