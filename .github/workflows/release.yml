@@ -53,6 +53,11 @@ jobs:
         if: env.SOMETHING_UPDATED == 'YES'
         working-directory: node
         run: npm ci
+      - name: Copy type definitions from README.md
+        if: env.SOMETHING_UPDATED == 'YES'
+        working-directory: node
+        run: |
+          npm run copy:types
       - name: Build Node packages
         if: env.SOMETHING_UPDATED == 'YES'
         working-directory: node
