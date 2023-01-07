@@ -10,7 +10,7 @@ on:
         required: true
         default: 'Updated to the latest version of the source dictionary files'
       dry_run:
-        description: 'Do not publish a release, do not commit checksums'
+        description: "Dry run: don't create a release, don't commit checksums"
         required: true
         type: boolean
         default: false
