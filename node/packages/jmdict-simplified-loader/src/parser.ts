@@ -147,8 +147,11 @@ export function parseWords<W extends JMdictWord | JMnedictWord>(
         path.pop();
         updatePathAfterValue(path);
         return;
-      case 'stringValue':
       case 'numberValue':
+        put(word, path, Number.parseFloat(value as string));
+        updatePathAfterValue(path);
+        return;
+      case 'stringValue':
       case 'trueValue':
       case 'falseValue':
       case 'nullValue':
