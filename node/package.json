@@ -5,6 +5,7 @@
   "scripts": {
     "build": "npx nx run-many --target=build",
     "build:nocache": "npx nx run-many --target=build --skip-nx-cache",
+    "test": "npx nx run-many --target=test",
     "validate": "node validate-dict.js"
   },
   "private": true,
