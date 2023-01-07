@@ -48,7 +48,7 @@ type DataChunk = {
   value?: string | number | boolean | null;
 };
 
-function updatePathAfterValue(path: Path) {
+export function updatePathAfterValue(path: Path) {
   if (path.length === 0) return;
   const last = path[path.length - 1];
   if (typeof last === 'string') {
@@ -90,8 +90,11 @@ export function parseMetadata(parser: Parser, handler: MetadataHandler) {
         path.pop();
         updatePathAfterValue(path);
         return;
-      case 'stringValue':
       case 'numberValue':
+        put(metadata, path, Number.parseFloat(value as string));
+        updatePathAfterValue(path);
+        return;
+      case 'stringValue':
       case 'trueValue':
       case 'falseValue':
       case 'nullValue':
