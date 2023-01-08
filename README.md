@@ -35,13 +35,25 @@ There are two main types of JSON files for the JMdict dictionary:
 
 - full - same as original files, with no omissions of entries
 - "common-only" - containing only dictionary entries considered "common" -
-  if `/k_ele/ke_pri` or `/r_ele/re_pri` elements in original XML files contain
+  if any of `/k_ele/ke_pri` or `/r_ele/re_pri` elements in XML files contain
   one of these markers: "news1", "ichi1", "spec1", "spec2", "gai1".
+  Only one such element is enough for the whole word to be considered common.
   This corresponds to how online dictionaries such as <https://jisho.org>
   classify words as "common". Common-only distributions are much smaller.
   They are marked with "common" keyword in file names, see the [latest release][latest-release]
 
-Also, JMdict has language-specific versions with language codes in file names.
+Also, JMdict has language-specific versions with language codes
+(3-letter [ISO 639-2](https://en.wikipedia.org/wiki/ISO_639-2) codes) in file names:
+
+- `eng`	- English
+- `ger`	- German
+- `rus`	- Russian
+- `hun`	- Hungarian
+- `dut`	- Dutch
+- `spa`	- Spanish
+- `fre`	- French
+- `swe`	- Swedish
+- `slv`	- Slovenian
 
 JMnedict has only one version, since it's (currently) English-only,
 and has no "common" indicators on entries.
