@@ -14,6 +14,11 @@ on:
         required: true
         type: boolean
         default: false
+      force:
+        description: "Force: proceed even if XML files haven't changed"
+        required: true
+        type: boolean
+        default: false
 
 jobs:
   release:
@@ -32,6 +37,7 @@ jobs:
           ./gradlew clean
           ./gradlew download
       - name: Check for updates
+        if: !inputs.force
         shell: bash
         run: |
           jmdict_updated=$(./gradlew --quiet jmdictHasChanged)
@@ -41,6 +47,12 @@ jobs:
           if [[ "$jmdict_updated" = "YES" ]] || [[ "$jmnedict_updated" = "YES" ]]; then
             echo "SOMETHING_UPDATED=YES" >> $GITHUB_ENV
           fi
+      - name: Set force update variables
+        if: inputs.force
+        run: |
+          echo "JMDICT_UPDATED=YES" >> $GITHUB_ENV
+          echo "JMNEDICT_UPDATED=YES" >> $GITHUB_ENV
+          echo "SOMETHING_UPDATED=YES" >> $GITHUB_ENV
       - name: Convert dictionaries
         if: env.SOMETHING_UPDATED == 'YES'
         run: ./gradlew convert
