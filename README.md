@@ -212,7 +212,7 @@ export interface DictionaryMetadata {
   tags: {
     [tag: Tag]: string;
   };
-};
+}
 
 
 //////////////////
@@ -227,7 +227,7 @@ export interface JMdict extends DictionaryMetadata {
    * List of dictionary entries/words
    */
   words: JMdictWord[];
-};
+}
 
 /**
  * JMdict entry/word
@@ -490,7 +490,7 @@ export interface JMnedict extends DictionaryMetadata {
    * List of dictionary entries/words
    */
   words: JMnedictWord[];
-};
+}
 
 /**
  * JMdict entry/word
