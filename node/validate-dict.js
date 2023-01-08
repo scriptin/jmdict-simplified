@@ -19,13 +19,13 @@ const schema = createGenerator({
   type: '*',
 });
 
-const DictionaryMetadata = schema.createSchema('DictionaryMetadata');
-const JMdictWord = schema.createSchema('JMdictWord');
-const JMnedictWord = schema.createSchema('JMnedictWord');
+const dictionaryMetadataSchema = schema.createSchema('DictionaryMetadata');
+const jmdictWordSchema = schema.createSchema('JMdictWord');
+const jmnedictWordSchema = schema.createSchema('JMnedictWord');
 
-// console.log(JSON.stringify(DictionaryMetadata, null, '  '));
-// console.log(JSON.stringify(JMdictWord, null, '  '));
-// console.log(JSON.stringify(JMnedictWord, null, '  '));
+// printAsJson(dictionaryMetadataSchema);
+// printAsJson(jmdictWordSchema);
+// printAsJson(jmnedictWordSchema);
 
 function printAsJson(obj) {
   console.log(JSON.stringify(obj, null, '  '));
@@ -33,7 +33,7 @@ function printAsJson(obj) {
 
 /**
  * Validate appliesTo(Kanji|Kana) arrays on sense elements
- * @param {JMdictWord} word
+ * @param {import('@scriptin/jmdict-simplified-loader').JMdictWord} word
  * @returns {string[]} Errors
  */
 function jmdictValidateSenseAppliesTo(word) {
@@ -68,10 +68,10 @@ async function validate(filePath) {
     const fileName = filePath.split(sep).pop();
     const isJMdict = fileName.startsWith('jmdict');
 
-    const validateMetadata = new Ajv().compile(DictionaryMetadata);
+    const validateMetadata = new Ajv().compile(dictionaryMetadataSchema);
 
     const validateWord = new Ajv().compile(
-      isJMdict ? JMdictWord : JMnedictWord,
+      isJMdict ? jmdictWordSchema : jmnedictWordSchema,
     );
 
     const loader = loadDictionary(filePath)
@@ -92,7 +92,9 @@ async function validate(filePath) {
           loader.parser.destroy(new Error('Invalid dictionary entry'));
         }
         if (isJMdict) {
-          const errors = jmdictValidateSenseAppliesTo(word);
+          const errors = jmdictValidateSenseAppliesTo(
+            /** @type import('@scriptin/jmdict-simplified-loader').JMdictWord */ word,
+          );
           if (errors.length) {
             console.error(`Invalid word [id=${word.id}]: `, errors);
             printAsJson(word);
