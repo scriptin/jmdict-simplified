@@ -37,7 +37,7 @@ jobs:
           ./gradlew clean
           ./gradlew download
       - name: Check for updates
-        if: !inputs.force
+        if: ${{ !inputs.force }}
         shell: bash
         run: |
           jmdict_updated=$(./gradlew --quiet jmdictHasChanged)
@@ -48,7 +48,7 @@ jobs:
             echo "SOMETHING_UPDATED=YES" >> $GITHUB_ENV
           fi
       - name: Set force update variables
-        if: inputs.force
+        if: ${{ inputs.force }}
         run: |
           echo "JMDICT_UPDATED=YES" >> $GITHUB_ENV
           echo "JMNEDICT_UPDATED=YES" >> $GITHUB_ENV
