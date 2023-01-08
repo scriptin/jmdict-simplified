@@ -27,6 +27,37 @@ const JMnedictWord = schema.createSchema('JMnedictWord');
 // console.log(JSON.stringify(JMdictWord, null, '  '));
 // console.log(JSON.stringify(JMnedictWord, null, '  '));
 
+function printAsJson(obj) {
+  console.log(JSON.stringify(obj, null, '  '));
+}
+
+/**
+ * Validate appliesTo(Kanji|Kana) arrays on sense elements
+ * @param {JMdictWord} word
+ * @returns {string[]} Errors
+ */
+function jmdictValidateSenseAppliesTo(word) {
+  const errors = [];
+  for (const [index, sense] of word.sense.entries()) {
+    const { appliesToKanji, appliesToKana } = sense;
+    if (appliesToKanji.length === 0) {
+      errors.push(`appliesToKanji field cannot be empty, at index ${index}`);
+    } else if (appliesToKanji.includes('*') && appliesToKanji.length > 1) {
+      errors.push(
+        `appliesToKanji field cannot contain both "*" wildcard and other values, at index ${index}`,
+      );
+    }
+    if (appliesToKana.length === 0) {
+      errors.push(`appliesToKana field cannot be empty, at index ${index}`);
+    } else if (appliesToKana.includes('*') && appliesToKana.length > 1) {
+      errors.push(
+        `appliesToKana field cannot contain both "*" wildcard and other values, at index ${index}`,
+      );
+    }
+  }
+  return errors;
+}
+
 /**
  * Validate a JSON dictionary file
  * @param {string} filePath
@@ -48,6 +79,7 @@ async function validate(filePath) {
         validateMetadata(metadata);
         if (validateMetadata.errors && validateMetadata.errors.length) {
           console.error('Invalid metadata: ', validateMetadata.errors);
+          printAsJson(metadata);
           // This Error will be caught in `parser.on('error')` handler below
           loader.parser.destroy(new Error('Invalid dictionary metadata'));
         }
@@ -56,8 +88,16 @@ async function validate(filePath) {
         validateWord(word);
         if (validateWord.errors && validateWord.errors.length) {
           console.error(`Invalid word [id=${word.id}]: `, validateWord.errors);
-          console.log(JSON.stringify(word, null, '  '));
+          printAsJson(word);
           loader.parser.destroy(new Error('Invalid dictionary entry'));
+        }
+        if (isJMdict) {
+          const errors = jmdictValidateSenseAppliesTo(word);
+          if (errors.length) {
+            console.error(`Invalid word [id=${word.id}]: `, errors);
+            printAsJson(word);
+            loader.parser.destroy(new Error('Invalid dictionary entry'));
+          }
         }
       })
       .onEnd(() => resolve());
