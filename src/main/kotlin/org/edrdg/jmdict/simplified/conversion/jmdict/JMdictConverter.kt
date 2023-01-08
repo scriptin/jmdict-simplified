@@ -44,10 +44,16 @@ class JMdictConverter : Converter<JMdictXmlElement.Entry, JMdictJsonElement.Word
                 entSeq,
                 "No part-of-speech (<pos>) found in ${i + 1} first <sense> tags"
             )
+            val appliesToKanji = sense.stagk
+                .filter { it.text.trim().isNotEmpty() }
+                .map { it.text }
+            val appliesToKana = sense.stagr
+                .filter { it.text.trim().isNotEmpty() }
+                .map { it.text }
             JMdictJsonElement.Sense(
                 partOfSpeech = lastPartOfSpeech.map { entityToTag(it.text, entSeq) },
-                appliesToKanji = sense.stagk.map { it.text },
-                appliesToKana = sense.stagr.map { it.text },
+                appliesToKanji = appliesToKanji.ifEmpty { listOf("*") },
+                appliesToKana = appliesToKana.ifEmpty { listOf("*") },
                 related = sense.xref.map { xref(it.text, "xref", entSeq) },
                 antonym = sense.ant.map { xref(it.text, "ant", entSeq) },
                 field = sense.field.map { entityToTag(it.text, entSeq) },

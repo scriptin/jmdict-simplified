@@ -333,17 +333,17 @@ export type JMdictSense = {
 
   /**
    * List of kanji writings within this word which this sense applies to.
-   * Empty array means "all"/"any". There is no "none" value - compare that
-   * to {@link JMdictKana#appliesToKanji} elements, which have "*" for "all"
-   * and emtpy list for "none".
-   *
+   * Works in conjunction with the next `appliesToKana` field.
+   * `"*"` means "all". This is never empty, unlike {@link JMdictKana#appliesToKanji}.
    * See also {@link JMdictKana#appliesToKanji}
    */
   appliesToKanji: string[];
 
   /**
    * List of kana writings within this word which this sense applies to.
-   * Empty array means "all"/"any".
+   * Works in conjunction with the previous `appliesToKanji` field.
+   * "*"` means "all". This is never empty, unlike {@link JMdictKana#appliesToKanji}.
+   * See also `appliesToKanji` field and {@link JMdictKana#appliesToKanji}.
    */
   appliesToKana: string[];
 
