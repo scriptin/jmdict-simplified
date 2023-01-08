@@ -33,7 +33,7 @@ function printAsJson(obj) {
 
 /**
  * Validate appliesTo(Kanji|Kana) arrays on sense elements
- * @param {import('@scriptin/jmdict-simplified-loader').JMdictWord} word
+ * @param {import('@scriptin/jmdict-simplified-types').JMdictWord} word
  * @returns {string[]} Errors
  */
 function jmdictValidateSenseAppliesTo(word) {
@@ -93,7 +93,7 @@ async function validate(filePath) {
         }
         if (isJMdict) {
           const errors = jmdictValidateSenseAppliesTo(
-            /** @type import('@scriptin/jmdict-simplified-loader').JMdictWord */ word,
+            /** @type import('@scriptin/jmdict-simplified-types').JMdictWord */ word,
           );
           if (errors.length) {
             console.error(`Invalid word [id=${word.id}]: `, errors);
