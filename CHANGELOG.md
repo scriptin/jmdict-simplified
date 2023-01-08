@@ -1,3 +1,8 @@
+# Version 3.3.1
+
+- Bugfix #24: `sense.appliesToKanji` and `sense.appliesToKana` are set to `["*"]`
+  (meaning "applies to all/any") by default. This was the logic of the original XQuery converter
+
 # Version 3.3.0
 
 - Added missing field descriptions in readme
