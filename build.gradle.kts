@@ -261,6 +261,7 @@ val tarAll: Task by tasks.creating {
         .filter { it.isFile && it.extension == "json" }
         .forEachIndexed { idx, file ->
             dependsOn.add(tasks.create("tar$idx", Tar::class) {
+                compression = Compression.GZIP
                 from(dictJsonDir) { include(file.name) }
                 archiveFileName.set("${file.name}.tgz")
             })
