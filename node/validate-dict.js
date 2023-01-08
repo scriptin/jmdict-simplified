@@ -32,6 +32,13 @@ function printAsJson(obj) {
 }
 
 /**
+ * @typedef {Function} JMdictWordValidator
+ * @param {import('@scriptin/jmdict-simplified-types').JMdictWord} word
+ * @param {import('@scriptin/jmdict-simplified-types').DictionaryMetadata} metadata
+ * @returns {string[]} Errors
+ */
+
+/**
  * Validate appliesTo(Kanji|Kana) arrays on sense elements
  * @param {import('@scriptin/jmdict-simplified-types').JMdictWord} word
  * @returns {string[]} Errors
@@ -44,18 +51,78 @@ function jmdictValidateSenseAppliesTo(word) {
       errors.push(`appliesToKanji field cannot be empty, at index ${index}`);
     } else if (appliesToKanji.includes('*') && appliesToKanji.length > 1) {
       errors.push(
-        `appliesToKanji field cannot contain both "*" wildcard and other values, at index ${index}`,
+        `appliesToKanji field cannot contain both "*" wildcard and other values, sense at index ${index}`,
       );
     }
     if (appliesToKana.length === 0) {
       errors.push(`appliesToKana field cannot be empty, at index ${index}`);
     } else if (appliesToKana.includes('*') && appliesToKana.length > 1) {
       errors.push(
-        `appliesToKana field cannot contain both "*" wildcard and other values, at index ${index}`,
+        `appliesToKana field cannot contain both "*" wildcard and other values, sense at index ${index}`,
       );
     }
   }
   return errors;
+}
+
+/**
+ * @param {import('@scriptin/jmdict-simplified-types').JMdictWord} word
+ * @param {import('@scriptin/jmdict-simplified-types').DictionaryMetadata} metadata
+ * @returns {string[]} Errors
+ */
+function jmdictValidateLanguage(word, metadata) {
+  const { languages } = metadata;
+  if (languages.includes('all')) return [];
+
+  const errors = [];
+  for (const [index, sense] of word.sense.entries()) {
+    const glossLanguages = sense.gloss.map(({ lang }) => lang);
+    const invalidLanguages = glossLanguages.filter(
+      (l) => !languages.includes(l),
+    );
+    if (invalidLanguages.length) {
+      errors.push(
+        'gloss.lang field cannot contain languages outside those listed in metadata, ' +
+          `found ${invalidLanguages}, sense at index ${index}`,
+      );
+    }
+  }
+  return errors;
+}
+
+/**
+ * @param {import('@scriptin/jmdict-simplified-types').JMdictWord} word
+ * @param {import('@scriptin/jmdict-simplified-types').DictionaryMetadata} metadata
+ * @returns {string[]} Errors
+ */
+function jmdictValidateIsCommon(word, metadata) {
+  const { commonOnly } = metadata;
+  if (!commonOnly) return [];
+
+  const errors = [];
+  const { id, kanji, kana } = word;
+  const kanjiCommon = kanji.filter((k) => k.common);
+  const kanaCommon = kana.filter((k) => k.common);
+  if (kanjiCommon.length + kanaCommon.length === 0) {
+    errors.push(
+      `Word with id=${id} with no "common" kanji or kana entries ` +
+        'is not allowed in a dictionary with commonOnly set to true',
+    );
+  }
+  return errors;
+}
+
+/** @type {JMdictWordValidator[]} */
+const JMDICT_WORD_VALIDATORS = [
+  jmdictValidateSenseAppliesTo,
+  jmdictValidateLanguage,
+  jmdictValidateIsCommon,
+];
+
+function reportWordAndStop(word, errors, loader) {
+  console.error(`Invalid word [id=${word.id}]: `, errors);
+  printAsJson(word);
+  loader.parser.destroy(new Error('Invalid dictionary entry'));
 }
 
 /**
@@ -74,8 +141,11 @@ async function validate(filePath) {
       isJMdict ? jmdictWordSchema : jmnedictWordSchema,
     );
 
+    let dictMetadata;
+
     const loader = loadDictionary(filePath)
       .onMetadata((metadata) => {
+        dictMetadata = metadata;
         validateMetadata(metadata);
         if (validateMetadata.errors && validateMetadata.errors.length) {
           console.error('Invalid metadata: ', validateMetadata.errors);
@@ -87,18 +157,18 @@ async function validate(filePath) {
       .onWord((word) => {
         validateWord(word);
         if (validateWord.errors && validateWord.errors.length) {
-          console.error(`Invalid word [id=${word.id}]: `, validateWord.errors);
-          printAsJson(word);
-          loader.parser.destroy(new Error('Invalid dictionary entry'));
+          reportWordAndStop(word, validateWord.errors, loader);
         }
         if (isJMdict) {
-          const errors = jmdictValidateSenseAppliesTo(
-            /** @type import('@scriptin/jmdict-simplified-types').JMdictWord */ word,
-          );
-          if (errors.length) {
-            console.error(`Invalid word [id=${word.id}]: `, errors);
-            printAsJson(word);
-            loader.parser.destroy(new Error('Invalid dictionary entry'));
+          for (const validate of JMDICT_WORD_VALIDATORS) {
+            const errors = validate(
+              /** @type import('@scriptin/jmdict-simplified-types').JMdictWord */ word,
+              dictMetadata,
+            );
+            if (errors.length) {
+              reportWordAndStop(word, errors, loader);
+              break;
+            }
           }
         }
       })
