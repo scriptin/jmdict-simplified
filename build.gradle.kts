@@ -6,7 +6,11 @@ import java.security.NoSuchAlgorithmException
 group = "org.edrdg.jmdict.simplified"
 version = "3.3.1"
 
-val jmdictLanguages = listOf("all", "eng", "eng-common")
+val jmdictLanguages = listOf(
+    "all", "eng", "eng-common",
+    // Other languages, in order of # of entries:
+    "ger", "rus", "hun", "dut", "spa", "fre", "swe", "slv",
+)
 val jmdictReportFile = "jmdict-release-info.md"
 val jmnedictLanguages = listOf("all") // There is only English
 val jmnedictReportFile = "jmnedict-release-info.md"
