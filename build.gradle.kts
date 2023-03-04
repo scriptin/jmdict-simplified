@@ -6,14 +6,18 @@ import java.security.NoSuchAlgorithmException
 group = "org.edrdg.jmdict.simplified"
 version = "3.3.1"
 
-val jmdictLanguages = listOf(
+val jmdictLanguages = listOf( // ISO 639-2, 3-letter codes
     "all", "eng", "eng-common",
     // Other languages, in order of # of entries:
     "ger", "rus", "hun", "dut", "spa", "fre", "swe", "slv",
 )
 val jmdictReportFile = "jmdict-release-info.md"
+
 val jmnedictLanguages = listOf("all") // There is only English
 val jmnedictReportFile = "jmnedict-release-info.md"
+
+val kanjidicLanguages = listOf("all", "en") // ISO 639-1, 2-letter codes
+val kanjidicReportFile = "kanjidic-release-info.md"
 
 plugins {
     id("de.undercouch.download") version "5.3.0"
@@ -285,10 +289,30 @@ val jmnedictConvert: Task by tasks.creating(Exec::class) {
     )
 }
 
+val kanjidicConvert: Task by tasks.creating(Exec::class) {
+    group = "Convert"
+    description = "Convert Kanjidic"
+    dependsOn(createDictJsonDir, tasks.getByName("uberJar"))
+    val dictJsonDir: String by createDictJsonDir.extra
+    val kanjidicPath: String by kanjidicExtract.extra
+    commandLine = listOf(
+        "java",
+        "-Djdk.xml.entityExpansionLimit=0", // To avoid errors about # of entities in XML files
+        "-jar",
+        (tasks.getByName("uberJar") as Jar).archiveFile.get().asFile.path,
+        "convert-kanjidic",
+        "--version=$version",
+        "--languages=${kanjidicLanguages.joinToString(",")}",
+        "--report=$dictJsonDir${File.separator}$kanjidicReportFile",
+        kanjidicPath,
+        dictJsonDir,
+    )
+}
+
 val convert: Task by tasks.creating {
     group = "Convert"
-    description = "Convert JMdict and JMnedict"
-    dependsOn(jmdictConvert, jmnedictConvert)
+    description = "Convert all dictionaries"
+    dependsOn(jmdictConvert, jmnedictConvert, kanjidicConvert)
 }
 
 val zipAll: Task by tasks.creating {
