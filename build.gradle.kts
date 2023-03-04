@@ -118,13 +118,38 @@ val jmnedictExtract: Task by tasks.creating {
     }
 }
 
+val kanjidicDownload by tasks.creating(Download::class) {
+    group = "Download"
+    description = "Download Kanjidic source XML archive"
+    val dictXmlDir: String by createDictXmlDir.extra
+    val filePath = "$dictXmlDir/kanjidic2.xml.gz"
+    src("http://www.edrdg.org/kanjidic/kanjidic2.xml.gz")
+    dest(filePath)
+    extra["archivePath"] = filePath
+    overwrite(true)
+    onlyIfModified(true)
+}
+
+val kanjidicExtract: Task by tasks.creating {
+    group = "Extract"
+    description = "Extract Kanjidic source XML from an archive"
+    dependsOn(kanjidicDownload)
+    val dictXmlDir: String by createDictXmlDir.extra
+    val archivePath: String by kanjidicDownload.extra
+    val filePath = "$dictXmlDir/kanjidic2.xml"
+    extra["kanjidicPath"] = filePath
+    doLast {
+        resources.gzip(archivePath).read().copyTo(file(filePath).outputStream())
+    }
+}
+
 /**
  * Download and extract all dictionaries
  */
 val download: Task by tasks.creating {
     group = "Download"
     description = "Download and unpack all dictionaries"
-    dependsOn(jmdictExtract, jmnedictExtract)
+    dependsOn(jmdictExtract, jmnedictExtract, kanjidicExtract)
 }
 
 fun getFileHash(inputFilePath: String): String {
@@ -150,7 +175,7 @@ val jmdictUpdateChecksumFile: Task by tasks.creating {
 
 val jmnedictUpdateChecksumFile: Task by tasks.creating {
     group = "Checksum"
-    description = "Generate a checksum JMnedict XML file and write it into a checksum file"
+    description = "Generate a checksum of JMnedict XML file and write it into a checksum file"
     val jmnedictPath: String by jmnedictExtract.extra
     val jmnedictChecksumPath = "$projectDir/checksums/JMnedict.xml.sha256"
     extra["jmnedictChecksumPath"] = jmnedictChecksumPath
@@ -159,10 +184,21 @@ val jmnedictUpdateChecksumFile: Task by tasks.creating {
     }
 }
 
+val kanjidicUpdateChecksumFile: Task by tasks.creating {
+    group = "Checksum"
+    description = "Generate a checksum of Kanjidic XML file and write it into a checksum file"
+    val kanjidicPath: String by kanjidicExtract.extra
+    val kanjidicChecksumPath = "$projectDir/checksums/kanjidic2.xml.sha256"
+    extra["kanjidicChecksumPath"] = kanjidicChecksumPath
+    doLast {
+        file(kanjidicChecksumPath).writeText(getFileHash(kanjidicPath))
+    }
+}
+
 val updateChecksums: Task by tasks.creating {
     group = "Checksum"
     description = "Generate checksums of all dictionaries and write into checksum files"
-    dependsOn(jmdictUpdateChecksumFile, jmnedictUpdateChecksumFile)
+    dependsOn(jmdictUpdateChecksumFile, jmnedictUpdateChecksumFile, kanjidicUpdateChecksumFile)
 }
 
 val jmdictHasChanged: Task by tasks.creating {
@@ -185,6 +221,18 @@ val jmnedictHasChanged: Task by tasks.creating {
     doLast {
         val previousChecksum = file(jmnedictChecksumPath).readText().trim()
         val newChecksum = getFileHash(jmnedictPath).trim()
+        println(if (previousChecksum == newChecksum) "NO" else "YES")
+    }
+}
+
+val kanjidicHasChanged: Task by tasks.creating {
+    group = "Checksum"
+    description = "Check if a checksum of Kanjidic XML file has changed"
+    val kanjidicPath: String by kanjidicExtract.extra
+    val kanjidicChecksumPath: String by kanjidicUpdateChecksumFile.extra
+    doLast {
+        val previousChecksum = file(kanjidicChecksumPath).readText().trim()
+        val newChecksum = getFileHash(kanjidicPath).trim()
         println(if (previousChecksum == newChecksum) "NO" else "YES")
     }
 }
