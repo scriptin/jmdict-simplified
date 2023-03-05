@@ -38,7 +38,7 @@ sealed class Kanjidic2XmlElement(open val name: String) {
      *         -->
      * ~~~
      */
-    data class FileVersion(val text: String) : Kanjidic2XmlElement("file_version")
+    data class FileVersion(val value: Int) : Kanjidic2XmlElement("file_version")
 
     /**
      * ~~~xml
@@ -50,7 +50,13 @@ sealed class Kanjidic2XmlElement(open val name: String) {
      *         -->
      * ~~~
      */
-    data class DatabaseVersion(val text: String) : Kanjidic2XmlElement("database_version")
+    data class DatabaseVersion(val text: String) : Kanjidic2XmlElement("database_version") {
+        val year: Int
+            get() = text.split("-")[0].toInt()
+
+        val ordinalVersion: Int
+            get() = text.split("-")[1].toInt()
+    }
 
     /**
      * ~~~xml
