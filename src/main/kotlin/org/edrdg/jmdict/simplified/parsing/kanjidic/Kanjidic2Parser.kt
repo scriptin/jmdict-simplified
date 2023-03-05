@@ -13,23 +13,14 @@ object Kanjidic2Parser : Parser<Kanjidic2XmlElement.Character, Kanjidic2Metadata
             setOf(
                 XMLEvent.START_DOCUMENT,
                 XMLEvent.SPACE,
+                XMLEvent.DTD,
             )
         )
 
-        val dtd = eventReader.dtd("DTD declaration")
-
-        val versionCommentRegex = "<!-- Version (\\d+\\.\\d+)\\s+-\\s+(.*)\\s+\n".toRegex()
-        val versionMatch = versionCommentRegex.find(dtd.documentTypeDeclaration)
-            ?: throw ParsingException.InvalidDoctypeFormat(
-                dtd.documentTypeDeclaration,
-                "Expected version and date in a comment",
-            )
-
-        val dtdVersion = versionMatch.groupValues[1]
-        val dtdDate = versionMatch.groupValues[2]
-
         eventReader.openTag(QName("kanjidic2"), "Kanjidic opening tag")
+
         val header = eventReader.tag(QName("header"), "Kanjidic header") {
+            eventReader.skip(setOf(XMLEvent.COMMENT))
             Kanjidic2XmlElement.Header(
                 fileVersion = eventReader.tag(QName("file_version"), "File version") {
                     Kanjidic2XmlElement.FileVersion(eventReader.text(it).toInt())
@@ -44,7 +35,6 @@ object Kanjidic2Parser : Parser<Kanjidic2XmlElement.Character, Kanjidic2Metadata
         }
 
         return Kanjidic2Metadata(
-            dtdVersion, dtdDate,
             header.fileVersion.value,
             Kanjidic2DatabaseVersion(
                 header.databaseVersion.year,
