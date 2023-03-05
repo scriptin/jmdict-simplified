@@ -34,7 +34,7 @@ object Kanjidic2Parser : Parser<Kanjidic2XmlElement.Character, Kanjidic2Metadata
                 fileVersion = eventReader.tag(QName("file_version"), "File version") {
                     Kanjidic2XmlElement.FileVersion(eventReader.text(it).toInt())
                 },
-                databaseVersion = eventReader.tag(QName("datebase_version"), "Database version") {
+                databaseVersion = eventReader.tag(QName("database_version"), "Database version") {
                     Kanjidic2XmlElement.DatabaseVersion(eventReader.text(it))
                 },
                 dateOfCreation = eventReader.tag(QName("date_of_creation"), "Date of creation") {
