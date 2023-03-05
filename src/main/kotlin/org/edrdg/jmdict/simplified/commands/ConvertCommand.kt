@@ -18,7 +18,7 @@ abstract class ConvertCommand<E : InputDictionaryEntry, W : OutputDictionaryWord
     override val parser: Parser<E, M>,
     override val rootTagName: String,
     val dictionaryName: String,
-    val converter: Converter<E, W>,
+    val converter: Converter<E, W, M>,
 ) : AnalyzeCommand<E, M>(
     help = help,
     parser = parser,
