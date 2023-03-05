@@ -58,6 +58,6 @@ class JMdictConvert<E : InputDictionaryEntry, W : OutputDictionaryWord<W>>(
     }
 
     override fun getDictionaryMetadataTable(metadata: JMdictMetadata): String {
-        return getDictionaryMetadataMarkdownTable(dictionaryXmlFile, metadata)
+        return JMdictDryRun.getDictionaryMetadataMarkdownTable(dictionaryXmlFile, metadata)
     }
 }
