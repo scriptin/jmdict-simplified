@@ -9,8 +9,8 @@ import javax.xml.stream.XMLEventReader
 import javax.xml.stream.events.StartElement
 import javax.xml.stream.events.XMLEvent
 
-object JMdictParser : Parser<JMdictXmlElement.Entry> {
-    override fun parseMetadata(eventReader: XMLEventReader): Metadata {
+object JMdictParser : Parser<JMdictXmlElement.Entry, JMdictMetadata> {
+    override fun parseMetadata(eventReader: XMLEventReader): JMdictMetadata {
         eventReader.skip(
             setOf(
                 XMLEvent.START_DOCUMENT,
@@ -29,7 +29,7 @@ object JMdictParser : Parser<JMdictXmlElement.Entry> {
         val date = eventReader.comment("JMdict creation date comment")
             .text.split(":").last().trim()
 
-        return Metadata(revisions, entities, date)
+        return JMdictMetadata(revisions, entities, date)
     }
 
     override fun hasNextEntry(eventReader: XMLEventReader): Boolean {

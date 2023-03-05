@@ -1,7 +1,5 @@
 package org.edrdg.jmdict.simplified.processing
 
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import org.edrdg.jmdict.simplified.commands.DictionaryOutputWriter
 import org.edrdg.jmdict.simplified.conversion.Converter
 import org.edrdg.jmdict.simplified.conversion.OutputDictionaryWord
@@ -15,22 +13,22 @@ import java.nio.file.Path
  * Parses, analyzes, and converts to JSON a dictionary XML file.
  * Can produce a report file.
  */
-class Convert<E : InputDictionaryEntry, W : OutputDictionaryWord<W>>(
+abstract class Convert<E : InputDictionaryEntry, W : OutputDictionaryWord<W>, M : Metadata>(
     override val dictionaryXmlFile: File,
     override val rootTagName: String,
-    override val parser: Parser<E>,
+    override val parser: Parser<E, M>,
     override val reportFile: File?,
     private val dictionaryName: String,
     private val version: String,
     private val languages: List<String>,
     private val outputDirectory: Path,
     private val outputs: List<DictionaryOutputWriter>,
-    private val converter: Converter<E, W>,
-) : DryRun<E>(
-    dictionaryXmlFile = dictionaryXmlFile,
-    rootTagName = rootTagName,
-    parser = parser,
-    reportFile = reportFile,
+    private val converter: Converter<E, W, M>,
+) : DryRun<E, M>(
+    dictionaryXmlFile,
+    rootTagName,
+    parser,
+    reportFile,
 ) {
     override fun reportFiles() {
         super.reportFiles()
@@ -41,25 +39,6 @@ class Convert<E : InputDictionaryEntry, W : OutputDictionaryWord<W>>(
             println(" - $dictionaryName-$it-$version.json")
         }
         println()
-    }
-
-    override fun beforeEntries(metadata: Metadata) {
-        super.beforeEntries(metadata)
-        converter.setMetadata(metadata)
-        outputs.forEach {
-            it.write(
-                """
-                {
-                "version": ${Json.encodeToString(version)},
-                "languages": ${Json.encodeToString(it.languages.toList().sorted())},
-                "commonOnly": ${Json.encodeToString(it.commonOnly)},
-                "dictDate": ${Json.encodeToString(metadata.date)},
-                "dictRevisions": ${Json.encodeToString(metadata.revisions)},
-                "tags": ${Json.encodeToString(metadata.entities)},
-                "words": [
-                """.trimIndent().trimEnd('\n', ' ')
-            )
-        }
     }
 
     override fun processEntry(entry: E) {

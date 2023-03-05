@@ -1,7 +1,7 @@
 package org.edrdg.jmdict.simplified.parsing
 
-data class Metadata(
+data class JMdictMetadata(
     val revisions: List<String>,
     val entities: Map<String, String>,
-    val date: String,
-)
+    override val date: String,
+) : Metadata(date)

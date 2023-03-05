@@ -4,22 +4,22 @@ import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.*
 import com.github.ajalt.clikt.parameters.types.path
 import net.swiftzer.semver.SemVer
-import org.edrdg.jmdict.simplified.processing.Convert
 import org.edrdg.jmdict.simplified.conversion.Converter
 import org.edrdg.jmdict.simplified.conversion.OutputDictionaryWord
 import org.edrdg.jmdict.simplified.parsing.InputDictionaryEntry
+import org.edrdg.jmdict.simplified.parsing.Metadata
 import org.edrdg.jmdict.simplified.parsing.Parser
 import java.util.*
 import kotlin.IllegalArgumentException
 
-abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryWord<W>>(
+abstract class ConvertCommand<E : InputDictionaryEntry, W : OutputDictionaryWord<W>, M : Metadata>(
     help: String = "Convert dictionary file into JSON",
     private val supportsCommonOnlyOutputs: Boolean,
-    private val parser: Parser<E>,
-    private val rootTagName: String,
-    private val dictionaryName: String,
-    private val converter: Converter<E, W>,
-) : AnalyzeDictionary<E>(
+    override val parser: Parser<E, M>,
+    override val rootTagName: String,
+    val dictionaryName: String,
+    val converter: Converter<E, W>,
+) : AnalyzeCommand<E, M>(
     help = help,
     parser = parser,
     rootTagName = rootTagName,
@@ -53,7 +53,7 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
         }
     }
 
-    private val languages by option(
+    val languages by option(
         "-l", "--languages",
         metavar = "LANGUAGES",
         help = "Comma-separated language IDs: ISO 639-2/B values, " +
@@ -80,7 +80,7 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
         }
     }
 
-    private val outputs by lazy {
+    val outputs by lazy {
         languages.map { language ->
             val fileName = "$dictionaryName-$language-$version.json"
             DictionaryOutputWriter(
@@ -94,7 +94,7 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
         }
     }
 
-    private val version by option(
+    val version by option(
         "-v", "--version",
         metavar = "VERSION",
         help = "Version which will be used in output files",
@@ -107,20 +107,5 @@ abstract class ConvertDictionary<E : InputDictionaryEntry, W : OutputDictionaryW
         }
     }
 
-    private val outputDirectory by argument().path(canBeFile = false, mustBeWritable = true)
-
-    override fun run() {
-        Convert(
-            dictionaryXmlFile = dictionaryXmlFile,
-            rootTagName = rootTagName,
-            parser = parser,
-            reportFile = reportFile,
-            dictionaryName = dictionaryName,
-            version = version,
-            languages = languages,
-            outputDirectory = outputDirectory,
-            outputs = outputs,
-            converter = converter,
-        ).run()
-    }
+    val outputDirectory by argument().path(canBeFile = false, mustBeWritable = true)
 }

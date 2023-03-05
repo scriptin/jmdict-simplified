@@ -6,16 +6,15 @@ import java.io.File
 import java.io.FileInputStream
 import javax.xml.namespace.QName
 import javax.xml.stream.XMLInputFactory
-import kotlin.math.round
 
 /**
  * Parses and analyzes a dictionary XML file without conversion to JSON.
  * Can produce a report file.
  */
-open class DryRun<E : InputDictionaryEntry>(
+abstract class DryRun<E : InputDictionaryEntry, M : Metadata>(
     open val dictionaryXmlFile: File,
     open val rootTagName: String,
-    open val parser: Parser<E>,
+    open val parser: Parser<E, M>,
     open val reportFile: File?,
 ) {
     private val eventReader by lazy {
@@ -44,21 +43,9 @@ open class DryRun<E : InputDictionaryEntry>(
         }
     }
 
-    private fun getDictionaryMetadataTable(metadata: Metadata): String {
-        val fileSize = dictionaryXmlFile.length()
-        val fileSizeMB = round(fileSize.toDouble() / 1024.0 / 1024.0).toInt()
-        return MarkdownUtils.table(
-            listOf("Attribute", "Value"),
-            listOf(
-                listOf("File size", "${fileSizeMB}MB ($fileSize bytes)"),
-                listOf("Date", metadata.date),
-                listOf("Revisions", metadata.revisions.joinToString(", ")),
-                listOf("# of XML entities", metadata.entities.size),
-            )
-        )
-    }
+    abstract fun getDictionaryMetadataTable(metadata: M): String
 
-    open fun beforeEntries(metadata: Metadata) {
+    open fun beforeEntries(metadata: M) {
         writeln(MarkdownUtils.heading("Dictionary metadata", level = 3))
         writeln()
         writeln(getDictionaryMetadataTable(metadata))

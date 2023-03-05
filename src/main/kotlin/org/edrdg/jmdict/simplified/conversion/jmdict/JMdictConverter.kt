@@ -2,10 +2,17 @@ package org.edrdg.jmdict.simplified.conversion.jmdict
 
 import org.edrdg.jmdict.simplified.conversion.ConversionException
 import org.edrdg.jmdict.simplified.conversion.Converter
+import org.edrdg.jmdict.simplified.parsing.JMdictMetadata
 import org.edrdg.jmdict.simplified.parsing.jmdict.JMdictXmlElement
-import org.edrdg.jmdict.simplified.parsing.Metadata
 
-class JMdictConverter : Converter<JMdictXmlElement.Entry, JMdictJsonElement.Word>() {
+class JMdictConverter : Converter<JMdictXmlElement.Entry, JMdictJsonElement.Word, JMdictMetadata>() {
+    override fun entity(value: String): String? {
+        require(metadata != null) {
+            "Metadata must be set"
+        }
+        return metadata!!.entities.entries.find { it.value == value }?.key
+    }
+
     override fun convert(xmlEntry: JMdictXmlElement.Entry) = JMdictJsonElement.Word(
         id = xmlEntry.entSeq.text,
         kanji = xmlEntry.kEle.map { kanji(it, xmlEntry.entSeq.text) },
