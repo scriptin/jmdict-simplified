@@ -116,4 +116,11 @@ sealed class ParsingException : RuntimeException {
         "Invalid format of a text '$text' in tag $parentTag: $details - at ${showLocation(parentTag.location)}",
         cause
     )
+
+    class InvalidDoctypeFormat(
+        dtd: String,
+        details: String,
+    ) : ParsingException(
+        "Invalid format of DTD string: $details\n$dtd"
+    )
 }
