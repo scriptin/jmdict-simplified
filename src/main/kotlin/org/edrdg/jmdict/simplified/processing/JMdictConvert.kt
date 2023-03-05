@@ -40,7 +40,7 @@ class JMdictConvert<E : InputDictionaryEntry, W : OutputDictionaryWord<W>>(
 ) {
     override fun beforeEntries(metadata: JMdictMetadata) {
         super.beforeEntries(metadata)
-        converter.setMetadata(metadata)
+        converter.metadata = metadata
         outputs.forEach {
             it.write(
                 """

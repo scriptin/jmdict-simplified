@@ -6,10 +6,6 @@ import org.edrdg.jmdict.simplified.parsing.Metadata
 abstract class Converter<E : InputDictionaryEntry, W : OutputDictionaryWord<W>, M : Metadata> {
     var metadata: M? = null
 
-    fun setMetadata(m: M) {
-        this.metadata = m
-    }
-
     abstract fun convert(xmlEntry: E): W
 
     abstract fun entity(value: String): String?
