@@ -29,7 +29,7 @@ object Kanjidic2Parser : Parser<Kanjidic2XmlElement.Character, Kanjidic2Metadata
         val dtdDate = versionMatch.groupValues[2]
 
         eventReader.openTag(QName("kanjidic2"), "Kanjidic opening tag")
-        val header = eventReader.tag(QName("header"), "Kanjidic header") { header ->
+        val header = eventReader.tag(QName("header"), "Kanjidic header") {
             Kanjidic2XmlElement.Header(
                 fileVersion = eventReader.tag(QName("file_version"), "File version") {
                     Kanjidic2XmlElement.FileVersion(eventReader.text(it).toInt())
