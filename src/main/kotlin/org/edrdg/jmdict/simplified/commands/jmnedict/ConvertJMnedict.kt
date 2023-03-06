@@ -6,7 +6,9 @@ import org.edrdg.jmdict.simplified.conversion.jmnedict.JMnedictJsonElement
 import org.edrdg.jmdict.simplified.parsing.JMdictMetadata
 import org.edrdg.jmdict.simplified.parsing.jmnedict.JMnedictParser
 import org.edrdg.jmdict.simplified.parsing.jmnedict.JMnedictXmlElement
-import org.edrdg.jmdict.simplified.processing.JMdictConvert
+import org.edrdg.jmdict.simplified.processing.jmdict.JMdictConvertingProcessor
+import java.io.FileInputStream
+import javax.xml.stream.XMLInputFactory
 
 class ConvertJMnedict : ConvertCommand<JMnedictXmlElement.Entry, JMnedictJsonElement.Word, JMdictMetadata>(
     supportsCommonOnlyOutputs = false,
@@ -17,10 +19,14 @@ class ConvertJMnedict : ConvertCommand<JMnedictXmlElement.Entry, JMnedictJsonEle
     converter = JMnedictConverter(),
 ) {
     override fun run() {
-        JMdictConvert(
-            dictionaryXmlFile = dictionaryXmlFile,
+        val factory = XMLInputFactory.newFactory()
+        factory.setProperty(XMLInputFactory.IS_COALESCING, true)
+        val eventReader = factory.createXMLEventReader(FileInputStream(dictionaryXmlFile))
+        JMdictConvertingProcessor(
             rootTagName = rootTagName,
             parser = parser,
+            eventReader = eventReader,
+            dictionaryXmlFile = dictionaryXmlFile,
             reportFile = reportFile,
             dictionaryName = dictionaryName,
             version = version,

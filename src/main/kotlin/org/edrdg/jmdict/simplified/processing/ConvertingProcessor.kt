@@ -6,32 +6,26 @@ import org.edrdg.jmdict.simplified.conversion.OutputDictionaryWord
 import org.edrdg.jmdict.simplified.parsing.InputDictionaryEntry
 import org.edrdg.jmdict.simplified.parsing.Metadata
 import org.edrdg.jmdict.simplified.parsing.Parser
-import java.io.File
 import java.nio.file.Path
+import javax.xml.stream.XMLEventReader
 
 /**
  * Parses, analyzes, and converts to JSON a dictionary XML file.
  * Can produce a report file.
  */
-abstract class Convert<E : InputDictionaryEntry, W : OutputDictionaryWord<W>, M : Metadata>(
-    override val dictionaryXmlFile: File,
-    override val rootTagName: String,
+class ConvertingProcessor<E : InputDictionaryEntry, W : OutputDictionaryWord<W>, M : Metadata>(
     override val parser: Parser<E, M>,
-    override val reportFile: File?,
+    override val rootTagName: String,
+    override val eventReader: XMLEventReader,
     private val dictionaryName: String,
     private val version: String,
     private val languages: List<String>,
     private val outputDirectory: Path,
     private val outputs: List<DictionaryOutputWriter>,
     private val converter: Converter<E, W, M>,
-) : DryRun<E, M>(
-    dictionaryXmlFile,
-    rootTagName,
-    parser,
-    reportFile,
-) {
-    override fun reportFiles() {
-        super.reportFiles()
+    override val skipOpeningRootTag: Boolean,
+) : DictionaryProcessor<E, M> {
+    override fun onStart() {
         println("Output directory: $outputDirectory")
         println()
         println("Output files:")
@@ -41,8 +35,10 @@ abstract class Convert<E : InputDictionaryEntry, W : OutputDictionaryWord<W>, M 
         println()
     }
 
+    override fun beforeEntries(metadata: M) {
+    }
+
     override fun processEntry(entry: E) {
-        super.processEntry(entry)
         val word = converter.convert(entry)
         val relevantOutputs = outputs.filter { it.acceptsWord(word) }
         relevantOutputs.forEach { output ->
@@ -54,7 +50,6 @@ abstract class Convert<E : InputDictionaryEntry, W : OutputDictionaryWord<W>, M 
     }
 
     override fun afterEntries() {
-        super.afterEntries()
         outputs.forEach {
             it.write(
                 """
@@ -65,8 +60,7 @@ abstract class Convert<E : InputDictionaryEntry, W : OutputDictionaryWord<W>, M 
         }
     }
 
-    override fun finish() {
-        super.finish()
+    override fun onFinish() {
         outputs.forEach { it.close() }
     }
 }

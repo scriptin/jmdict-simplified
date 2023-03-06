@@ -1,31 +1,26 @@
 package org.edrdg.jmdict.simplified.processing
 
 import org.edrdg.jmdict.simplified.parsing.*
-import org.edrdg.jmdict.simplified.parsing.openTag
 import java.io.File
-import java.io.FileInputStream
-import javax.xml.namespace.QName
-import javax.xml.stream.XMLInputFactory
+import javax.xml.stream.XMLEventReader
 
 /**
  * Parses and analyzes a dictionary XML file without conversion to JSON.
  * Can produce a report file.
  */
-abstract class DryRun<E : InputDictionaryEntry, M : Metadata>(
+open class ReportingProcessor<E : InputDictionaryEntry, M : Metadata>(
+    override val parser: Parser<E, M>,
+    override val rootTagName: String,
+    override val eventReader: XMLEventReader,
+    override val skipOpeningRootTag: Boolean,
+    /** Source file name for reporting */
     open val dictionaryXmlFile: File,
-    open val rootTagName: String,
-    open val parser: Parser<E, M>,
+    /** Set if you want to write report to a file instead of printing to terminal */
     open val reportFile: File?,
-) {
-    private val eventReader by lazy {
-        val factory = XMLInputFactory.newFactory()
-        factory.setProperty(XMLInputFactory.IS_COALESCING, true)
-        factory.createXMLEventReader(FileInputStream(dictionaryXmlFile))
-    }
-
+) : DictionaryProcessor<E, M> {
     private val reportFileWriter by lazy { reportFile?.writer() }
 
-    private fun writeln(text: String = "") {
+    fun writeln(text: String = "") {
         if (reportFile != null) {
             reportFileWriter?.write("$text\n")
         } else {
@@ -33,7 +28,7 @@ abstract class DryRun<E : InputDictionaryEntry, M : Metadata>(
         }
     }
 
-    open fun reportFiles() {
+    override fun onStart() {
         println("Input file: $dictionaryXmlFile")
         println()
 
@@ -43,19 +38,15 @@ abstract class DryRun<E : InputDictionaryEntry, M : Metadata>(
         }
     }
 
-    abstract fun getDictionaryMetadataTable(metadata: M): String
-
-    open fun beforeEntries(metadata: M) {
+    override fun beforeEntries(metadata: M) {
         writeln(MarkdownUtils.heading("Dictionary metadata", level = 3))
-        writeln()
-        writeln(getDictionaryMetadataTable(metadata))
         writeln()
     }
 
     private var entryCount: Long = 0L
     private val entriesByLanguage = mutableMapOf<String, Long>()
 
-    open fun processEntry(entry: E) {
+    override fun processEntry(entry: E) {
         entryCount += 1
         entry.allLanguages.forEach { lang ->
             entriesByLanguage.putIfAbsent(lang, 0L)
@@ -77,7 +68,7 @@ abstract class DryRun<E : InputDictionaryEntry, M : Metadata>(
         )
     }
 
-    open fun afterEntries() {
+    override fun afterEntries() {
         writeln(MarkdownUtils.heading("Entries by language", level = 3))
         writeln()
         writeln(getEntriesSummaryTable(entryCount, entriesByLanguage))
@@ -85,33 +76,8 @@ abstract class DryRun<E : InputDictionaryEntry, M : Metadata>(
         println("Entries processed: $entryCount")
     }
 
-    open fun finish() {
+    override fun onFinish() {
         reportFileWriter?.close()
         eventReader.close()
-    }
-
-    /**
-     * In some cases we want to parse the root tag, e.g. to read attributes.
-     * Return true if you want to automatically skip the opening tag.
-     */
-    abstract fun skipOpeningRootTag(): Boolean
-
-    fun run() {
-        try {
-            reportFiles()
-            val metadata = parser.parseMetadata(eventReader)
-            beforeEntries(metadata)
-            if (skipOpeningRootTag()) {
-                eventReader.openTag(QName(rootTagName), "root opening tag")
-            }
-            while (parser.hasNextEntry(eventReader)) {
-                val entry = parser.parseEntry(eventReader)
-                processEntry(entry)
-            }
-            eventReader.closeTag(QName(rootTagName), "root closing tag")
-            afterEntries()
-        } finally {
-            finish()
-        }
     }
 }
