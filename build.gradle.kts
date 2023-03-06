@@ -28,6 +28,7 @@ plugins {
 
 application {
     mainClass.set("org.edrdg.jmdict.simplified.MainKt")
+    applicationDefaultJvmArgs = listOf("-Xmx6g", "-Djdk.xml.entityExpansionLimit=0")
 }
 
 tasks {
