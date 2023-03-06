@@ -280,7 +280,8 @@ internal fun <E : Enum<E>> StartElement.attrEnum(
  */
 internal fun Attribute.toInt(context: StartElement): Int {
     try {
-        return value.toInt()
+        if (Regex("^0+$").matches(value)) return 0;
+        return value.trimStart('0').toInt()
     } catch (e: NumberFormatException) {
         throw ParsingException.InvalidAttributeFormat(context, this, "expected integer", e)
     }
