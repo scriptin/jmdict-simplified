@@ -90,12 +90,20 @@ abstract class DryRun<E : InputDictionaryEntry, M : Metadata>(
         eventReader.close()
     }
 
+    /**
+     * In some cases we want to parse the root tag, e.g. to read attributes.
+     * Return true if you want to automatically skip the opening tag.
+     */
+    abstract fun skipOpeningRootTag(): Boolean
+
     fun run() {
         try {
             reportFiles()
             val metadata = parser.parseMetadata(eventReader)
             beforeEntries(metadata)
-            eventReader.openTag(QName(rootTagName), "root opening tag")
+            if (skipOpeningRootTag()) {
+                eventReader.openTag(QName(rootTagName), "root opening tag")
+            }
             while (parser.hasNextEntry(eventReader)) {
                 val entry = parser.parseEntry(eventReader)
                 processEntry(entry)

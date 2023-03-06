@@ -19,6 +19,10 @@ open class Kanjidic2DryRun<E : InputDictionaryEntry>(
     parser,
     reportFile,
 ) {
+    override fun skipOpeningRootTag(): Boolean {
+        return false
+    }
+
     override fun getDictionaryMetadataTable(metadata: Kanjidic2Metadata): String {
         return getDictionaryMetadataMarkdownTable(dictionaryXmlFile, metadata)
     }

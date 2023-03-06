@@ -38,6 +38,10 @@ class JMdictConvert<E : InputDictionaryEntry, W : OutputDictionaryWord<W>>(
     outputs,
     converter,
 ) {
+    override fun skipOpeningRootTag(): Boolean {
+        return true
+    }
+
     override fun beforeEntries(metadata: JMdictMetadata) {
         super.beforeEntries(metadata)
         converter.metadata = metadata

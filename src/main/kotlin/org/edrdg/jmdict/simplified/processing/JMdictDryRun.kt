@@ -19,6 +19,10 @@ open class JMdictDryRun<E : InputDictionaryEntry>(
     parser,
     reportFile,
 ) {
+    override fun skipOpeningRootTag(): Boolean {
+        return true
+    }
+
     override fun getDictionaryMetadataTable(metadata: JMdictMetadata): String {
         return getDictionaryMetadataMarkdownTable(dictionaryXmlFile, metadata)
     }
