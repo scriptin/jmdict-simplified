@@ -163,9 +163,12 @@ internal fun <T> XMLEventReader.simpleTagList(
 internal fun <T> XMLEventReader.nonEmptyTagList(
     parentTag: StartElement,
     childTagName: QName,
-    extractor: () -> T?
+    description: String,
+    extractor: (StartElement) -> T?
 ): List<T> {
-    val result = tagList(childTagName, extractor)
+    val result = tagList(childTagName) {
+        tag(childTagName, description, extractor)
+    }
     if (result.isEmpty()) {
         throw ParsingException.EmptyChildrenList(parentTag, childTagName)
     }

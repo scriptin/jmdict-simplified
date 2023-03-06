@@ -45,10 +45,10 @@ object JMdictParser : Parser<JMdictXmlElement.Entry, JMdictMetadata> {
                 kEle = eventReader.tagList(QName("k_ele")) {
                     kEle(eventReader)
                 },
-                rEle = eventReader.nonEmptyTagList(entry, QName("r_ele")) {
+                rEle = eventReader.nonEmptyTagList(entry, QName("r_ele"), "r_ele") {
                     rEle(eventReader)
                 },
-                sense = eventReader.nonEmptyTagList(entry, QName("sense")) {
+                sense = eventReader.nonEmptyTagList(entry, QName("sense"), "sense") {
                     sense(eventReader)
                 },
             )
