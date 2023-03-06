@@ -7,7 +7,9 @@ import org.edrdg.jmdict.simplified.parsing.JMdictMetadata
 import org.edrdg.jmdict.simplified.parsing.XMLEventReaderBuilder
 import org.edrdg.jmdict.simplified.parsing.jmnedict.JMnedictParser
 import org.edrdg.jmdict.simplified.parsing.jmnedict.JMnedictXmlElement
-import org.edrdg.jmdict.simplified.processing.jmdict.JMdictConvertingProcessor
+import org.edrdg.jmdict.simplified.processing.EventLoop
+import org.edrdg.jmdict.simplified.processing.jmdict.JMdictConvertingHandler
+import org.edrdg.jmdict.simplified.processing.jmdict.JMdictReportingHandler
 
 class ConvertJMnedict : ConvertCommand<JMnedictXmlElement.Entry, JMnedictJsonElement.Word, JMdictMetadata>(
     supportsCommonOnlyOutputs = false,
@@ -18,18 +20,24 @@ class ConvertJMnedict : ConvertCommand<JMnedictXmlElement.Entry, JMnedictJsonEle
     converter = JMnedictConverter(),
 ) {
     override fun run() {
-        JMdictConvertingProcessor(
-            rootTagName = rootTagName,
+        EventLoop(
             parser = parser,
             eventReader = XMLEventReaderBuilder.build(dictionaryXmlFile),
-            dictionaryXmlFile = dictionaryXmlFile,
-            reportFile = reportFile,
-            dictionaryName = dictionaryName,
-            version = version,
-            languages = languages,
-            outputDirectory = outputDirectory,
-            outputs = outputs,
-            converter = converter,
+            rootTagName = rootTagName,
+            skipOpeningRootTag = true,
+        ).addHandlers(
+            JMdictReportingHandler(
+                dictionaryXmlFile = dictionaryXmlFile,
+                reportFile = reportFile,
+            ),
+            JMdictConvertingHandler(
+                dictionaryName = dictionaryName,
+                version = version,
+                languages = languages,
+                outputDirectory = outputDirectory,
+                outputs = outputs,
+                converter = converter,
+            ),
         ).run()
     }
 }

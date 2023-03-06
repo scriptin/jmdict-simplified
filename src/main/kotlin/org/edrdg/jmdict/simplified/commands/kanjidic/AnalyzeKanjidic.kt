@@ -5,7 +5,8 @@ import org.edrdg.jmdict.simplified.parsing.Kanjidic2Metadata
 import org.edrdg.jmdict.simplified.parsing.XMLEventReaderBuilder
 import org.edrdg.jmdict.simplified.parsing.kanjidic.Kanjidic2Parser
 import org.edrdg.jmdict.simplified.parsing.kanjidic.Kanjidic2XmlElement
-import org.edrdg.jmdict.simplified.processing.kanjidic.Kanjidic2ReportingProcessor
+import org.edrdg.jmdict.simplified.processing.EventLoop
+import org.edrdg.jmdict.simplified.processing.kanjidic.Kanjidic2ReportingHandler
 
 class AnalyzeKanjidic : AnalyzeCommand<Kanjidic2XmlElement.Character, Kanjidic2Metadata>(
     help = "Analyze kanjidic2.xml file contents",
@@ -13,12 +14,16 @@ class AnalyzeKanjidic : AnalyzeCommand<Kanjidic2XmlElement.Character, Kanjidic2M
     rootTagName = "kanjidic2",
 ) {
     override fun run() {
-        Kanjidic2ReportingProcessor(
-            rootTagName = rootTagName,
+        EventLoop(
             parser = parser,
             eventReader = XMLEventReaderBuilder.build(dictionaryXmlFile),
-            dictionaryXmlFile = dictionaryXmlFile,
-            reportFile = reportFile,
+            rootTagName = rootTagName,
+            skipOpeningRootTag = false,
+        ).addHandlers(
+            Kanjidic2ReportingHandler(
+                dictionaryXmlFile = dictionaryXmlFile,
+                reportFile = reportFile,
+            ),
         ).run()
     }
 }

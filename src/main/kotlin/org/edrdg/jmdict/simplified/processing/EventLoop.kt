@@ -4,43 +4,40 @@ import org.edrdg.jmdict.simplified.parsing.*
 import javax.xml.namespace.QName
 import javax.xml.stream.XMLEventReader
 
-interface DictionaryProcessor<E : InputDictionaryEntry, M : Metadata> {
-    val parser: Parser<E, M>
-    val eventReader: XMLEventReader
-    val rootTagName: String
-
-    fun onStart()
-
-    fun beforeEntries(metadata: M)
-
-    fun processEntry(entry: E)
-
-    fun afterEntries()
-
-    fun onFinish()
-
+class EventLoop<E : InputDictionaryEntry, M : Metadata>(
+    val parser: Parser<E, M>,
+    val eventReader: XMLEventReader,
+    val rootTagName: String,
     /**
      * In some cases we want to parse the root tag, e.g. to read attributes.
      * Return true if you want to automatically skip the opening tag.
      */
-    val skipOpeningRootTag: Boolean
+    private val skipOpeningRootTag: Boolean,
+) {
+    private val _handlers: MutableList<EventHandler<E, M>> = mutableListOf()
+
+    fun addHandlers(vararg handlers: EventHandler<E, M>): EventLoop<E, M> {
+        _handlers.addAll(handlers)
+        return this
+    }
 
     fun run() {
         try {
-            onStart()
+            _handlers.forEach { it.onStart() }
             val metadata = parser.parseMetadata(eventReader)
-            beforeEntries(metadata)
+            _handlers.forEach { it.beforeEntries(metadata) }
             if (skipOpeningRootTag) {
                 eventReader.openTag(QName(rootTagName), "root opening tag")
             }
             while (parser.hasNextEntry(eventReader)) {
                 val entry = parser.parseEntry(eventReader)
-                processEntry(entry)
+                _handlers.forEach { it.onEntry(entry) }
             }
             eventReader.closeTag(QName(rootTagName), "root closing tag")
-            afterEntries()
+            _handlers.forEach { it.afterEntries() }
         } finally {
-            onFinish()
+            _handlers.forEach { it.onFinish() }
+            eventReader.close()
         }
     }
 }

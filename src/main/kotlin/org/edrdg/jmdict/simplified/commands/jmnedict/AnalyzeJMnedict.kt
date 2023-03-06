@@ -5,7 +5,8 @@ import org.edrdg.jmdict.simplified.parsing.JMdictMetadata
 import org.edrdg.jmdict.simplified.parsing.XMLEventReaderBuilder
 import org.edrdg.jmdict.simplified.parsing.jmnedict.JMnedictParser
 import org.edrdg.jmdict.simplified.parsing.jmnedict.JMnedictXmlElement
-import org.edrdg.jmdict.simplified.processing.jmdict.JMdictReportingProcessor
+import org.edrdg.jmdict.simplified.processing.EventLoop
+import org.edrdg.jmdict.simplified.processing.jmdict.JMdictReportingHandler
 
 class AnalyzeJMnedict : AnalyzeCommand<JMnedictXmlElement.Entry, JMdictMetadata>(
     help = "Analyze JMnedict.xml file contents",
@@ -13,12 +14,16 @@ class AnalyzeJMnedict : AnalyzeCommand<JMnedictXmlElement.Entry, JMdictMetadata>
     rootTagName = "JMnedict",
 ) {
     override fun run() {
-        JMdictReportingProcessor(
-            dictionaryXmlFile = dictionaryXmlFile,
-            rootTagName = rootTagName,
-            eventReader = XMLEventReaderBuilder.build(dictionaryXmlFile),
+        EventLoop(
             parser = parser,
-            reportFile = reportFile,
+            eventReader = XMLEventReaderBuilder.build(dictionaryXmlFile),
+            rootTagName = rootTagName,
+            skipOpeningRootTag = true,
+        ).addHandlers(
+            JMdictReportingHandler(
+                dictionaryXmlFile = dictionaryXmlFile,
+                reportFile = reportFile,
+            ),
         ).run()
     }
 }

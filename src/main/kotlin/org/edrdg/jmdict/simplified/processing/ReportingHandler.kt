@@ -2,25 +2,20 @@ package org.edrdg.jmdict.simplified.processing
 
 import org.edrdg.jmdict.simplified.parsing.*
 import java.io.File
-import javax.xml.stream.XMLEventReader
 
 /**
  * Parses and analyzes a dictionary XML file without conversion to JSON.
  * Can produce a report file.
  */
-open class ReportingProcessor<E : InputDictionaryEntry, M : Metadata>(
-    override val parser: Parser<E, M>,
-    override val rootTagName: String,
-    override val eventReader: XMLEventReader,
-    override val skipOpeningRootTag: Boolean,
+open class ReportingHandler<E : InputDictionaryEntry, M : Metadata>(
     /** Source file name for reporting */
     open val dictionaryXmlFile: File,
     /** Set if you want to write report to a file instead of printing to terminal */
     open val reportFile: File?,
-) : DictionaryProcessor<E, M> {
+) : EventHandler<E, M> {
     private val reportFileWriter by lazy { reportFile?.writer() }
 
-    fun writeln(text: String = "") {
+    internal fun writeln(text: String = "") {
         if (reportFile != null) {
             reportFileWriter?.write("$text\n")
         } else {
@@ -46,7 +41,7 @@ open class ReportingProcessor<E : InputDictionaryEntry, M : Metadata>(
     private var entryCount: Long = 0L
     private val entriesByLanguage = mutableMapOf<String, Long>()
 
-    override fun processEntry(entry: E) {
+    override fun onEntry(entry: E) {
         entryCount += 1
         entry.allLanguages.forEach { lang ->
             entriesByLanguage.putIfAbsent(lang, 0L)
@@ -78,6 +73,5 @@ open class ReportingProcessor<E : InputDictionaryEntry, M : Metadata>(
 
     override fun onFinish() {
         reportFileWriter?.close()
-        eventReader.close()
     }
 }
