@@ -42,7 +42,7 @@ object JMdictParser : Parser<JMdictXmlElement.Entry, JMdictMetadata> {
         return eventReader.tag(QName("entry"), "entry") { entry ->
             JMdictXmlElement.Entry(
                 entSeq = entSeq(eventReader),
-                kEle = eventReader.tagList(QName("k_ele")) {
+                kEle = eventReader.simpleTagList(QName("k_ele"), "k_ele") {
                     kEle(eventReader)
                 },
                 rEle = eventReader.nonEmptyTagList(entry, QName("r_ele"), "r_ele") {
