@@ -109,7 +109,7 @@ internal fun XMLEventReader.closeTag(name: QName, description: String) {
 }
 
 /**
- * Read whole tag (opening and closing) given a lambda to parse its' attributes and body
+ * Read whole tag (opening and closing) given a lambda to parse its attributes and body
  */
 internal fun <T> XMLEventReader.tag(name: QName, description: String, convert: (StartElement) -> T): T {
     val tag = openTag(name, description)
@@ -134,7 +134,7 @@ internal fun <T> XMLEventReader.maybeTag(name: QName, description: String, conve
 /**
  * Read a homogeneous list of child tags
  */
-internal fun <T> XMLEventReader.tagList(name: QName, extractor: () -> T?): List<T> {
+internal fun <T> XMLEventReader.tagList(name: QName, extractor: () -> T): List<T> {
     val result = mutableListOf<T>()
     while (hasNext()) {
         skipSpace()
@@ -164,11 +164,9 @@ internal fun <T> XMLEventReader.nonEmptyTagList(
     parentTag: StartElement,
     childTagName: QName,
     description: String,
-    extractor: (StartElement) -> T?
+    extractor: (StartElement) -> T
 ): List<T> {
-    val result = tagList(childTagName) {
-        tag(childTagName, description, extractor)
-    }
+    val result = this.simpleTagList(childTagName, description, extractor)
     if (result.isEmpty()) {
         throw ParsingException.EmptyChildrenList(parentTag, childTagName)
     }
