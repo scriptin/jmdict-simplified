@@ -124,25 +124,22 @@ internal fun <T> XMLEventReader.tag(name: QName, description: String, convert: (
 internal fun <T> XMLEventReader.maybeTag(name: QName, description: String, convert: (StartElement) -> T?): T? {
     skipSpace()
     val next = peek()
-    return if (!next.isStartElement || next.asStartElement().name.toPlainString() != name.toPlainString()) {
-        null
-    } else {
-        tag(name, description, convert)
+    if (!next.isStartElement || next.asStartElement().name.toPlainString() != name.toPlainString()) {
+        return null
     }
+    return tag(name, description, convert)
 }
 
 /**
  * Read a homogeneous list of child tags
  */
-internal fun <T> XMLEventReader.tagList(name: QName, extractor: () -> T): List<T> {
+internal fun <T> XMLEventReader.tagList(name: QName, extractor: () -> T?): List<T> {
     val result = mutableListOf<T>()
     while (hasNext()) {
         skipSpace()
         val next = peek()
-        if (
-            next.isEndElement // end of a parent tag
-            || (next.isStartElement && next.asStartElement().name.toPlainString() != name.toPlainString()) // or other tags
-        ) break
+        if (next.isEndElement) break // end of a parent tag
+        if (next.isStartElement && next.asStartElement().name.toPlainString() != name.toPlainString()) break // other tags
         result.add(extractor() ?: break)
     }
     skipSpace()
