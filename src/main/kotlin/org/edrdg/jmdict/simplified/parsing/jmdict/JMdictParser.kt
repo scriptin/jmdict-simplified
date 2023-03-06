@@ -42,15 +42,9 @@ object JMdictParser : Parser<JMdictXmlElement.Entry, JMdictMetadata> {
         return eventReader.tag(QName("entry"), "entry") { entry ->
             JMdictXmlElement.Entry(
                 entSeq = entSeq(eventReader),
-                kEle = eventReader.simpleTagList(QName("k_ele"), "k_ele") {
-                    kEle(eventReader)
-                },
-                rEle = eventReader.nonEmptyTagList(entry, QName("r_ele"), "r_ele") {
-                    rEle(eventReader)
-                },
-                sense = eventReader.nonEmptyTagList(entry, QName("sense"), "sense") {
-                    sense(eventReader)
-                },
+                kEle = kEle(eventReader),
+                rEle = rEle(eventReader, entry),
+                sense = sense(eventReader, entry),
             )
         }
     }
@@ -59,7 +53,7 @@ object JMdictParser : Parser<JMdictXmlElement.Entry, JMdictMetadata> {
         JMdictXmlElement.EntSeq(eventReader.text(it))
     }
 
-    private fun kEle(eventReader: XMLEventReader) = eventReader.tag(QName("k_ele"), "k_ele") {
+    private fun kEle(eventReader: XMLEventReader) = eventReader.simpleTagList(QName("k_ele"), "k_ele") {
         JMdictXmlElement.KEle(
             keb = eventReader.tag(QName("keb"), "keb") {
                 JMdictXmlElement.Keb(eventReader.text(it))
@@ -73,7 +67,7 @@ object JMdictParser : Parser<JMdictXmlElement.Entry, JMdictMetadata> {
         )
     }
 
-    private fun rEle(eventReader: XMLEventReader) = eventReader.tag(QName("r_ele"), "r_ele") {
+    private fun rEle(eventReader: XMLEventReader, parent: StartElement) = eventReader.nonEmptyTagList(parent, QName("r_ele"), "r_ele") {
         JMdictXmlElement.REle(
             reb = eventReader.tag(QName("reb"), "reb") {
                 JMdictXmlElement.Reb(eventReader.text(it))
@@ -93,7 +87,7 @@ object JMdictParser : Parser<JMdictXmlElement.Entry, JMdictMetadata> {
         )
     }
 
-    private fun sense(eventReader: XMLEventReader) = eventReader.tag(QName("sense"), "sense") {
+    private fun sense(eventReader: XMLEventReader, parent: StartElement) = eventReader.nonEmptyTagList(parent, QName("sense"), "sense") {
         JMdictXmlElement.Sense(
             stagk = eventReader.simpleTagList(QName("stagk"), "stagk") {
                 JMdictXmlElement.Stagk(eventReader.text(it))
