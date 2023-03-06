@@ -472,7 +472,7 @@ sealed class Kanjidic2XmlElement(open val name: String) {
          * Leading zeroes are dropped here
          */
         val mPage: Int?,
-        val value: Int,
+        val value: String,
     ) : Kanjidic2XmlElement("dic_ref")
 
     /**
