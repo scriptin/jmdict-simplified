@@ -89,14 +89,7 @@ class Kanjidic2Converter : Converter<Kanjidic2XmlElement.Character, Kanjidic2Jso
         return Kanjidic2JsonElement.DictionaryReference(
             type = type,
             morohashi = when (type) {
-                Kanjidic2JsonElement.DictionaryReferenceType.MORO -> {
-                    if (dicRef.mVol == null || dicRef.mPage == null)
-                        throw Error("mVol and mPage must be non-null when type == $type")
-                    Kanjidic2JsonElement.Morohashi(
-                        volume = dicRef.mVol,
-                        page = dicRef.mPage,
-                    )
-                }
+                Kanjidic2JsonElement.DictionaryReferenceType.MORO -> morohashi(dicRef)
                 else -> {
                     if (dicRef.mVol != null || dicRef.mPage != null)
                         throw Error("mVol and mPage must be null when type == $type")
@@ -106,6 +99,19 @@ class Kanjidic2Converter : Converter<Kanjidic2XmlElement.Character, Kanjidic2Jso
             value = dicRef.value,
         )
     }
+
+    private fun morohashi(dicRef: Kanjidic2XmlElement.DicRef) =
+        if (dicRef.mVol == null && dicRef.mPage == null)
+            null
+        else if (dicRef.mVol != null && dicRef.mPage != null)
+            Kanjidic2JsonElement.Morohashi(
+                volume = dicRef.mVol,
+                page = dicRef.mPage,
+            )
+        else if (dicRef.mVol == null)
+            throw Error("mVol must be non-null when type == ${Kanjidic2JsonElement.DictionaryReferenceType.MORO.value} and mPage is set")
+        else
+            throw Error("mPage must be non-null when type == ${Kanjidic2JsonElement.DictionaryReferenceType.MORO.value} and mVol is set")
 
     private fun queryCode(qCode: Kanjidic2XmlElement.QCode): Kanjidic2JsonElement.QueryCode {
         val type = when (qCode.qcType) {
