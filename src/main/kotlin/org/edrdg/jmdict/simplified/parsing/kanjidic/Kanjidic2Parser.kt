@@ -94,7 +94,7 @@ object Kanjidic2Parser : Parser<Kanjidic2XmlElement.Character, Kanjidic2Metadata
                         Kanjidic2XmlElement.RadType.values(),
                         Kanjidic2XmlElement.RadType::fromString,
                     ) ?: throw ParsingException.MissingRequiredAttribute(radValue, QName("cp_type")),
-                    text = eventReader.text(radValue),
+                    value = eventReader.text(radValue).toInt(),
                 )
             },
         )

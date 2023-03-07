@@ -198,7 +198,7 @@ sealed class Kanjidic2XmlElement(open val name: String) {
          * ~~~
          */
         val radType: RadType,
-        val text: String,
+        val value: Int,
     ) : Kanjidic2XmlElement("rad_value")
 
     /**
