@@ -118,7 +118,7 @@ class Kanjidic2Converter : Converter<Kanjidic2XmlElement.Character, Kanjidic2Jso
         return Kanjidic2JsonElement.QueryCode(
             type = type,
             skipMisclassification = when (type) {
-                Kanjidic2JsonElement.QueryCodeType.MISCLASS -> when (qCode.skipMisclass) {
+                Kanjidic2JsonElement.QueryCodeType.SKIP -> when (qCode.skipMisclass) {
                     Kanjidic2XmlElement.SkipMisclass.POSN -> Kanjidic2JsonElement.SkipMisclassification.POSN
                     Kanjidic2XmlElement.SkipMisclass.STROKE_COUNT -> Kanjidic2JsonElement.SkipMisclassification.STROKE_COUNT
                     Kanjidic2XmlElement.SkipMisclass.STROKE_AND_POSN -> Kanjidic2JsonElement.SkipMisclassification.STROKE_AND_POSN
