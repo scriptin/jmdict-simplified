@@ -2,6 +2,8 @@ package org.edrdg.jmdict.simplified.conversion.kanjidic
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.edrdg.jmdict.simplified.conversion.OutputDictionaryWord
 
 sealed class Kanjidic2JsonElement {
@@ -15,15 +17,26 @@ sealed class Kanjidic2JsonElement {
         val queryCodes: List<QueryCode>,
         val readingMeaning: ReadingMeaning,
     ) : OutputDictionaryWord<Character> {
-        override val allLanguages: Set<String> = emptySet()
+        override val allLanguages: Set<String>
+            get() = readingMeaning
+                .groups
+                .flatMap { group -> group.meanings.map { it.lang } }
+                .toSet()
 
-        override fun onlyWithLanguages(languages: Set<String>): Character {
-            TODO("Not yet implemented")
-        }
+        override fun onlyWithLanguages(languages: Set<String>): Character =
+            copy(
+                readingMeaning = readingMeaning.copy(
+                    groups = readingMeaning.groups.map { group ->
+                        group.copy(
+                            meanings = group.meanings.filter {
+                                languages.contains(it.lang) || languages.contains("all")
+                            }
+                        )
+                    }
+                )
+            )
 
-        override fun toJsonString(): String {
-            TODO("Not yet implemented")
-        }
+        override fun toJsonString(): String = Json.encodeToString(this)
     }
 
     @Serializable
@@ -155,7 +168,7 @@ sealed class Kanjidic2JsonElement {
     @Serializable
     data class ReadingMeaningGroup(
         val readings: List<Reading>,
-        val meaning: List<Meaning>,
+        val meanings: List<Meaning>,
     )
 
     @Serializable
@@ -178,7 +191,7 @@ sealed class Kanjidic2JsonElement {
 
     @Serializable
     data class Meaning(
-        val language: String,
+        val lang: String,
         val value: String,
     )
 }
