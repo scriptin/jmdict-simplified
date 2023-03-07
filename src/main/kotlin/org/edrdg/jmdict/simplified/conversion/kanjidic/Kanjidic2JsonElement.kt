@@ -15,17 +15,18 @@ sealed class Kanjidic2JsonElement {
         val misc: Misc,
         val dictionaryReferences: List<DictionaryReference>,
         val queryCodes: List<QueryCode>,
-        val readingMeaning: ReadingMeaning,
+        val readingMeaning: ReadingMeaning?,
     ) : OutputDictionaryWord<Character> {
         override val allLanguages: Set<String>
             get() = readingMeaning
-                .groups
-                .flatMap { group -> group.meanings.map { it.lang } }
-                .toSet()
+                ?.groups
+                ?.flatMap { group -> group.meanings.map { it.lang } }
+                ?.toSet()
+                .orEmpty()
 
         override fun onlyWithLanguages(languages: Set<String>): Character =
             copy(
-                readingMeaning = readingMeaning.copy(
+                readingMeaning = readingMeaning?.copy(
                     groups = readingMeaning.groups.map { group ->
                         group.copy(
                             meanings = group.meanings.filter {
@@ -138,7 +139,7 @@ sealed class Kanjidic2JsonElement {
     @Serializable
     data class QueryCode(
         val type: QueryCodeType,
-        val skipMisclassification: SkipMisclassification,
+        val skipMisclassification: SkipMisclassification?,
         val value: String,
     )
 
