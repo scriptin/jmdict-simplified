@@ -506,16 +506,16 @@ sealed class Kanjidic2XmlElement(open val name: String) {
         }
     }
 
-    enum class SkipMissclass(val value: String) {
+    enum class SkipMisclass(val value: String) {
         POSN("posn"),
         STROKE_COUNT("stroke_count"),
         STROKE_AND_POSN("stroke_and_posn"),
         STROKE_DIFF("stroke_diff");
 
         companion object {
-            fun fromString(s: String): SkipMissclass {
-                return SkipMissclass.values().find { it.value == s } ?:
-                throw IllegalArgumentException("Value $s is not one of: ${SkipMissclass.values()}")
+            fun fromString(s: String): SkipMisclass {
+                return SkipMisclass.values().find { it.value == s } ?:
+                throw IllegalArgumentException("Value $s is not one of: ${SkipMisclass.values()}")
             }
         }
     }
@@ -578,7 +578,7 @@ sealed class Kanjidic2XmlElement(open val name: String) {
          *         -->
          * ~~~
          */
-        val skipMisclass: SkipMissclass?,
+        val skipMisclass: SkipMisclass?,
         val text: String,
     ) : Kanjidic2XmlElement("q_code")
 

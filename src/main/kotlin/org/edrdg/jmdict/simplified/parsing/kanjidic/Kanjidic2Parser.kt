@@ -168,8 +168,8 @@ object Kanjidic2Parser : Parser<Kanjidic2XmlElement.Character, Kanjidic2Metadata
                     ) ?: throw ParsingException.MissingRequiredAttribute(qCode, QName("qc_type")),
                     skipMisclass = qCode.attrEnum(
                         QName("skip_misclass"),
-                        Kanjidic2XmlElement.SkipMissclass.values(),
-                        Kanjidic2XmlElement.SkipMissclass::fromString,
+                        Kanjidic2XmlElement.SkipMisclass.values(),
+                        Kanjidic2XmlElement.SkipMisclass::fromString,
                     ),
                     text = eventReader.text(qCode),
                 )
