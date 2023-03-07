@@ -472,6 +472,10 @@ sealed class Kanjidic2XmlElement(open val name: String) {
          * Leading zeroes are dropped here
          */
         val mPage: Int?,
+        /**
+         * Usually an integer, but there are exception with "X" as a last character,
+         * e.g. "21371X"
+         */
         val value: String,
     ) : Kanjidic2XmlElement("dic_ref")
 
