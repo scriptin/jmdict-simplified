@@ -1,6 +1,6 @@
 package org.edrdg.jmdict.simplified.commands
 
-import org.edrdg.jmdict.simplified.conversion.OutputDictionaryWord
+import org.edrdg.jmdict.simplified.conversion.OutputDictionaryEntry
 import java.nio.file.Path
 
 class DictionaryOutputWriter(
@@ -26,7 +26,7 @@ class DictionaryOutputWriter(
             if (!acceptedEntry && value) acceptedEntry = true
         }
 
-    fun <W : OutputDictionaryWord<W>> acceptsWord(word: W): Boolean {
+    fun <O : OutputDictionaryEntry<O>> acceptsEntry(word: O): Boolean {
         val shareSomeLanguages = languages.intersect(word.allLanguages).isNotEmpty()
         // For non-only-common outputs, all words must be accepted
         // Otherwise, for only-common outputs, allow only common words

@@ -4,7 +4,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.edrdg.jmdict.simplified.commands.DictionaryOutputWriter
 import org.edrdg.jmdict.simplified.conversion.Converter
-import org.edrdg.jmdict.simplified.conversion.OutputDictionaryWord
+import org.edrdg.jmdict.simplified.conversion.OutputDictionaryEntry
 import org.edrdg.jmdict.simplified.parsing.InputDictionaryEntry
 import org.edrdg.jmdict.simplified.parsing.JMdictMetadata
 import org.edrdg.jmdict.simplified.processing.ConvertingHandler
@@ -14,14 +14,14 @@ import java.nio.file.Path
  * Parses, analyzes, and converts to JSON a dictionary XML file.
  * Can produce a report file.
  */
-class JMdictConvertingHandler<E : InputDictionaryEntry, W : OutputDictionaryWord<W>>(
+class JMdictConvertingHandler<I : InputDictionaryEntry, O : OutputDictionaryEntry<O>>(
     override val dictionaryName: String,
     override val version: String,
     override val languages: List<String>,
     override val outputDirectory: Path,
     override val outputs: List<DictionaryOutputWriter>,
-    override val converter: Converter<E, W, JMdictMetadata>,
-) : ConvertingHandler<E, W, JMdictMetadata>(
+    override val converter: Converter<I, O, JMdictMetadata>,
+) : ConvertingHandler<I, O, JMdictMetadata>(
     dictionaryName,
     version,
     languages,

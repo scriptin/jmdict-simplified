@@ -5,21 +5,21 @@ import com.github.ajalt.clikt.parameters.options.*
 import com.github.ajalt.clikt.parameters.types.path
 import net.swiftzer.semver.SemVer
 import org.edrdg.jmdict.simplified.conversion.Converter
-import org.edrdg.jmdict.simplified.conversion.OutputDictionaryWord
+import org.edrdg.jmdict.simplified.conversion.OutputDictionaryEntry
 import org.edrdg.jmdict.simplified.parsing.InputDictionaryEntry
 import org.edrdg.jmdict.simplified.parsing.Metadata
 import org.edrdg.jmdict.simplified.parsing.Parser
 import java.util.*
 import kotlin.IllegalArgumentException
 
-abstract class ConvertCommand<E : InputDictionaryEntry, W : OutputDictionaryWord<W>, M : Metadata>(
+abstract class ConvertCommand<I : InputDictionaryEntry, O : OutputDictionaryEntry<O>, M : Metadata>(
     help: String = "Convert dictionary file into JSON",
     private val supportsCommonOnlyOutputs: Boolean,
-    override val parser: Parser<E, M>,
+    override val parser: Parser<I, M>,
     override val rootTagName: String,
     val dictionaryName: String,
-    val converter: Converter<E, W, M>,
-) : AnalyzeCommand<E, M>(
+    val converter: Converter<I, O, M>,
+) : AnalyzeCommand<I, M>(
     help = help,
     parser = parser,
     rootTagName = rootTagName,

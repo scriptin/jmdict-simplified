@@ -1,9 +1,9 @@
 package org.edrdg.jmdict.simplified.conversion
 
-interface OutputDictionaryWord<W : OutputDictionaryWord<W>> {
+interface OutputDictionaryEntry<E : OutputDictionaryEntry<E>> {
     val allLanguages: Set<String>
 
-    fun onlyWithLanguages(languages: Set<String>): W
+    fun onlyWithLanguages(languages: Set<String>): E
 
     /**
      * `false` is default because we don't expect to have

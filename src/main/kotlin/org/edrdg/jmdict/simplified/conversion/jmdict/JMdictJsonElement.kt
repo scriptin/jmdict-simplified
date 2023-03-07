@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.edrdg.jmdict.simplified.conversion.CommonJsonElement
-import org.edrdg.jmdict.simplified.conversion.OutputDictionaryWord
+import org.edrdg.jmdict.simplified.conversion.OutputDictionaryEntry
 
 sealed class JMdictJsonElement : CommonJsonElement() {
     @Serializable
@@ -14,7 +14,7 @@ sealed class JMdictJsonElement : CommonJsonElement() {
         val kanji: List<Kanji>,
         val kana: List<Kana>,
         val sense: List<Sense>,
-    ) : OutputDictionaryWord<Word> {
+    ) : OutputDictionaryEntry<Word> {
         override val allLanguages: Set<String>
             get() = sense
                 .flatMap { sense -> sense.gloss.map { it.lang } }

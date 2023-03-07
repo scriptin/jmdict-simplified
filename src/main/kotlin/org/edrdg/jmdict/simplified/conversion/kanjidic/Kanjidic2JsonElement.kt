@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.edrdg.jmdict.simplified.conversion.OutputDictionaryWord
+import org.edrdg.jmdict.simplified.conversion.OutputDictionaryEntry
 
 sealed class Kanjidic2JsonElement {
     @Serializable
@@ -16,7 +16,7 @@ sealed class Kanjidic2JsonElement {
         val dictionaryReferences: List<DictionaryReference>,
         val queryCodes: List<QueryCode>,
         val readingMeaning: ReadingMeaning?,
-    ) : OutputDictionaryWord<Character> {
+    ) : OutputDictionaryEntry<Character> {
         override val allLanguages: Set<String>
             get() = readingMeaning
                 ?.groups

@@ -3,10 +3,10 @@ package org.edrdg.jmdict.simplified.conversion
 import org.edrdg.jmdict.simplified.parsing.InputDictionaryEntry
 import org.edrdg.jmdict.simplified.parsing.Metadata
 
-abstract class Converter<E : InputDictionaryEntry, W : OutputDictionaryWord<W>, M : Metadata> {
+abstract class Converter<I : InputDictionaryEntry, O : OutputDictionaryEntry<O>, M : Metadata> {
     var metadata: M? = null
 
-    abstract fun convert(xmlEntry: E): W
+    abstract fun convert(xmlEntry: I): O
 
     abstract fun entity(value: String): String?
 
