@@ -12,4 +12,5 @@ fun main(args: Array<String>) = JMdictSimplified().subcommands(
     AnalyzeJMnedict(),
     ConvertJMnedict(),
     AnalyzeKanjidic(),
+    ConvertKanjidic(),
 ).main(args)
