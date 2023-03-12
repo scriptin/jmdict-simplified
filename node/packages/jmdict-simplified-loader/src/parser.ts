@@ -80,7 +80,7 @@ export function parseMetadata(parser: Parser, handler: MetadataHandler) {
         updatePathAfterValue(path);
         return;
       case 'keyValue':
-        if (value === 'words') {
+        if (value === 'words' || value === 'characters') {
           // Array of words have started
           parser.off('data', parserDataHandler);
           handler(metadata as DictionaryMetadata);
