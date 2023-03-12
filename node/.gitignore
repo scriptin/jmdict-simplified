@@ -1,1 +1,5 @@
+# Nx Clous configuration - may contain secret keys
 nx-cloud.env
+
+# Build artifacts
+packages/**/dist

@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "copy:types": "npm run copy:types -w packages/jmdict-simplified-types",
     "build": "npx nx run-many --target=build",
     "build:nocache": "npx nx run-many --target=build --skip-nx-cache",
     "test": "npx nx run-many --target=test",

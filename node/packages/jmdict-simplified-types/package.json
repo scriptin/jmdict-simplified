@@ -5,7 +5,6 @@
   "license": "MIT",
   "types": "dist/index.d.ts",
   "scripts": {
-    "copy:types": "node copy-types.js",
     "build": "rm -rf dist/ && tsc"
   },
   "devDependencies": {

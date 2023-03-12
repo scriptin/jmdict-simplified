@@ -12,7 +12,6 @@
 
 # Build outputs
 build
-node/packages/**/dist
 
 # Logs
 logs
