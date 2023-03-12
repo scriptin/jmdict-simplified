@@ -127,7 +127,12 @@ const JMDICT_WORD_VALIDATORS = [
 ];
 
 function reportWordAndStop(word, errors, loader) {
-  console.error(`Invalid word [id=${word.id}]: `, errors);
+  console.error(
+    `Invalid entry [${word.id ? 'id' : 'literal'}=${
+      word.id ?? word.literal
+    }]: `,
+    errors,
+  );
   printAsJson(word);
   loader.parser.destroy(new Error('Invalid dictionary entry'));
 }
