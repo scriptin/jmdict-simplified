@@ -621,7 +621,7 @@ export type Kanjidic2DictionaryReferenceMorohashi = {
    * @see {Kanjidic2DictionaryReferenceNotMorohashi} for non-Morohashi types
    */
   type: 'moro';
-  moroshashi: {
+  morohashi: {
     volume: number;
     page: number;
   };
@@ -686,7 +686,7 @@ export type Kanjidic2DictionaryReferenceNotMorohashi = {
     | 'busy_people'
     | 'kodansha_compact'
     | 'maniette';
-  moroshashi: null;
+  morohashi: null;
   value: string;
 };
 
