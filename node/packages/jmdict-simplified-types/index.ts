@@ -506,7 +506,7 @@ export interface Kanjidic2DictionaryMetadata
   /**
    * Format: YYYY-NN, where YYYY is a year, and NN is a zero-padded ordinal number (01, 02, ..., 99)
    */
-  databaseRevision: string;
+  databaseVersion: string;
 }
 
 /**
