@@ -624,7 +624,7 @@ export type Kanjidic2DictionaryReferenceMorohashi = {
   morohashi: {
     volume: number;
     page: number;
-  };
+  } | null;
   value: string;
 };
 
@@ -720,7 +720,8 @@ export type Kanjidic2QueryCodeSkip = {
     | 'posn'
     | 'stroke_count'
     | 'stroke_and_posn'
-    | 'stroke_diff';
+    | 'stroke_diff'
+    | null;
   value: string;
 };
 
