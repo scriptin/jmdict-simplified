@@ -42,9 +42,11 @@ jobs:
         run: |
           jmdict_updated=$(./gradlew --quiet jmdictHasChanged)
           jmnedict_updated=$(./gradlew --quiet jmnedictHasChanged)
+          kanjidic_updated=$(./gradlew --quiet kanjidicHasChanged)
           echo "JMDICT_UPDATED=$jmdict_updated" >> $GITHUB_ENV
           echo "JMNEDICT_UPDATED=$jmnedict_updated" >> $GITHUB_ENV
-          if [[ "$jmdict_updated" = "YES" ]] || [[ "$jmnedict_updated" = "YES" ]]; then
+          echo "KANJIDIC_UPDATED=$kanjidic_updated" >> $GITHUB_ENV
+          if [[ "$jmdict_updated" = "YES" ]] || [[ "$jmnedict_updated" = "YES" ]] || [[ "$kanjidic_updated" = "YES" ]]; then
             echo "SOMETHING_UPDATED=YES" >> $GITHUB_ENV
           fi
       - name: Set force update variables
@@ -52,6 +54,7 @@ jobs:
         run: |
           echo "JMDICT_UPDATED=YES" >> $GITHUB_ENV
           echo "JMNEDICT_UPDATED=YES" >> $GITHUB_ENV
+          echo "KANJIDIC_UPDATED=YES" >> $GITHUB_ENV
           echo "SOMETHING_UPDATED=YES" >> $GITHUB_ENV
       - name: Convert dictionaries
         if: env.SOMETHING_UPDATED == 'YES'
@@ -96,18 +99,18 @@ jobs:
         if: env.SOMETHING_UPDATED == 'YES' && !inputs.release_notes
         shell: bash
         run: |
-          if [[ "$JMDICT_UPDATED" = "YES" ]] && [[ "$JMNEDICT_UPDATED" = "YES" ]]; then
-            RELEASE_NOTES="JMdict and JMnedict were updated."
-          elif [[ "$JMDICT_UPDATED" = "YES" ]]; then
-            RELEASE_NOTES="JMdict was updated."
-          elif [[ "$JMNEDICT_UPDATED" = "YES" ]]; then
-            RELEASE_NOTES="JMnedict was updated."
-          else
-            # this should not happen, but just in case
-            RELEASE_NOTES="Distribution files were updated."
+          RELEASE_NOTES="Updated dictionaries:\n\n"
+          if [[ "$JMDICT_UPDATED" = "YES" ]]; then
+            RELEASE_NOTES="${RELEASE_NOTES}- JMdict\n"
+          fi
+          if [[ "$JMNEDICT_UPDATED" = "YES" ]]; then
+            RELEASE_NOTES="${RELEASE_NOTES}- JMnedict\n"
+          fi
+          if [[ "$KANJIDIC_UPDATED" = "YES" ]]; then
+            RELEASE_NOTES="${RELEASE_NOTES}- Kanjidic\n"
           fi
           WARNING="NOTE: This is a scheduled automated release. It may not have been reviewed by a human."
-          RELEASE_NOTES="$RELEASE_NOTES\n\n$WARNING"
+          RELEASE_NOTES="$RELEASE_NOTES\n$WARNING"
           echo "RELEASE_NOTES=$RELEASE_NOTES" >> $GITHUB_ENV
       - name: Set release notes for manual releases
         if: env.SOMETHING_UPDATED == 'YES' && inputs.release_notes
@@ -144,10 +147,15 @@ jobs:
           # create release message
           echo -e "${BUILD_VERSION_NUMBER}, update ${BUILD_TIME}" > $message_file
           echo -e "\n\n${RELEASE_NOTES}" >> $message_file
+
           echo -e "\n\n## JMdict\n\n" >> $message_file
           cat ./build/dict-json/jmdict-release-info.md >> $message_file
+
           echo -e "\n\n## JMnedict\n\n" >> $message_file
           cat ./build/dict-json/jmnedict-release-info.md >> $message_file
+
+          echo -e "\n\n## Kanjidic\n\n" >> $message_file
+          cat ./build/dict-json/kanjidic-release-info.md >> $message_file
 
           # create a release
           hub release create "${assets[@]}" --file $message_file $BUILD_TAG
