@@ -1,6 +1,6 @@
 # jmdict-simplified
 
-### [JMdict][] and [JMnedict][] in JSON format
+### [JMdict][], [JMnedict][], and [Kanjidic][] in JSON format
 
 with more comprehensible structure and beginner-friendly documentation
 
@@ -42,18 +42,20 @@ There are two main types of JSON files for the JMdict dictionary:
   classify words as "common". Common-only distributions are much smaller.
   They are marked with "common" keyword in file names, see the [latest release][latest-release]
 
-Also, JMdict has language-specific versions with language codes
-(3-letter [ISO 639-2](https://en.wikipedia.org/wiki/ISO_639-2) codes) in file names:
+Also, JMdict and Kanjidic have language-specific versions with language codes
+(3-letter [ISO 639-2](https://en.wikipedia.org/wiki/ISO_639-2) codes for JMdict,
+2-letter [ISO 639-1](https://en.wikipedia.org/wiki/ISO_639-1) codes for Kanjidic) in file names:
 
-- `eng`	- English
-- `ger`	- German
-- `rus`	- Russian
-- `hun`	- Hungarian
-- `dut`	- Dutch
-- `spa`	- Spanish
-- `fre`	- French
-- `swe`	- Swedish
-- `slv`	- Slovenian
+- `all` - all languages, i.e. no language filter was applied
+- `eng`/`en` - English
+- `ger`/`de` - German
+- `rus`/`ru` - Russian
+- `hun`/`hu` - Hungarian
+- `dut`/`nl` - Dutch
+- `spa`/`es` - Spanish
+- `fre`/`fr` - French
+- `swe`/`sv` - Swedish
+- `slv`/`sl` - Slovenian
 
 JMnedict has only one version, since it's (currently) English-only,
 and has no "common" indicators on entries.
@@ -81,37 +83,44 @@ Tasks to convert dictionary files and create distribution archives:
 
 Utility tasks (for CI/CD workflows):
 
-- `./gradlew --quiet jmdictHasChanged` and `./gradlew --quiet jmnedictHasChanged` -
-  check if JMdict or JMnedict has changed by comparing checksums
-  of downloaded files with those stored in the [checksums](checksums).
+- `./gradlew --quiet jmdictHasChanged`, `./gradlew --quiet jmnedictHasChanged`,
+  and `./gradlew --quiet kanjidicHasChanged`-  check if dictionary files have changed
+  by comparing checksums of downloaded files with those stored in the [checksums](checksums).
   Outputs `YES` or `NO`. Run this only after `download` task!
   The `--quiet` is to silence Gradle logs, e.g. when you need to put values into environments variables.
 - `./gradlew updateChecksums` - update checksum files in the [checksums](checksums) directory.
   Run after creating distribution archives and commit checksum files into the repository,
   so that next time CI/CD workflow knows if it needs to rebuild anything.
-- `./gradlew userJar` - create an Uber JAR for standalone use (i.e. w/o Gradle).
+- `./gradlew uberJar` - create an Uber JAR for standalone use (i.e. w/o Gradle).
   The JAR program shows help messages and should be intuitive to use if you know how to run it.
 
-There are also more specific tasks, run `./gradlew tasks` for details
+For the full list of available tasks, run `./gradlew tasks`
 
 ## Troubleshooting
 
-- Make sure to run tasks in order: `download`, then `convert`, then `archive`
+- Make sure to run tasks in order: `download` -> `convert` -> `archive`
 - If running Gradle fails, make sure `java` is available on your `$PATH` environment variable
 - Run Gradle with `--stacktrace`, `--info`, or `--debug` arguments to see more details
   if you get an error
 
 ## Format
 
-**See the [TypeScript types](node/packages/jmdict-simplified-types/index.ts).**
-These are [TypeScript](https://www.typescriptlang.org/) types for JSON files produced by this project.
+> See the [TypeScript types](node/packages/jmdict-simplified-types/index.ts)
+
+A better documentation is in development, but the types have enough comments
+to explain the format. Please also read the original documentation:
+
+- [EDRDG wiki](https://www.edrdg.org/wiki/index.php/Main_Page)
+- [JMdict][] (also [wiki](https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project))
+- [JMnedict][]
+- [Kanjidic][]
 
 You can also find Kotlin types in [JMdictJsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/jmdict/JMdictJsonElement.kt),
 [JMnedictJsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/jmnedict/JMnedictJsonElement.kt),
 and [Kanjidic2JsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/kanjidic/Kanjidic2JsonElement.kt),
 although they contain some methods and annotations you might not need.
 
-Main concepts:
+JMdict format notes:
 
 - "Kanji" and "kana" versions of words are not always equivalent
   to "spellings" and "readings" correspondingly. Some words are kana-only.
@@ -127,19 +136,34 @@ Main concepts:
 
 ## License
 
-Original XML files - **JMdict.xml**, **JMdict_e.xml**, and **JMnedict.xml** -
+### JMdict and JMnedict
+
+The original XML files - **JMdict.xml**, **JMdict_e.xml**, and **JMnedict.xml** -
 are the property of the Electronic Dictionary Research and Development Group,
 and are used in conformance with the Group's [license][EDRDG-license].
 Project started in 1991 by Jim Breen.
 
 All derived files are distributed under the same license, as the original license requires it.
 
-Source files of this project (excluding distribution archives containing JSON files)
-are available under [Creative Commons Attribution-ShareAlike License v4.0][CC-BY-SA-4].
+### Kanjidic
+
+The original **kanjidic2.xml** file is released under
+[Creative Commons Attribution-ShareAlike License v4.0][CC-BY-SA-4].
+See the [Copyright and Permissions](https://www.edrdg.org/wiki/index.php/KANJIDIC_Project#Copyright_and_Permissions)
+section on the Kanjidic wiki for details.
+
+All derived files are distributed under the same license, as the original license requires it.
+
+### Other files
+
+The source code and other files of this project (this doesn't include
+the distribution archives containing JSON files) are available under
+[Creative Commons Attribution-ShareAlike License v4.0][CC-BY-SA-4].
 See [LICENSE.txt](LICENSE.txt)
 
 [JMdict]: http://www.edrdg.org/jmdict/j_jmdict.html
 [JMnedict]: http://www.edrdg.org/enamdict/enamdict_doc.html
+[Kanjidic]: https://www.edrdg.org/wiki/index.php/KANJIDIC_Project
 [latest-release]: https://github.com/scriptin/jmdict-simplified/releases/latest
 [AzulJava17]: https://www.azul.com/downloads/?version=java-17-lts&package=jre
 [EDRDG-license]: http://www.edrdg.org/edrdg/licence.html
