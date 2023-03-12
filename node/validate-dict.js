@@ -19,17 +19,24 @@ const schema = createGenerator({
   type: '*',
 });
 
-const dictionaryMetadataSchema = schema.createSchema('DictionaryMetadata');
-const jmdictWordSchema = schema.createSchema('JMdictWord');
-const jmnedictWordSchema = schema.createSchema('JMnedictWord');
-
-// printAsJson(dictionaryMetadataSchema);
-// printAsJson(jmdictWordSchema);
-// printAsJson(jmnedictWordSchema);
-
 function printAsJson(obj) {
   console.log(JSON.stringify(obj, null, '  '));
 }
+
+const jmdictMetadataSchema = schema.createSchema('JMdictDictionaryMetadata');
+const jmdictWordSchema = schema.createSchema('JMdictWord');
+const jmnedictWordSchema = schema.createSchema('JMnedictWord');
+
+const kanjidicMetadataSchema = schema.createSchema(
+  'Kanjidic2DictionaryMetadata',
+);
+const kanjidicCharacterSchema = schema.createSchema('Kanjidic2Character');
+
+// printAsJson(jmdictMetadataSchema);
+// printAsJson(jmdictWordSchema);
+// printAsJson(jmnedictWordSchema);
+// printAsJson(kanjidicMetadataSchema);
+// printAsJson(kanjidicCharacterSchema);
 
 /**
  * @typedef {Function} JMdictWordValidator
@@ -125,6 +132,17 @@ function reportWordAndStop(word, errors, loader) {
   loader.parser.destroy(new Error('Invalid dictionary entry'));
 }
 
+function getMetadataSchema(fileName) {
+  if (fileName.startsWith('kanjidic')) return kanjidicMetadataSchema;
+  return jmdictMetadataSchema;
+}
+
+function getEntrySchema(fileName) {
+  if (fileName.startsWith('kanjidic')) return kanjidicCharacterSchema;
+  if (fileName.startsWith('jmdict')) return jmdictWordSchema;
+  return jmnedictWordSchema;
+}
+
 /**
  * Validate a JSON dictionary file
  * @param {string} filePath
@@ -135,11 +153,8 @@ async function validate(filePath) {
     const fileName = filePath.split(sep).pop();
     const isJMdict = fileName.startsWith('jmdict');
 
-    const validateMetadata = new Ajv().compile(dictionaryMetadataSchema);
-
-    const validateWord = new Ajv().compile(
-      isJMdict ? jmdictWordSchema : jmnedictWordSchema,
-    );
+    const validateMetadata = new Ajv().compile(getMetadataSchema(fileName));
+    const validateEntry = new Ajv().compile(getEntrySchema(fileName));
 
     let dictMetadata;
 
@@ -154,19 +169,19 @@ async function validate(filePath) {
           loader.parser.destroy(new Error('Invalid dictionary metadata'));
         }
       })
-      .onWord((word) => {
-        validateWord(word);
-        if (validateWord.errors && validateWord.errors.length) {
-          reportWordAndStop(word, validateWord.errors, loader);
+      .onEntry((entry) => {
+        validateEntry(entry);
+        if (validateEntry.errors && validateEntry.errors.length) {
+          reportWordAndStop(entry, validateEntry.errors, loader);
         }
         if (isJMdict) {
           for (const validate of JMDICT_WORD_VALIDATORS) {
             const errors = validate(
-              /** @type import('@scriptin/jmdict-simplified-types').JMdictWord */ word,
+              /** @type import('@scriptin/jmdict-simplified-types').JMdictWord */ entry,
               dictMetadata,
             );
             if (errors.length) {
-              reportWordAndStop(word, errors, loader);
+              reportWordAndStop(entry, errors, loader);
               break;
             }
           }
@@ -190,7 +205,8 @@ async function validateAll(baseDir) {
   for (const file of files) {
     const isJMdict = file.startsWith('jmdict');
     const isJMnedict = file.startsWith('jmnedict');
-    if (!isJMdict && !isJMnedict) continue;
+    const isKanjidic = file.startsWith('kanjidic2');
+    if (!isJMdict && !isJMnedict && !isKanjidic) continue;
     console.log(`Validating ${file}...`);
     try {
       await validate(join(baseDir, file));
