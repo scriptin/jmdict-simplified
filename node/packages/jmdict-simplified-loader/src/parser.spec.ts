@@ -1,6 +1,11 @@
 import { Readable } from 'stream';
 
-import { parseMetadata, parseWords, put, updatePathAfterValue } from './parser';
+import {
+  parseMetadata,
+  parseEntries,
+  put,
+  updatePathAfterValue,
+} from './parser';
 // @ts-ignore
 import makeParser from 'stream-json';
 
@@ -140,7 +145,7 @@ describe('parseWords', () => {
     s.push(serializedJson);
     s.push(null);
     const handler = jest.fn();
-    parseWords(parser, handler);
+    parseEntries(parser, handler);
     parser.on('end', () => {
       expect(handler).toBeCalledTimes(4);
       expect(handler).nthCalledWith(1, expect.objectContaining(obj1));

@@ -1,16 +1,23 @@
 import { Parser } from 'stream-json';
 
 import {
-  DictionaryMetadata,
+  JMdictDictionaryMetadata,
   JMdictWord,
   JMnedictWord,
+  Kanjidic2DictionaryMetadata,
+  Kanjidic2Character,
 } from '@scriptin/jmdict-simplified-types';
+
+type DictionaryMetadata =
+  | JMdictDictionaryMetadata
+  | Kanjidic2DictionaryMetadata;
 
 export type MetadataHandler = (metadata: DictionaryMetadata) => void;
 
-export type WordHandler<W extends JMdictWord | JMnedictWord> = (
-  word: W,
-) => void;
+export type EntryHandler<
+  W extends JMdictWord | JMnedictWord | Kanjidic2Character,
+> = (word: W) => void;
+
 type Path = (string | number)[];
 
 export function put(obj: object, path: Path, value: any) {
@@ -105,10 +112,9 @@ export function parseMetadata(parser: Parser, handler: MetadataHandler) {
   });
 }
 
-export function parseWords<W extends JMdictWord | JMnedictWord>(
-  parser: Parser,
-  handler: WordHandler<W>,
-) {
+export function parseEntries<
+  W extends JMdictWord | JMnedictWord | Kanjidic2Character,
+>(parser: Parser, handler: EntryHandler<W>) {
   let word: Partial<W> = {};
   const path: Path = [];
   let objectDepth = 0;

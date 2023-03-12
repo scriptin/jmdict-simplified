@@ -4,16 +4,19 @@ import makeParser, { Parser } from 'stream-json';
 import type {
   JMdictWord,
   JMnedictWord,
+  Kanjidic2Character,
 } from '@scriptin/jmdict-simplified-types';
 
 import {
   MetadataHandler,
-  WordHandler,
+  EntryHandler,
   parseMetadata,
-  parseWords,
+  parseEntries,
 } from './parser';
 
-export interface DictionaryLoader<W extends JMdictWord | JMnedictWord> {
+export interface DictionaryLoader<
+  W extends JMdictWord | JMnedictWord | Kanjidic2Character,
+> {
   /**
    * In case you need low-level access to JSON stream.
    */
@@ -30,7 +33,7 @@ export interface DictionaryLoader<W extends JMdictWord | JMnedictWord> {
    * @param handler is called after each subsequent word has been parsed
    * @returns self for method chaining
    */
-  onWord(handler: WordHandler<W>): DictionaryLoader<W>;
+  onEntry(handler: EntryHandler<W>): DictionaryLoader<W>;
 
   /**
    * @param handler is called when JSON stream has ended.
@@ -40,14 +43,14 @@ export interface DictionaryLoader<W extends JMdictWord | JMnedictWord> {
   onEnd(handler: () => void): DictionaryLoader<W>;
 }
 
-export function loadDictionary<W extends JMdictWord | JMnedictWord>(
-  filePath: string,
-): DictionaryLoader<W> {
+export function loadDictionary<
+  W extends JMdictWord | JMnedictWord | Kanjidic2Character,
+>(filePath: string): DictionaryLoader<W> {
   const parser = createReadStream(filePath).pipe(
     makeParser({ packValues: true }),
   );
 
-  let wordHandler: WordHandler<W> | null = null;
+  let entryHandler: EntryHandler<W> | null = null;
 
   return {
     parser,
@@ -55,15 +58,15 @@ export function loadDictionary<W extends JMdictWord | JMnedictWord>(
     onMetadata(handler) {
       parseMetadata(parser, (metadata) => {
         handler(metadata);
-        if (wordHandler) {
-          parseWords<W>(parser, wordHandler);
+        if (entryHandler) {
+          parseEntries<W>(parser, entryHandler);
         }
       });
       return this;
     },
 
-    onWord(handler) {
-      wordHandler = handler;
+    onEntry(handler) {
+      entryHandler = handler;
       return this;
     },
 
