@@ -1,3 +1,7 @@
+# Version 3.4.0
+
+- Added [Kanjidic](https://www.edrdg.org/wiki/index.php/KANJIDIC_Project)
+
 # Version 3.3.1
 
 - Bugfix #24: `sense.appliesToKanji` and `sense.appliesToKana` are set to `["*"]`
