@@ -45,7 +45,9 @@ jobs:
           fi
 
           version=$(./gradlew properties | grep 'version: .*' | cut -d' ' -f2 | tr -d '[:space:]')
+          echo "Version from Gradle properties: $version"
           version="${version}${build_metadata}"
+          echo "Version with build metadata: $version"
           echo "PACKAGES_VERSION=$version" >> $GITHUB_ENV
 
           npm version "$version" -w packages/jmdict-simplified-types
