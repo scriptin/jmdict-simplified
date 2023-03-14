@@ -34,8 +34,8 @@ jobs:
       - name: Test
         working-directory: node
         run: npm run test
-      - name: Update package versions
-        working-directory: node
+      - name: Calculate package versions
+        # running in the root dir
         run: |
           build_metadata_input='${{ inputs.build_metadata }}'
           if [[ -z "$build_metadata_input" ]]; then
@@ -49,10 +49,12 @@ jobs:
           version="${version}${build_metadata}"
           echo "Version with build metadata: $version"
           echo "PACKAGES_VERSION=$version" >> $GITHUB_ENV
-
-          npm version "$version" -w packages/jmdict-simplified-types
-          npm version "$version" -w packages/jmdict-simplified-loader
-          npm version "$version"
+      - name: Update package versions
+        working-directory: node
+        run: |
+          npm version '${{ env.PACKAGES_VERSION }}' -w packages/jmdict-simplified-types
+          npm version '${{ env.PACKAGES_VERSION }}' -w packages/jmdict-simplified-loader
+          npm version '${{ env.PACKAGES_VERSION }}'
       - name: Build
         working-directory: node
         run: npm run build
