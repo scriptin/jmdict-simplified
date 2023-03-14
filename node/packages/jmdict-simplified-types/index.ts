@@ -5,16 +5,16 @@
 /**
  * Language code, ISO 639-1 standard.
  * 2 letters: "en", "es", "fr"
- * See <https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes>
- * See <https://en.wikipedia.org/wiki/ISO_639-1>
+ * @see <https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes>
+ * @see <https://en.wikipedia.org/wiki/ISO_639-1>
  */
 export type Language2Letter = string;
 
 /**
  * Language code, ISO 639-2 standard.
  * 3 letters: "eng", "spa", "fra"
- * See <https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes>
- * See <https://en.wikipedia.org/wiki/ISO_639-2>
+ * @see <https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes>
+ * @see <https://en.wikipedia.org/wiki/ISO_639-2>
  */
 export type Language3Letter = string;
 
@@ -27,7 +27,7 @@ export interface DictionaryMetadata<L extends Language> {
   /**
    * Semantic version of this project (not the dictionary itself).
    * For the dictionary revisions, see `dictRevisions` field below
-   * See <https://semver.org/>
+   * @see <https://semver.org/>
    */
   version: string;
 
@@ -384,10 +384,11 @@ export type JMdictGloss = {
 /**
  * JMnedict root object
  *
- * Differences from JMdict format:
+ * Differences from {@link JMdict} format (in {@link JMdictWord}):
  *
  * 1. `kanji` and `kana` have no `common` flag because in this dictionary
- *    priority data is missing (`ke_pri` and `re_pri` fields)
+ *    priority data is missing (`ke_pri` and `re_pri` fields in JMdict,
+ *    see {@link JMdictKanji}.common and {@link JMdictKana}.common)
  * 2. `translation` instead of `gloss`
  * 3. `translation->translation->lang` seems to be always empty because
  *    the original XML files have no data in corresponding attributes,
@@ -609,7 +610,8 @@ export type Kanjidic2Variant = {
 
 /**
  * Special case for reference: Morohashi
- * @see {Kanjidic2DictionaryReferenceNotMorohashi} for non-Morohashi types
+ *
+ * @see {@link Kanjidic2DictionaryReferenceNotMorohashi} for non-Morohashi types
  */
 export type Kanjidic2DictionaryReferenceMorohashi = {
   /**
@@ -618,7 +620,7 @@ export type Kanjidic2DictionaryReferenceMorohashi = {
    *   dictionary in which the kanji is found, and m_page: the page
    *   number in the volume.
    *
-   * @see {Kanjidic2DictionaryReferenceNotMorohashi} for non-Morohashi types
+   * @see {@link Kanjidic2DictionaryReferenceNotMorohashi} for non-Morohashi types
    */
   type: 'moro';
   morohashi: {
@@ -643,7 +645,7 @@ export type Kanjidic2DictionaryReferenceNotMorohashi = {
    * - gakken - "A New Dictionary of Kanji Usage" (Gakken)
    * - oneill_names - "Japanese Names", by P.G. O'Neill.
    * - oneill_kk - "Essential Kanji" by P.G. O'Neill.
-   * - moro - See the type above
+   * - moro - See {@link Kanjidic2DictionaryReferenceMorohashi}
    * - henshall - "A Guide To Remembering Japanese Characters" by Kenneth G. Henshall.
    * - sh_kk - "Kanji and Kana" by Spahn and Hadamitzky.
    * - sh_kk2 - "Kanji and Kana" by Spahn and Hadamitzky (2011 edition).
@@ -660,7 +662,8 @@ export type Kanjidic2DictionaryReferenceNotMorohashi = {
    * - maniette - codes from Yves Maniette's "Les Kanjis dans la tete" French adaptation of Heisig.
    *
    * 'moro' type is excluded on purpose
-   * @see {Kanjidic2DictionaryReferenceMorohashi} for Morohashi ('moro') type
+   *
+   * @see {@link Kanjidic2DictionaryReferenceMorohashi} for Morohashi ('moro') type
    */
   type:
     | 'nelson_c'
@@ -696,7 +699,8 @@ export type Kanjidic2DictionaryReference =
 
 /**
  * Special case for query code: skip
- * @see {Kanjidic2QueryCodeNotSkip} for non-'skip' types
+ *
+ * @see {@link Kanjidic2QueryCodeNotSkip} for non-'skip' types
  */
 export type Kanjidic2QueryCodeSkip = {
   /**
@@ -707,7 +711,7 @@ export type Kanjidic2QueryCodeSkip = {
    *   a number of misclassification codes, indicated by the
    *   "skip_misclass" attribute.
    *
-   * @see {Kanjidic2QueryCodeNotSkip} for non-'skip' types
+   * @see {@link Kanjidic2QueryCodeNotSkip} for non-'skip' types
    */
   type: 'skip';
   /**
@@ -727,7 +731,7 @@ export type Kanjidic2QueryCodeSkip = {
 
 export type Kanjidic2QueryCodeNotSkip = {
   /**
-   * - skip - See the type above
+   * - skip - See {@link Kanjidic2QueryCodeSkip}
    * - sh_desc - the descriptor codes for The Kanji Dictionary (Tuttle 1996)
    *   by Spahn and Hadamitzky. They are in the form nxnn.n,
    *   e.g. 3k11.2, where the kanji has 3 strokes in the
@@ -745,7 +749,8 @@ export type Kanjidic2QueryCodeNotSkip = {
    *   documentation for more details.)
    *
    * 'skip' type is excluded on purpose
-   * @see {Kanjidic2QueryCodeSkip} for 'skip' type
+   *
+   * @see {@link Kanjidic2QueryCodeSkip} for 'skip' type
    */
   type: 'sh_desc' | 'four_corner' | 'deroo' | 'misclass';
   skipMisclassification: null;
