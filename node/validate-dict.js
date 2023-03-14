@@ -41,7 +41,7 @@ const kanjidicCharacterSchema = schema.createSchema('Kanjidic2Character');
 /**
  * @typedef {Function} JMdictWordValidator
  * @param {import('@scriptin/jmdict-simplified-types').JMdictWord} word
- * @param {import('@scriptin/jmdict-simplified-types').DictionaryMetadata} metadata
+ * @param {import('@scriptin/jmdict-simplified-types').JMdictDictionaryMetadata} metadata
  * @returns {string[]} Errors
  */
 
@@ -156,16 +156,25 @@ function getEntrySchema(fileName) {
 async function validate(filePath) {
   return new Promise((resolve, reject) => {
     const fileName = filePath.split(sep).pop();
-    const isJMdict = fileName.startsWith('jmdict');
 
     const validateMetadata = new Ajv().compile(getMetadataSchema(fileName));
     const validateEntry = new Ajv().compile(getEntrySchema(fileName));
 
-    let dictMetadata;
+    /** @type {import("@scriptin/jmdict-simplified-loader").DictionaryType} */
+    const dictType = fileName.startsWith('jmdict')
+      ? 'jmdict'
+      : fileName.startsWith('jmnedict')
+      ? 'jmnedict'
+      : fileName.startsWith('kanjidic')
+      ? 'kanjidic'
+      : null;
 
-    const loader = loadDictionary(filePath)
+    if (!dictType) {
+      throw new Error(`Unknown dictionary type, fileName=${fileName}`);
+    }
+
+    const loader = loadDictionary(dictType, filePath)
       .onMetadata((metadata) => {
-        dictMetadata = metadata;
         validateMetadata(metadata);
         if (validateMetadata.errors && validateMetadata.errors.length) {
           console.error('Invalid metadata: ', validateMetadata.errors);
@@ -174,17 +183,14 @@ async function validate(filePath) {
           loader.parser.destroy(new Error('Invalid dictionary metadata'));
         }
       })
-      .onEntry((entry) => {
+      .onEntry((entry, metadata) => {
         validateEntry(entry);
         if (validateEntry.errors && validateEntry.errors.length) {
           reportWordAndStop(entry, validateEntry.errors, loader);
         }
-        if (isJMdict) {
+        if (dictType === 'jmdict') {
           for (const validate of JMDICT_WORD_VALIDATORS) {
-            const errors = validate(
-              /** @type import('@scriptin/jmdict-simplified-types').JMdictWord */ entry,
-              dictMetadata,
-            );
+            const errors = validate(entry, metadata);
             if (errors.length) {
               reportWordAndStop(entry, errors, loader);
               break;
