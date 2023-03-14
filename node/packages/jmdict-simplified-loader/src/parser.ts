@@ -59,7 +59,7 @@ type DataChunk = {
 export function updatePathAfterValue(path: Path) {
   if (path.length === 0) return;
   const last = path[path.length - 1];
-  if (!last) {
+  if (last == null) {
     throw new Error(`Last element is undefined in ${path}`);
   } else if (typeof last === 'string') {
     // we're building an object and just received a new value for a pending key
