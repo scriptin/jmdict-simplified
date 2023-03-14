@@ -6,6 +6,7 @@
     "build": "npx nx run-many --target=build",
     "build:nocache": "npx nx run-many --target=build --skip-nx-cache",
     "test": "npx nx run-many --target=test",
+    "lint": "npx nx run-many --target=lint",
     "validate": "node validate-dict.js",
     "docs": "npx nx run-many --target=docs"
   },
