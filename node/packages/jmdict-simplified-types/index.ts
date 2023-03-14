@@ -525,11 +525,42 @@ export type Kanjidic2Character = {
    * Kanji itself
    */
   literal: string;
+
+  /**
+   * Kanji code in various encoding systems, such as Unicode or JIS
+   */
   codepoints: Kanjidic2Codepoint[];
+
+  /**
+   * Radicals (i.e. "components" used for looking up kanji in dictionaries) of this kanji
+   * Note that radicals don't necessarily represent all the component parts of a kanji,
+   * but instead only describe some more distinctive parts. Radicals are used
+   * to create indexes of kanji in dictionaries.
+   */
   radicals: Kanjidic2Radical[];
+
+  /**
+   * Miscellanea data, such as school grade, JLPT level, usage frequency, etc.
+   */
   misc: Kanjidic2Misc;
+
+  /**
+   * References to find this kanji in various dictionaries
+   */
   dictionaryReferences: Kanjidic2DictionaryReference[];
+
+  /**
+   * Query codes to find this kanji in various (typically electronic) dictionaries.
+   * Query code is typically a unique sequence of numbers and/or letters which
+   * describes the shape of a kanji w/o relying on the knowledge of its
+   * reading or meaning.
+   */
   queryCodes: Kanjidic2QueryCode[];
+
+  /**
+   * Reading and meaning of a kanji, split into groups because different
+   * readings can have different meanings.
+   */
   readingMeaning: Kanjidic2ReadingMeaning | null;
 };
 
@@ -558,17 +589,30 @@ export type Kanjidic2Radical = {
 
 export type Kanjidic2Misc = {
   grade: number | null;
+
   /**
    * First value is the right count, the rest are common miscounts
    */
   strokeCounts: number[];
+
+  /**
+   * List of variants of this kanji. "Variants" typically kanji with the same
+   * meaning but different shape, e.g. language-specific or simplified versions.
+   */
   variants: Kanjidic2Variant[];
+
   /**
    * The rank of the character based on its frequency.
    * Only first 2,500 most used kanji, based on data of Japanese newspapers.
    */
   frequency: number | null;
+
+  /**
+   * Human-readable names of radical, if this kanji is also known as a radical
+   * for other kanji. Most of the time this list is empty.
+   */
   radicalNames: string[];
+
   /**
    * The (former) Japanese Language Proficiency Test (JLPT) level for this kanji.
    * 1 (most advanced) to 4 (most elementary).
@@ -693,6 +737,14 @@ export type Kanjidic2DictionaryReferenceNotMorohashi = {
   value: string;
 };
 
+/**
+ * Dictionary references.
+ *
+ * This type is split into multiple cases for better type checking:
+ *
+ * - {@link Kanjidic2DictionaryReferenceMorohashi} - "Morohashi", has an optional additional field
+ * - {@link Kanjidic2DictionaryReferenceNotMorohashi} - everything else
+ */
 export type Kanjidic2DictionaryReference =
   | Kanjidic2DictionaryReferenceMorohashi
   | Kanjidic2DictionaryReferenceNotMorohashi;
@@ -757,15 +809,41 @@ export type Kanjidic2QueryCodeNotSkip = {
   value: string;
 };
 
+/**
+ * Query codes.
+ *
+ * This type is split into multiple cases for better type checking:
+ *
+ * - {@link Kanjidic2QueryCodeSkip} - "skip" code, has an optional additional field
+ * - {@link Kanjidic2QueryCodeNotSkip} - everything else
+ */
 export type Kanjidic2QueryCode =
   | Kanjidic2QueryCodeSkip
   | Kanjidic2QueryCodeNotSkip;
 
+/**
+ * Readings and meanings of kanji, split by groups
+ */
 export type Kanjidic2ReadingMeaning = {
+  /**
+   * Groups are required because different readings can have
+   * different meanings.
+   */
   groups: Kanjidic2ReadingMeaningGroup[];
+
+  /**
+   * Japanese readings that are now only associated with names.
+   * (from jap. "名乗り", "to say or give one's own name")
+   */
   nanori: string[];
 };
 
+/**
+ * Reading/meaning group.
+ *
+ * Groups are required because different readings can have
+ * different meanings.
+ */
 export type Kanjidic2ReadingMeaningGroup = {
   readings: Kanjidic2Reading[];
   meanings: Kanjidic2Meaning[];
@@ -795,11 +873,28 @@ export type Kanjidic2Reading = {
    *   approved for a "Jouyou kanji". (The r_status attribute is not currently used.)
    */
   type: 'pinyin' | 'korean_r' | 'korean_h' | 'vietnam' | 'ja_on' | 'ja_kun';
+
+  /**
+   * Indicates the type of on-reading: "kan", "go", "tou" or "kan'you".
+   * Currently not used.
+   */
   onType: string | null;
+
+  /**
+   * "jy" indicates the reading is approved for a "Jouyou kanji"
+   * Currently not used.
+   */
   status: string | null;
+
   value: string;
 };
 
+/**
+ * Meaning usually refers to a historical usage of a kanji.
+ * This sometimes doesn't represent the current usage.
+ * For example, some kanji are not used as standalone words anymore,
+ * or used in multiple words with unrelated meanings.
+ */
 export type Kanjidic2Meaning = {
   lang: Language2Letter;
   value: string;
