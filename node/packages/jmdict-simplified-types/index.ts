@@ -203,7 +203,7 @@ export type JMdictKanji = {
 
 export type JMdictKana = {
   /**
-   * Same as {@link JMdictKanji#common}.
+   * Same as {@link JMdictKanji}.common.
    * In this case, it shows that this particular kana transcription of a word
    * is considered common. For example, when a word can be read in multiple ways,
    * some of them may be more common than others.
@@ -217,7 +217,7 @@ export type JMdictKana = {
   text: string;
 
   /**
-   * Same as {@link JMdictKanji#tags}
+   * Same as {@link JMdictKanji}.tags
    */
   tags: Tag[];
 
@@ -249,16 +249,14 @@ export type JMdictSense = {
   /**
    * List of kanji writings within this word which this sense applies to.
    * Works in conjunction with the next `appliesToKana` field.
-   * `"*"` means "all". This is never empty, unlike {@link JMdictKana#appliesToKanji}.
-   * See also {@link JMdictKana#appliesToKanji}
+   * `"*"` means "all". This is never empty, unlike {@link JMdictKana}.appliesToKanji.
    */
   appliesToKanji: string[];
 
   /**
    * List of kana writings within this word which this sense applies to.
    * Works in conjunction with the previous `appliesToKanji` field.
-   * "*"` means "all". This is never empty, unlike {@link JMdictKana#appliesToKanji}.
-   * See also `appliesToKanji` field and {@link JMdictKana#appliesToKanji}.
+   * "*" means "all". This is never empty, unlike {@link JMdictKana}.appliesToKanji.
    */
   appliesToKana: string[];
 
@@ -284,7 +282,7 @@ export type JMdictSense = {
   dialect: Tag[];
 
   /**
-   * Miscellania - list of other tags which don't fit into other tag fields
+   * Miscellanea - list of other tags which don't fit into other tag fields
    */
   misc: Tag[];
 
@@ -324,7 +322,8 @@ export type JMdictLanguageSource = {
 
   /**
    * Indicates that the word is wasei-eigo.
-   * See <https://en.wikipedia.org/wiki/Wasei-eigo>
+   *
+   * @see <https://en.wikipedia.org/wiki/Wasei-eigo>
    */
   wasei: boolean;
 
@@ -433,7 +432,8 @@ export type JMnedictWord = {
 export type JMnedictKanji = {
   /**
    * The word itself, as spelled with any non-kana-only writing.
-   * See {@link JMdictKanji#text}
+   *
+   * @see {@link JMdictKanji}.text
    */
   text: string;
 
@@ -451,7 +451,7 @@ export type JMnedictKana = {
   text: string;
 
   /**
-   * Same as {@link JMnedictKanji#tags}
+   * Same as {@link JMnedictKanji}.tags
    */
   tags: Tag[];
 
@@ -466,7 +466,7 @@ export type JMnedictKana = {
 
 export type JMnedictTranslation = {
   /**
-   * Name types, as specified in {@link JMnedict#tags}
+   * Name types, as specified in {@link JMnedict}.tags
    */
   type: Tag[];
 
