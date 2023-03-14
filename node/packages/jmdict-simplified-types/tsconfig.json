@@ -9,4 +9,8 @@
     "outDir": "dist"
   },
   "include": ["*.ts"],
+  "typedocOptions": {
+    "entryPoints": ["index.ts"],
+    "out": "../../../docs",
+  },
 }
