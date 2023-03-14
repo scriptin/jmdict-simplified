@@ -5,6 +5,7 @@ import {
   parseEntries,
   put,
   updatePathAfterValue,
+  Metadata,
 } from './parser';
 // @ts-ignore
 import makeParser from 'stream-json';
@@ -148,13 +149,14 @@ describe('parseWords', () => {
     s.push(serializedJson);
     s.push(null);
     const handler = jest.fn();
-    parseEntries(parser, handler);
+    const metadata = {} as Metadata;
+    parseEntries(parser, metadata, handler);
     parser.on('end', () => {
       expect(handler).toBeCalledTimes(4);
-      expect(handler).nthCalledWith(1, expect.objectContaining(obj1));
-      expect(handler).nthCalledWith(2, expect.objectContaining(obj2));
-      expect(handler).nthCalledWith(3, expect.objectContaining(obj3));
-      expect(handler).nthCalledWith(4, expect.objectContaining(obj4));
+      expect(handler).nthCalledWith(1, expect.objectContaining(obj1), metadata);
+      expect(handler).nthCalledWith(2, expect.objectContaining(obj2), metadata);
+      expect(handler).nthCalledWith(3, expect.objectContaining(obj3), metadata);
+      expect(handler).nthCalledWith(4, expect.objectContaining(obj4), metadata);
     });
   });
 });

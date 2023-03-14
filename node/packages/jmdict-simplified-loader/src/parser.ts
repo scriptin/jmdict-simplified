@@ -8,15 +8,16 @@ import {
   Kanjidic2Character,
 } from '@scriptin/jmdict-simplified-types';
 
-type DictionaryMetadata =
-  | JMdictDictionaryMetadata
-  | Kanjidic2DictionaryMetadata;
+export type Entry = JMdictWord | JMnedictWord | Kanjidic2Character;
 
-export type MetadataHandler = (metadata: DictionaryMetadata) => void;
+export type Metadata = JMdictDictionaryMetadata | Kanjidic2DictionaryMetadata;
 
-export type EntryHandler<
-  W extends JMdictWord | JMnedictWord | Kanjidic2Character,
-> = (word: W) => void;
+export type MetadataHandler<M extends Metadata> = (metadata: M) => void;
+
+export type EntryHandler<M extends Metadata, E extends Entry> = (
+  entry: E,
+  metadata: M,
+) => void;
 
 type Path = (string | number)[];
 
@@ -68,8 +69,11 @@ export function updatePathAfterValue(path: Path) {
   }
 }
 
-export function parseMetadata(parser: Parser, handler: MetadataHandler) {
-  const metadata: Partial<DictionaryMetadata> = {};
+export function parseMetadata<M extends Metadata>(
+  parser: Parser,
+  handler: MetadataHandler<M>,
+) {
+  const metadata: Partial<M> = {};
   const path: Path = [];
   parser.on('data', function parserDataHandler({ name, value }: DataChunk) {
     switch (name) {
@@ -83,7 +87,7 @@ export function parseMetadata(parser: Parser, handler: MetadataHandler) {
         if (value === 'words' || value === 'characters') {
           // Array of words have started
           parser.off('data', parserDataHandler);
-          handler(metadata as DictionaryMetadata);
+          handler(metadata as M);
         } else {
           path.push(value as string);
           put(metadata, path, undefined);
@@ -112,10 +116,12 @@ export function parseMetadata(parser: Parser, handler: MetadataHandler) {
   });
 }
 
-export function parseEntries<
-  W extends JMdictWord | JMnedictWord | Kanjidic2Character,
->(parser: Parser, handler: EntryHandler<W>) {
-  let word: Partial<W> = {};
+export function parseEntries<M extends Metadata, E extends Entry>(
+  parser: Parser,
+  metadata: M,
+  handler: EntryHandler<M, E>,
+) {
+  let word: Partial<E> = {};
   const path: Path = [];
   let objectDepth = 0;
   parser.on('data', function parserDataHandler({ name, value }: DataChunk) {
@@ -128,7 +134,7 @@ export function parseEntries<
         objectDepth -= 1;
         updatePathAfterValue(path);
         if (objectDepth === 0) {
-          handler(word as W);
+          handler(word as E, metadata);
           word = {};
         }
         return;

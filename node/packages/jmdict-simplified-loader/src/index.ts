@@ -2,21 +2,23 @@ import { createReadStream } from 'fs';
 import makeParser, { Parser } from 'stream-json';
 
 import type {
+  JMdictDictionaryMetadata,
   JMdictWord,
   JMnedictWord,
   Kanjidic2Character,
+  Kanjidic2DictionaryMetadata,
 } from '@scriptin/jmdict-simplified-types';
 
 import {
-  MetadataHandler,
+  Entry,
+  Metadata,
   EntryHandler,
+  MetadataHandler,
   parseMetadata,
   parseEntries,
 } from './parser';
 
-export interface DictionaryLoader<
-  W extends JMdictWord | JMnedictWord | Kanjidic2Character,
-> {
+export interface DictionaryLoader<M extends Metadata, E extends Entry> {
   /**
    * In case you need low-level access to JSON stream.
    */
@@ -27,39 +29,55 @@ export interface DictionaryLoader<
    *                and words array has just started
    * @returns self for method chaining
    */
-  onMetadata(handler: MetadataHandler): DictionaryLoader<W>;
+  onMetadata(handler: MetadataHandler<M>): DictionaryLoader<M, E>;
 
   /**
    * @param handler is called after each subsequent word has been parsed
    * @returns self for method chaining
    */
-  onEntry(handler: EntryHandler<W>): DictionaryLoader<W>;
+  onEntry(handler: EntryHandler<M, E>): DictionaryLoader<M, E>;
 
   /**
    * @param handler is called when JSON stream has ended.
    * Alias for `parser.on('end', handler)`
    * @returns self for method chaining
    */
-  onEnd(handler: () => void): DictionaryLoader<W>;
+  onEnd(handler: () => void): DictionaryLoader<M, E>;
 }
 
-export function loadDictionary<
-  W extends JMdictWord | JMnedictWord | Kanjidic2Character,
->(filePath: string): DictionaryLoader<W> {
+export type DictionaryType = 'jmdict' | 'jmnedict' | 'kanjidic';
+
+export function loadDictionary(
+  dictionaryType: 'jmdict',
+  filePath: string,
+): DictionaryLoader<JMdictDictionaryMetadata, JMdictWord>;
+export function loadDictionary(
+  dictionaryType: 'jmnedict',
+  filePath: string,
+): DictionaryLoader<JMdictDictionaryMetadata, JMnedictWord>;
+export function loadDictionary(
+  dictionaryType: 'kanjidic',
+  filePath: string,
+): DictionaryLoader<Kanjidic2DictionaryMetadata, Kanjidic2Character>;
+
+export function loadDictionary<M extends Metadata, E extends Entry>(
+  dictionaryType: DictionaryType,
+  filePath: string,
+): DictionaryLoader<M, E> {
   const parser = createReadStream(filePath).pipe(
     makeParser({ packValues: true }),
   );
 
-  let entryHandler: EntryHandler<W> | null = null;
+  let entryHandler: EntryHandler<M, E> | null = null;
 
   return {
     parser,
 
     onMetadata(handler) {
-      parseMetadata(parser, (metadata) => {
+      parseMetadata<M>(parser, (metadata) => {
         handler(metadata);
         if (entryHandler) {
-          parseEntries<W>(parser, entryHandler);
+          parseEntries<M, E>(parser, metadata, entryHandler);
         }
       });
       return this;
@@ -74,5 +92,5 @@ export function loadDictionary<
       parser.on('end', handler);
       return this;
     },
-  } as DictionaryLoader<W>;
+  } as DictionaryLoader<M, E>;
 }
