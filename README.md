@@ -154,11 +154,16 @@ section on the Kanjidic wiki for details.
 
 All derived files are distributed under the same license, as the original license requires it.
 
+### NPM packages
+
+NPM packages `@scriptin/jmdict-simplified-types` and `@scriptin/jmdict-simplified-loader`
+are available under [MIT license][MIT]. This license is specifically chosen to be the most
+permissive and simple to use.
+
 ### Other files
 
-The source code and other files of this project (this doesn't include
-the distribution archives containing JSON files) are available under
-[Creative Commons Attribution-ShareAlike License v4.0][CC-BY-SA-4].
+The source code and other files of this project, excluding the files and packages mentioned above,
+are available under [Creative Commons Attribution-ShareAlike License v4.0][CC-BY-SA-4].
 See [LICENSE.txt](LICENSE.txt)
 
 [JMdict]: http://www.edrdg.org/jmdict/j_jmdict.html
@@ -168,3 +173,4 @@ See [LICENSE.txt](LICENSE.txt)
 [AzulJava17]: https://www.azul.com/downloads/?version=java-17-lts&package=jre
 [EDRDG-license]: http://www.edrdg.org/edrdg/licence.html
 [CC-BY-SA-4]: http://creativecommons.org/licenses/by-sa/4.0/
+[MIT]: https://opensource.org/license/mit/
