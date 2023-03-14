@@ -10,7 +10,6 @@
     "validate": "node validate-dict.js",
     "docs": "npx nx run-many --target=docs"
   },
-  "private": true,
   "devDependencies": {
     "@nrwl/nx-cloud": "latest",
     "ajv": "^8.12.0",
