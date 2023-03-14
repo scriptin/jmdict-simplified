@@ -1,0 +1,66 @@
+name: Publish NPM packages
+
+on:
+  workflow_dispatch: # Manually, for alpha/beta versions
+    inputs:
+      build_metadata:
+        description: 'Version build metadata'
+        default: 'Will be attached to a version, e.g. "alpha.1" will result in "1.2.3-alpha.1" version'
+  push:
+    tags:
+      - '*'
+      - '!*\+[0-9]+' # ignore tags with build metadata (e.g. 1.2.3+20231231010203),
+                     # as these are automated builds which only update dictionaries' data
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+          cache-dependency-path: 'node/package-lock.json'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install dependencies
+        working-directory: node
+        run: npm ci
+      - name: Lint/typecheck
+        working-directory: node
+        run: npm run lint
+      - name: Test
+        working-directory: node
+        run: npm run test
+      - name: Update package versions
+        working-directory: node
+        run: |
+          build_metadata_input='${{ inputs.build_metadata }}'
+          if [[ -z "$build_metadata_input" ]]; then
+            build_metadata=""
+          else
+            build_metadata="+$build_metadata_input"
+          fi
+
+          version=$(./gradlew properties | grep 'version: .*' | cut -d' ' -f2 | tr -d '[:space:]')
+          version="${version}${build_metadata}"
+          echo "PACKAGES_VERSION=$version" >> $GITHUB_ENV
+
+          npm version "$version" -w packages/jmdict-simplified-types
+          npm version "$version" -w packages/jmdict-simplified-loader
+          npm version "$version"
+      - name: Build
+        working-directory: node
+        run: npm run build
+      - name: Publish
+        working-directory: node
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Commit updated files
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: "node"
+          message: 'Update Node packages versions to ${{ env.PACKAGES_VERSION }}'
