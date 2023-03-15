@@ -8,7 +8,7 @@ You can find the JSON files here:
 
 You can find NPM packages here:
 
-- [@scriptin/jmdict-simplified-types][types] - a package with the types described in this API documentation
+- [@scriptin/jmdict-simplified-types][types] - a package with the TypeScript types described in this format documentation
 - [@scriptin/jmdict-simplified-loader][loader] - a package with a loader for JSON files
 
 ## Dictionary root types
