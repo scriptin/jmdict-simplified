@@ -2,14 +2,12 @@
 
 <!-- This file is used for generated API documentation, refer to README.md for package documentation -->
 
-You can find the JSON files here:
-
 [![Download JSON files](https://img.shields.io/static/v1?label=Download&message=JSON%20files&color=blue&style=for-the-badge)](https://github.com/scriptin/jmdict-simplified/releases/latest)
 
-You can find NPM packages here:
+NPM packages:
 
-- [@scriptin/jmdict-simplified-types][types] - a package with the TypeScript types described in this format documentation
-- [@scriptin/jmdict-simplified-loader][loader] - a package with a loader for JSON files
+- [@scriptin/jmdict-simplified-types][types] - TypeScript types described in this documentation
+- [@scriptin/jmdict-simplified-loader][loader] - loader for JSON files
 
 ## Dictionary root types
 
