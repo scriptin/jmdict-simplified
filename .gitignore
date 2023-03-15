@@ -24,6 +24,3 @@ node_modules
 # System Files
 .DS_Store
 Thumbs.db
-
-# Temporarily hide docs
-docs
