@@ -77,7 +77,7 @@ export type XrefWord = [kanjiOrKana: string];
  * Examples:
  * - `["丸", "まる", 1]` - refers to the word "丸", read as "まる" ("maru"),
  *   specifically the 1st sense element
- * - `["○", "まる", 1]` - same as prevous, but "○" is a special character
+ * - `["○", "まる", 1]` - same as previous, but "○" is a special character
  *    for the word "丸"
  * - `["二重丸", "にじゅうまる"]` - refers to the word "二重丸",
  *   read as "にじゅうまる" ("nijoumaru")
@@ -178,7 +178,7 @@ export type JMdictKanji = {
    * This field combines all the `*_pri` fields
    * from original files in a same way as <https://jisho.org>
    * and other on-line dictionaries do (typically, some words have
-   * "common" markers/tags). It gets rid of bunch of `*_pri` fields
+   * "common" markers/tags). It gets rid of a bunch of `*_pri` fields
    * which are not typically used. Words marked with "news1", "ichi1",
    * "spec1", "spec2", "gai1" in the original file are treated as common,
    * which may or may not be true according to other sources.
@@ -235,7 +235,7 @@ export type JMdictSense = {
    * Parts of speech for this sense.
    *
    * In the original files, part-of-speech from the previous sense elements
-   * may apply to the sunsequent elements: e.g. if the 1st and 2nd elements
+   * may apply to the subsequent elements: e.g. if the 1st and 2nd elements
    * are both nouns, then only the 1st will state that explicitly.
    * This requires users to check the whole list of senses to correctly
    * determine part of speech for any particular sense.
@@ -358,7 +358,7 @@ export type JMdictGloss = {
 
   /**
    * Gender.
-   * Typically for a noun in the target language.
+   * Typically, for a noun in the target language.
    * When `null`, the gender is either not relevant or hasn't been provided.
    */
   gender: JMdictGender | null;
@@ -752,7 +752,7 @@ export type Kanjidic2DictionaryReference =
 /**
  * Special case for query code: skip
  *
- * @see {@link Kanjidic2QueryCodeNotSkip} for non-'skip' types
+ * @see {@link Kanjidic2QueryCodeNotSkip} for non-skip types
  */
 export type Kanjidic2QueryCodeSkip = {
   /**
@@ -763,7 +763,7 @@ export type Kanjidic2QueryCodeSkip = {
    *   a number of misclassification codes, indicated by the
    *   "skip_misclass" attribute.
    *
-   * @see {@link Kanjidic2QueryCodeNotSkip} for non-'skip' types
+   * @see {@link Kanjidic2QueryCodeNotSkip} for non-skip types
    */
   type: 'skip';
   /**
