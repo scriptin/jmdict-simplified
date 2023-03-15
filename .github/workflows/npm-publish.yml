@@ -54,6 +54,9 @@ jobs:
         run: |
           npm version '${{ env.PACKAGES_VERSION }}' -w packages/jmdict-simplified-types
           npm version '${{ env.PACKAGES_VERSION }}' -w packages/jmdict-simplified-loader
+          # Use the same version of types in loader
+          npm i '@scriptin/jmdict-simplified-types@${{ env.PACKAGES_VERSION }}' -w packages/jmdict-simplified-loader
+          # Update top-level version in monorepo
           npm version '${{ env.PACKAGES_VERSION }}'
       - name: Build
         working-directory: node
