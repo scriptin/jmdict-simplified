@@ -12,5 +12,6 @@
   "typedocOptions": {
     "entryPoints": ["index.ts"],
     "out": "../../../docs",
+    "readme": "format.md",
   },
 }

@@ -1,6 +1,7 @@
 # TypeScript types for [jmdict-simplified](https://github.com/scriptin/jmdict-simplified)
 
 [![Download JSON files](https://img.shields.io/static/v1?label=Download&message=JSON%20files&color=blue&style=for-the-badge)](https://github.com/scriptin/jmdict-simplified/releases/latest)
+[![Format documentation](https://img.shields.io/static/v1?label=Read&message=Format%20docs&color=blue&style=for-the-badge)](https://scriptin.github.io/jmdict-simplified/)
 
 ```shell
 npm install --save-dev @scriptin/jmdict-simplified-types
