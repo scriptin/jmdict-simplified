@@ -1,6 +1,8 @@
 {
   "name": "@scriptin/jmdict-simplified-types",
   "version": "0.0.0",
+  "description": "TypeScript type definitions for jmdict-simplified - JMdict, JMnedict, Kanjidic in JSON format",
+  "keywords": ["jmdict", "jmnedict", "kanjidic", "kanjidic2", "json", "japanese", "dictionary"],
   "license": "MIT",
   "types": "dist/index.d.ts",
   "homepage": "https://github.com/scriptin/jmdict-simplified",

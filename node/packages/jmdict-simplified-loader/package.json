@@ -1,6 +1,8 @@
 {
   "name": "@scriptin/jmdict-simplified-loader",
   "version": "0.0.0",
+  "description": "JSON loader for jmdict-simplified - JMdict, JMnedict, Kanjidic in JSON format",
+  "keywords": ["jmdict", "jmnedict", "kanjidic", "kanjidic2", "json", "japanese", "dictionary"],
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
