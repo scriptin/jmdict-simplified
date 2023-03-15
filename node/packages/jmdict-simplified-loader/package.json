@@ -5,6 +5,14 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "homepage": "https://github.com/scriptin/jmdict-simplified",
+  "bugs": {
+    "url": "https://github.com/scriptin/jmdict-simplified/issues"
+  },
+  "author": {
+    "name": "Dmitry Shpika",
+    "url": "https://scriptin.github.io/"
+  },
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "lint": "tsc",
