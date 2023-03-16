@@ -1,10 +1,18 @@
 # jmdict-simplified
 
-### [JMdict][], [JMnedict][], and [Kanjidic][] in JSON format
-
+**[JMdict][], [JMnedict][], and [Kanjidic][] in JSON format**<br>
 with more comprehensible structure and beginner-friendly documentation
 
 [![Download JSON files](https://img.shields.io/static/v1?label=Download&message=JSON%20files&color=blue&style=for-the-badge)][latest-release]
+[![Format docs](https://img.shields.io/static/v1?label=Read&message=Format%20Docs&color=blue&style=for-the-badge)][format]
+
+[![NPM package: @scriptin/jmdict-simplified-types](https://img.shields.io/static/v1?label=NPM&message=@scriptin/jmdict-simplified-types&color=blue&style=flat-square&logo=npm)][npm-types]<br>
+[![NPM package: @scriptin/jmdict-simplified-loader](https://img.shields.io/static/v1?label=NPM&message=@scriptin/jmdict-simplified-loader&color=blue&style=flat-square&logo=npm)][npm-loader]
+
+---
+
+[![Release](https://github.com/scriptin/jmdict-simplified/actions/workflows/release.yml/badge.svg)](https://github.com/scriptin/jmdict-simplified/actions/workflows/release.yml)
+[![Publish NPM packages](https://github.com/scriptin/jmdict-simplified/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/scriptin/jmdict-simplified/actions/workflows/npm-publish.yml)
 
 - Releases are automatically scheduled for every Monday. See [release.yml](.github/workflows/release.yml)
 - Found a bug? Need a new feature? See [CONTRIBUTING.md](CONTRIBUTING.md)
@@ -105,34 +113,20 @@ For the full list of available tasks, run `./gradlew tasks`
 
 ## Format
 
-> See the [TypeScript types](node/packages/jmdict-simplified-types/index.ts)
+> See the [Format documentation][format] or [TypeScript types](node/packages/jmdict-simplified-types/index.ts)
 
-A better documentation is in development, but the types have enough comments
-to explain the format. Please also read the original documentation:
+Please also read the original documentation if you have more questions:
 
 - [EDRDG wiki](https://www.edrdg.org/wiki/index.php/Main_Page)
 - [JMdict][] (also [wiki](https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project))
 - [JMnedict][]
 - [Kanjidic][]
 
-You can also find Kotlin types in [JMdictJsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/jmdict/JMdictJsonElement.kt),
-[JMnedictJsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/jmnedict/JMnedictJsonElement.kt),
-and [Kanjidic2JsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/kanjidic/Kanjidic2JsonElement.kt),
-although they contain some methods and annotations you might not need.
+There are also Kotlin types, although they contain some methods and annotations you might not need.
 
-JMdict format notes:
-
-- "Kanji" and "kana" versions of words are not always equivalent
-  to "spellings" and "readings" correspondingly. Some words are kana-only.
-  You should treat "kanji" and "kana" as different ways of spelling,
-  although when kanji versions are present, kana versions are indeed "readings" for those
-- Some kana versions only apply to particular kanji versions, i.e. different spellings
-  of the same word can be read in different ways. You'll see the `appliesToKanji` field
-  being filled with a particular version in such cases
-- "Sense" in JMdict refers to translations along with some other information.
-  Sometimes, some "senses" only apply to some particular kanji/kana versions of a word,
-  that's why you'll see fields `appliesToKanji` and `appliesToKana`.
-  In JMnedict, translations are simply called "translations," there are no "senses"
+- [JMdictJsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/jmdict/JMdictJsonElement.kt)
+- [JMnedictJsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/jmnedict/JMnedictJsonElement.kt)
+- [Kanjidic2JsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/kanjidic/Kanjidic2JsonElement.kt)
 
 ## License
 
@@ -170,6 +164,9 @@ See [LICENSE.txt](LICENSE.txt)
 [JMnedict]: http://www.edrdg.org/enamdict/enamdict_doc.html
 [Kanjidic]: https://www.edrdg.org/wiki/index.php/KANJIDIC_Project
 [latest-release]: https://github.com/scriptin/jmdict-simplified/releases/latest
+[format]: https://scriptin.github.io/jmdict-simplified/
+[npm-types]: https://www.npmjs.com/package/@scriptin/jmdict-simplified-types
+[npm-loader]: https://www.npmjs.com/package/@scriptin/jmdict-simplified-loader
 [AzulJava17]: https://www.azul.com/downloads/?version=java-17-lts&package=jre
 [EDRDG-license]: http://www.edrdg.org/edrdg/licence.html
 [CC-BY-SA-4]: http://creativecommons.org/licenses/by-sa/4.0/

@@ -27,5 +27,10 @@ NPM packages:
 - [JMnedictWord](types/JMnedictWord.html)
 - [Kanjidic2Character](types/Kanjidic2Character.html)
 
+## Languages
+
+- JMdict and JMnedict use 3-letters ISO 639-2 codes - [Language3Letter](types/Language3Letter.html)
+- Kanjidic uses 2-letters ISO 639-1 codes - [Language2Letter](types/Language2Letter.html)
+
 [types]: https://www.npmjs.com/package/@scriptin/jmdict-simplified-types
 [loader]: https://www.npmjs.com/package/@scriptin/jmdict-simplified-loader

@@ -136,6 +136,20 @@ export interface JMdictDictionaryMetadata
 
 /**
  * JMdict root object
+ *
+ * Important concepts:
+ *
+ * - "Kanji" and "kana" versions of words are not always equivalent
+ *   to "spellings" and "readings" correspondingly. Some words are kana-only.
+ *   You should treat "kanji" and "kana" as different ways of spelling,
+ *   although when kanji versions are present, kana versions are indeed "readings" for those
+ * - Some kana versions only apply to particular kanji versions, i.e. different spellings
+ *   of the same word can be read in different ways. You'll see the `appliesToKanji` field
+ *   being filled with a particular version in such cases
+ * - "Sense" in JMdict refers to translations along with some other information.
+ *   Sometimes, some "senses" only apply to some particular kanji/kana versions of a word,
+ *   that's why you'll see fields `appliesToKanji` and `appliesToKana`.
+ *   In {@link JMnedict}, translations are simply called "translations," there are no "senses"
  */
 export interface JMdict extends JMdictDictionaryMetadata {
   /**
