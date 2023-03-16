@@ -66,8 +66,3 @@ jobs:
         run: npm publish --access public --workspaces
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Commit updated files
-        uses: EndBug/add-and-commit@v9
-        with:
-          add: "node"
-          message: 'Update Node packages versions to ${{ env.PACKAGES_VERSION }}'
