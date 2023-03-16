@@ -37,6 +37,23 @@ This project provides the following changes and improvements:
 5. Documentation in a single file instead of browsing obscure pages across multiple sites.
    In my opinion, the documentation is the weakest part of JMDict/JMnedict project
 
+## Format
+
+> See the [Format documentation][format] or [TypeScript types](node/packages/jmdict-simplified-types/index.ts)
+
+Please also read the original documentation if you have more questions:
+
+- [EDRDG wiki](https://www.edrdg.org/wiki/index.php/Main_Page)
+- [JMdict][] (also [wiki](https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project))
+- [JMnedict][]
+- [Kanjidic][]
+
+There are also Kotlin types, although they contain some methods and annotations you might not need.
+
+- [JMdictJsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/jmdict/JMdictJsonElement.kt)
+- [JMnedictJsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/jmnedict/JMnedictJsonElement.kt)
+- [Kanjidic2JsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/kanjidic/Kanjidic2JsonElement.kt)
+
 ## Full, "common-only", and language-specific versions
 
 There are two main types of JSON files for the JMdict dictionary:
@@ -110,23 +127,6 @@ For the full list of available tasks, run `./gradlew tasks`
 - If running Gradle fails, make sure `java` is available on your `$PATH` environment variable
 - Run Gradle with `--stacktrace`, `--info`, or `--debug` arguments to see more details
   if you get an error
-
-## Format
-
-> See the [Format documentation][format] or [TypeScript types](node/packages/jmdict-simplified-types/index.ts)
-
-Please also read the original documentation if you have more questions:
-
-- [EDRDG wiki](https://www.edrdg.org/wiki/index.php/Main_Page)
-- [JMdict][] (also [wiki](https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project))
-- [JMnedict][]
-- [Kanjidic][]
-
-There are also Kotlin types, although they contain some methods and annotations you might not need.
-
-- [JMdictJsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/jmdict/JMdictJsonElement.kt)
-- [JMnedictJsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/jmnedict/JMnedictJsonElement.kt)
-- [Kanjidic2JsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/kanjidic/Kanjidic2JsonElement.kt)
 
 ## License
 
