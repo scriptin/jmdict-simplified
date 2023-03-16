@@ -63,7 +63,7 @@ jobs:
         run: npm run build
       - name: Publish
         working-directory: node
-        run: npm publish --access public
+        run: npm publish --access public --workspaces
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Commit updated files
