@@ -3,9 +3,10 @@ name: Publish NPM packages
 on:
   workflow_dispatch: # Manually, for alpha/beta versions
     inputs:
-      build_metadata:
-        description: 'Version build metadata'
-        default: 'Will be attached to a version, e.g. "alpha.1" will result in "1.2.3-alpha.1" version'
+      pre_release_version:
+        description: 'Pre-release version modifier'
+        required: true
+        default: 'e.g. "alpha.1" -> "1.2.3-alpha.1"'
   push:
     tags:
       - '*'
@@ -37,16 +38,16 @@ jobs:
       - name: Calculate package versions
         # running in the root dir
         run: |
-          build_metadata_input='${{ inputs.build_metadata }}'
-          if [[ -z "$build_metadata_input" ]]; then
-            build_metadata=""
+          pre_release_version_input='${{ inputs.pre_release_version }}'
+          if [[ -z "$pre_release_version_input" ]]; then
+            pre_release_version=""
           else
-            build_metadata="+$build_metadata_input"
+            pre_release_version="+$pre_release_version_input"
           fi
 
           version=$(./gradlew properties | grep 'version: .*' | cut -d' ' -f2 | tr -d '[:space:]')
           echo "Version from Gradle properties: $version"
-          version="${version}${build_metadata}"
+          version="${version}${pre_release_version}"
           echo "Version with build metadata: $version"
           echo "PACKAGES_VERSION=$version" >> $GITHUB_ENV
       - name: Update package versions
