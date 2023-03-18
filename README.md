@@ -1,6 +1,6 @@
 # jmdict-simplified
 
-**[JMdict][], [JMnedict][], and [Kanjidic][] in JSON format**<br>
+**[JMdict][], [JMnedict][], [Kanjidic][], and [Kradfile/Radkfile][Kradfile] in JSON format**<br>
 with more comprehensible structure and beginner-friendly documentation
 
 [![Download JSON files](https://img.shields.io/static/v1?label=Download&message=JSON%20files&color=blue&style=for-the-badge)][latest-release]
@@ -20,10 +20,11 @@ with more comprehensible structure and beginner-friendly documentation
 ## Why?
 
 Original XML files are less than ideal in terms of format.
-(My opinion only, the JMdict/Jmnedict project in general is absolutely awesome!)
+(My opinion only, the JMdict/JMnedict project in general is absolutely awesome!)
 This project provides the following changes and improvements:
 
-1. JSON format instead of XML. Because the original format used some "advanced" XML features,
+1. JSON instead of XML (or custom text format of RADKFILE/KRADFILE).
+   Because the original format used some "advanced" XML features,
    such as entities and DOCTYPE, it could be quite difficult to use in some tech stacks,
    e.g. when your programming language of choice has no libraries for parsing some syntax
 2. Regular structure for every item in every collection, no "same as in previous" implicit values.
@@ -47,6 +48,7 @@ Please also read the original documentation if you have more questions:
 - [JMdict][] (also [wiki](https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project))
 - [JMnedict][]
 - [Kanjidic][]
+- [RADKFILE/KRADFILE][Kradfile]
 
 There are also Kotlin types, although they contain some methods and annotations you might not need.
 
@@ -148,6 +150,11 @@ section on the Kanjidic wiki for details.
 
 All derived files are distributed under the same license, as the original license requires it.
 
+### RADKFILE/KRADFILE
+
+The RADKFILE and KRADFILE files are copyright and available under the [EDRDG Licence][EDRDG-license].
+The copyright of the RADKFILE2 and KRADFILE2 files is held by Jim Rose.
+
 ### NPM packages
 
 NPM packages `@scriptin/jmdict-simplified-types` and `@scriptin/jmdict-simplified-loader`
@@ -163,6 +170,7 @@ See [LICENSE.txt](LICENSE.txt)
 [JMdict]: http://www.edrdg.org/jmdict/j_jmdict.html
 [JMnedict]: http://www.edrdg.org/enamdict/enamdict_doc.html
 [Kanjidic]: https://www.edrdg.org/wiki/index.php/KANJIDIC_Project
+[Kradfile]: https://www.edrdg.org/krad/kradinf.html
 [latest-release]: https://github.com/scriptin/jmdict-simplified/releases/latest
 [format]: https://scriptin.github.io/jmdict-simplified/
 [npm-types]: https://www.npmjs.com/package/@scriptin/jmdict-simplified-types
