@@ -13,7 +13,7 @@ npm run build
 npm run build:nocache
 ```
 
-Validate dictionary JSON files (see [validate-dict.js](validate-dict.js)):
+Validate dictionary JSON files (see [validate.js](validate.js)):
 
 ```bash
 npm run validate
