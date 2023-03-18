@@ -52,7 +52,7 @@ class ConvertKradfile() : CliktCommand(help = "Convert KRADFILE and KRADFILE2 in
     }
 
     private fun convertFile(file: File): List<KanjiDecomposition> {
-        val result = mutableListOf<Pair<String, List<String>>>()
+        val result = mutableListOf<KanjiDecomposition>()
         file.forEachLine(Charset.forName("EUC-JP")) { line ->
             if (line.startsWith("#")) return@forEachLine
             result.add(covertLine(line))
