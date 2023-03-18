@@ -1,4 +1,4 @@
-const { readdirSync } = require('fs');
+const { readdirSync, readFileSync } = require('fs');
 const { join, sep } = require('path');
 
 const { createGenerator } = require('ts-json-schema-generator');
@@ -32,11 +32,16 @@ const kanjidicMetadataSchema = schema.createSchema(
 );
 const kanjidicCharacterSchema = schema.createSchema('Kanjidic2Character');
 
+const kradfileSchema = schema.createSchema('Kradfile');
+const radkfileSchema = schema.createSchema('Radkfile');
+
 // printAsJson(jmdictMetadataSchema);
 // printAsJson(jmdictWordSchema);
 // printAsJson(jmnedictWordSchema);
 // printAsJson(kanjidicMetadataSchema);
 // printAsJson(kanjidicCharacterSchema);
+// printAsJson(kradfileSchema);
+// printAsJson(radkfileSchema);
 
 /**
  * @typedef {Function} JMdictWordValidator
@@ -149,11 +154,12 @@ function getEntrySchema(fileName) {
 }
 
 /**
- * Validate a JSON dictionary file
- * @param {string} filePath
+ * Validate a JSON dictionary file, metadata and entries separately,
+ * validating entries asynchronously.
+ * @param {string} filePath Path to JMdict, JMnedict, or Kanjidic file
  * @returns {Promise<void>} Rejects with an error if validation failed
  */
-async function validate(filePath) {
+async function validateMetadataAndEntries(filePath) {
   return new Promise((resolve, reject) => {
     const fileName = filePath.split(sep).pop();
 
@@ -207,6 +213,26 @@ async function validate(filePath) {
 }
 
 /**
+ * Validate a JSON dictionary file, reading the whole file into memory
+ * @param {string} filePath Path to kradfile or radkfile
+ * @returns {Promise<void>} Rejects with an error if validation failed
+ */
+async function validateWholeFile(filePath) {
+  const fileName = filePath.split(sep).pop();
+  const validate = new Ajv().compile(
+    fileName.startsWith('kradfile') ? kradfileSchema : radkfileSchema,
+  );
+  const fileContents = readFileSync(filePath, { encoding: 'utf-8' });
+  const dictionary = JSON.parse(fileContents);
+  validate(dictionary);
+  if (validate.errors && validate.errors.length) {
+    console.error('Invalid format of file: ', validate.errors);
+    return Promise.reject(new Error('Invalid format of file'));
+  }
+  return Promise.resolve();
+}
+
+/**
  * Validate all JSON dictionary files in a directory
  * @param {string} baseDir Base directory containing JSON dictionary files
  * @returns {Promise<boolean>}
@@ -217,10 +243,19 @@ async function validateAll(baseDir) {
     const isJMdict = file.startsWith('jmdict');
     const isJMnedict = file.startsWith('jmnedict');
     const isKanjidic = file.startsWith('kanjidic2');
-    if (!isJMdict && !isJMnedict && !isKanjidic) continue;
+    const isKradfile = file.startsWith('kradfile');
+    const isRadkfile = file.startsWith('radkfile');
+    const isValidFile =
+      isJMdict || !isJMnedict || isKanjidic || isKradfile || isRadkfile;
+    if (!isValidFile) continue;
     console.log(`Validating ${file}...`);
     try {
-      await validate(join(baseDir, file));
+      const filePath = join(baseDir, file);
+      if (isKradfile || isRadkfile) {
+        await validateWholeFile(filePath);
+      } else {
+        await validateMetadataAndEntries(filePath);
+      }
       console.log('PASS');
     } catch (e) {
       console.log('FAIL');
