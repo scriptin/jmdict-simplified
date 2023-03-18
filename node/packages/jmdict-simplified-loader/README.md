@@ -6,9 +6,13 @@
 npm install @scriptin/jmdict-simplified-loader
 ```
 
-This method works with server only, and allows you to import JSON files
+This library is server-only, and allows you to import JSON files
 (e.g. load into a database) using a streaming JSON parse
 with a simple event API,  which doesn't load the whole file into memory.
+
+This library handles JMdict, JMnedict and Kanjidic dictionary JSON files.
+There are also JSON files for Kradfile and Radkfile, but those are small
+enough to be fully loaded into memory, thus don't need a streaming parser.
 
 You can also install the TypeScript types:
 
@@ -26,6 +30,9 @@ Process the data using the simple event API (uses JSON streaming API under the h
 // load-jmdict.ts
 import { loadDictionary } from "@scriptin/jmdict-simplified-loader";
 
+// Arguments:
+// 1. dictionary type: 'jmdict' | 'jmnedict' | 'kanjidic'
+// 2. path to a file: string
 const loader = loadDictionary("jmdict", "path/to/jmdict-1.2.3.json")
   .onMetadata((metadata) => {
     // Process metadata
