@@ -5,6 +5,7 @@ import org.edrdg.jmdict.simplified.commands.JMdictSimplified
 import org.edrdg.jmdict.simplified.commands.jmdict.*
 import org.edrdg.jmdict.simplified.commands.jmnedict.*
 import org.edrdg.jmdict.simplified.commands.kanjidic.*
+import org.edrdg.jmdict.simplified.commands.kradfile.ConvertKradfile
 
 fun main(args: Array<String>) = JMdictSimplified().subcommands(
     AnalyzeJMdict(),
@@ -13,4 +14,5 @@ fun main(args: Array<String>) = JMdictSimplified().subcommands(
     ConvertJMnedict(),
     AnalyzeKanjidic(),
     ConvertKanjidic(),
+    ConvertKradfile(),
 ).main(args)

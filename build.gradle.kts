@@ -19,6 +19,8 @@ val jmnedictReportFile = "jmnedict-release-info.md"
 val kanjidicLanguages = listOf("all", "en") // ISO 639-1, 2-letter codes
 val kanjidicReportFile = "kanjidic-release-info.md"
 
+val kradfileReportFile = "kradfile-release-info.md"
+
 plugins {
     id("de.undercouch.download") version "5.3.0"
     kotlin("jvm") version "1.8.0"
@@ -336,6 +338,27 @@ val kanjidicConvert: Task by tasks.creating(Exec::class) {
         "--languages=${kanjidicLanguages.joinToString(",")}",
         "--report=$dictJsonDir${File.separator}$kanjidicReportFile",
         kanjidicPath,
+        dictJsonDir,
+    )
+}
+
+val kradfileConvert by tasks.creating(Exec::class) {
+    group = "Convert"
+    description = "Convert KRADFILE and KRADFILE2"
+    dependsOn(createDictJsonDir, tasks.getByName("uberJar"))
+    val dictJsonDir: String by createDictJsonDir.extra
+    val kradfilePath: String by kradfileExtract.extra
+    val kradfile2Path: String by kradfileExtract.extra
+    commandLine = listOf(
+        "java",
+        "-Djdk.xml.entityExpansionLimit=0", // To avoid errors about # of entities in XML files
+        "-jar",
+        (tasks.getByName("uberJar") as Jar).archiveFile.get().asFile.path,
+        "convert-kradfile",
+        "--version=$version",
+        "--report=$dictJsonDir${File.separator}$kradfileReportFile",
+        kradfilePath,
+        kradfile2Path,
         dictJsonDir,
     )
 }
