@@ -19,12 +19,6 @@ import java.nio.charset.Charset
  * and using the same approach as for JMdict would be too much.
  */
 class ConvertKradfile() : CliktCommand(help = "Convert KRADFILE and KRADFILE2 into JSON") {
-    val reportFile by option(
-        "-r", "--report",
-        metavar = "REPORT",
-        help = "Output file for an analysis report",
-    ).file(canBeDir = false)
-
     val version by option(
         "-v", "--version",
         metavar = "VERSION",

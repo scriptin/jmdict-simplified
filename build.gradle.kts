@@ -19,8 +19,6 @@ val jmnedictReportFile = "jmnedict-release-info.md"
 val kanjidicLanguages = listOf("all", "en") // ISO 639-1, 2-letter codes
 val kanjidicReportFile = "kanjidic-release-info.md"
 
-val kradfileReportFile = "kradfile-release-info.md"
-
 plugins {
     id("de.undercouch.download") version "5.3.0"
     kotlin("jvm") version "1.8.0"
@@ -356,7 +354,6 @@ val kradfileConvert by tasks.creating(Exec::class) {
         (tasks.getByName("uberJar") as Jar).archiveFile.get().asFile.path,
         "convert-kradfile",
         "--version=$version",
-        "--report=$dictJsonDir${File.separator}$kradfileReportFile",
         kradfilePath,
         kradfile2Path,
         dictJsonDir,
