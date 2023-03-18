@@ -16,7 +16,7 @@
     "url": "https://scriptin.github.io/"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "build": "tsup src/index.ts --format cjs,esm --dts --sourcemap",
     "lint": "tsc",
     "test": "jest",
     "test:watch": "jest --watch"
