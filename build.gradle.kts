@@ -360,6 +360,24 @@ val kradfileConvert by tasks.creating(Exec::class) {
     )
 }
 
+val radkfileConvert by tasks.creating(Exec::class) {
+    group = "Convert"
+    description = "Convert RADKFILE (combined radkfilex)"
+    dependsOn(createDictJsonDir, tasks.getByName("uberJar"))
+    val dictJsonDir: String by createDictJsonDir.extra
+    val radkfilexPath: String by kradfileExtract.extra
+    commandLine = listOf(
+        "java",
+        "-Djdk.xml.entityExpansionLimit=0", // To avoid errors about # of entities in XML files
+        "-jar",
+        (tasks.getByName("uberJar") as Jar).archiveFile.get().asFile.path,
+        "convert-radkfile",
+        "--version=$version",
+        radkfilexPath,
+        dictJsonDir,
+    )
+}
+
 val convert: Task by tasks.creating {
     group = "Convert"
     description = "Convert all dictionaries"
