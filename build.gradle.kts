@@ -148,13 +148,43 @@ val kanjidicExtract: Task by tasks.creating {
     }
 }
 
+val kradfileDownload by tasks.creating(Download::class) {
+    group = "Download"
+    description = "Download KRADFILE2/RADKFILE2 archive"
+    val dictXmlDir: String by createDictXmlDir.extra
+    val filePath = "$dictXmlDir/kradzip.zip"
+    src("http://ftp.edrdg.org/pub/Nihongo/kradzip.zip")
+    dest(filePath)
+    extra["archivePath"] = filePath
+    overwrite(true)
+    onlyIfModified(true)
+}
+
+val kradfileExtract by tasks.creating(Copy::class) {
+    group = "Extract"
+    description = "Extract KRADFILE2/RADKFILE2 sources from an archive"
+    dependsOn(kradfileDownload)
+    val dictXmlDir: String by createDictXmlDir.extra
+    val archivePath: String by kradfileDownload.extra
+    val kradfilePath = "$dictXmlDir/kradfile"
+    val kradfile2Path = "$dictXmlDir/kradfile2"
+    val radkfilexPath = "$dictXmlDir/radkfilex"
+    extra["kradfilePath"] = kradfilePath
+    extra["kradfile2Path"] = kradfile2Path
+    extra["radkfilexPath"] = radkfilexPath
+    from(
+        zipTree(archivePath)
+    )
+    into(dictXmlDir)
+}
+
 /**
  * Download and extract all dictionaries
  */
 val download: Task by tasks.creating {
     group = "Download"
     description = "Download and unpack all dictionaries"
-    dependsOn(jmdictExtract, jmnedictExtract, kanjidicExtract)
+    dependsOn(jmdictExtract, jmnedictExtract, kanjidicExtract, kradfileExtract)
 }
 
 fun getFileHash(inputFilePath: String): String {
