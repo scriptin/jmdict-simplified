@@ -230,6 +230,11 @@ val kanjidicUpdateChecksumFile: Task by tasks.creating {
     }
 }
 
+/**
+ * We don't do change checks for kradfile and radkfile, as they change rarely.
+ * Instead, we expect other dictionaries to change, which triggers conversion
+ * of kradfile and radkfile.
+ */
 val updateChecksums: Task by tasks.creating {
     group = "Checksum"
     description = "Generate checksums of all dictionaries and write into checksum files"
@@ -381,7 +386,7 @@ val radkfileConvert by tasks.creating(Exec::class) {
 val convert: Task by tasks.creating {
     group = "Convert"
     description = "Convert all dictionaries"
-    dependsOn(jmdictConvert, jmnedictConvert, kanjidicConvert)
+    dependsOn(jmdictConvert, jmnedictConvert, kanjidicConvert, kradfileConvert, radkfileConvert)
 }
 
 val zipAll: Task by tasks.creating {
