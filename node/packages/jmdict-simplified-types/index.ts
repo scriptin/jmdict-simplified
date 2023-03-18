@@ -913,3 +913,72 @@ export type Kanjidic2Meaning = {
   lang: Language2Letter;
   value: string;
 };
+
+//////////////////////////////
+// KRADFILE+KRADFILE2 types //
+//////////////////////////////
+
+/**
+ * KRADFILE and KRADFILE2 are combined into a single file.
+ * This is the only type you'll need.
+ */
+export interface Kradfile {
+  /**
+   * Version of jmdict-simplified project
+   */
+  version: string;
+
+  /**
+   * Map of: Kanji -> list of radicals/components
+   */
+  kanji: {
+    [kanji: string]: string[];
+  };
+}
+
+//////////////////////////////
+// RADKFILE+RADKFILE2 types //
+//////////////////////////////
+
+/**
+ * RADKFILE and RADKFILE2 are combined into a single file.
+ * (The "radkfilex" file from the source archive is used.)
+ * This is the only type you'll need.
+ */
+export interface Radkfile {
+  /**
+   * Version of jmdict-simplified project
+   */
+  version: string;
+
+  /**
+   * Map of: radical -> radical info, see {@link RadkfileRadicalInfo}
+   */
+  radicals: {
+    // Radical -> info
+    [radical: string]: RadkfileRadicalInfo;
+  };
+}
+
+/**
+ * Radical info
+ */
+export type RadkfileRadicalInfo = {
+  /**
+   * Stroke count, integer > 0
+   */
+  strokeCount: number;
+
+  /**
+   * One of:
+   *
+   * - the JIS X 0212 code of the kanji whose glyph better depicts the element in question
+   * - the name of an image file (used by the WWWJDIC server)
+   */
+  code: string | null;
+
+  /**
+   * Kanji which use this radical.
+   */
+  kanji: string[];
+};

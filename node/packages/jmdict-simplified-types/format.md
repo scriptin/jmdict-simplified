@@ -14,6 +14,8 @@ NPM packages:
 - [JMdict](interfaces/JMdict.html)
 - [JMnedict](interfaces/JMnedict.html)
 - [Kanjidic2](interfaces/Kanjidic2.html)
+- [Kradfile](interfaces/Kradfile.html)
+- [Radkfile](interfaces/Radkfile.html)
 
 ## Metadata
 
