@@ -73,14 +73,18 @@ class ConvertRadkfile() : CliktCommand(help = "Convert RADKFILE into JSON") {
         return result.toList()
     }
 
-    override fun run() {
-        val radicals = convertFile(radkfile)
-
+    private fun validate(radicals: List<RadicalInfo>) {
         val radicalCounts = radicals.toList().groupBy { it.radical }.mapValues { it.value.size }
         val nonUniqueRadicals = radicalCounts.toList().filter { it.second > 1 }
         if (nonUniqueRadicals.isNotEmpty()) {
             throw Error("Some radicals are not unique: ${nonUniqueRadicals.map { it.first } }")
         }
+    }
+
+    override fun run() {
+        val radicals = convertFile(radkfile)
+
+        validate(radicals)
 
         output.write("{\n")
         output.write("\"version\": \"$version\",\n")

@@ -60,26 +60,36 @@ class ConvertKradfile() : CliktCommand(help = "Convert KRADFILE and KRADFILE2 in
         return result.toList()
     }
 
-    override fun run() {
-        val kradfileDecompositions = convertFile(kradfile)
-        val kradfile2Decompositions = convertFile(kradfile2)
-
-        val keys = kradfileDecompositions.map { it.first }.toSet()
-        val keys2 = kradfile2Decompositions.map { it.first }.toSet()
+    private fun validate(
+        kradfile: List<KanjiDecomposition>,
+        kradfile2: List<KanjiDecomposition>,
+    ): List<KanjiDecomposition> {
+        val keys = kradfile.map { it.first }.toSet()
+        val keys2 = kradfile2.map { it.first }.toSet()
         val common = keys.intersect(keys2)
         if (common.isNotEmpty()) {
             throw Error("Unexpected shared kanji: $common")
         }
 
         val allDecompositions = mutableListOf<KanjiDecomposition>()
-        allDecompositions.addAll(kradfileDecompositions)
-        allDecompositions.addAll(kradfile2Decompositions)
+        allDecompositions.addAll(kradfile)
+        allDecompositions.addAll(kradfile2)
+        val result = allDecompositions.toList()
 
-        val kanjiCounts = allDecompositions.toList().groupBy { it.first }.mapValues { it.value.size }
+        val kanjiCounts = result.groupBy { it.first }.mapValues { it.value.size }
         val nonUniqueKanji = kanjiCounts.toList().filter { it.second > 1 }
         if (nonUniqueKanji.isNotEmpty()) {
             throw Error("Some kanji are not unique: ${nonUniqueKanji.map { it.first } }")
         }
+
+        return result
+    }
+
+    override fun run() {
+        val kradfileDecompositions = convertFile(kradfile)
+        val kradfile2Decompositions = convertFile(kradfile2)
+
+        val allDecompositions = validate(kradfileDecompositions, kradfile2Decompositions)
 
         output.write("{\n")
         output.write("\"version\": \"$version\",\n")
