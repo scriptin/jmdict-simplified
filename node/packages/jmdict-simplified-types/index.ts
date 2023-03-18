@@ -943,7 +943,6 @@ export interface Kradfile {
 /**
  * RADKFILE and RADKFILE2 are combined into a single file.
  * (The "radkfilex" file from the source archive is used.)
- * This is the only type you'll need.
  */
 export interface Radkfile {
   /**
