@@ -74,17 +74,24 @@ class ConvertKradfile() : CliktCommand(help = "Convert KRADFILE and KRADFILE2 in
         val allDecompositions = mutableListOf<KanjiDecomposition>()
         allDecompositions.addAll(kradfileDecompositions)
         allDecompositions.addAll(kradfile2Decompositions)
+
+        val kanjiCounts = allDecompositions.toList().groupBy { it.first }.mapValues { it.value.size }
+        val nonUniqueKanji = kanjiCounts.toList().filter { it.second > 1 }
+        if (nonUniqueKanji.isNotEmpty()) {
+            throw Error("Some kanji are not unique: ${nonUniqueKanji.map { it.first } }")
+        }
+
         output.write("{\n")
         output.write("\"version\": \"$version\",\n")
-        output.write("\"kanjiDecompositions\": [\n")
+        output.write("\"kanji\": {\n")
         allDecompositions.forEachIndexed { idx, decomposition ->
-            output.write("[\"${decomposition.first}\", ${Json.encodeToString(decomposition.second)}]")
+            output.write("\"${decomposition.first}\": ${Json.encodeToString(decomposition.second)}")
             if (idx < allDecompositions.size - 1) {
                 output.write(",")
             }
             output.write("\n")
         }
-        output.write("]\n")
+        output.write("}\n")
         output.write("}\n")
         output.flush()
     }
