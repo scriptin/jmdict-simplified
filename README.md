@@ -11,9 +11,6 @@ with more comprehensible structure and beginner-friendly documentation
 
 ---
 
-[![Release](https://github.com/scriptin/jmdict-simplified/actions/workflows/release.yml/badge.svg)](https://github.com/scriptin/jmdict-simplified/actions/workflows/release.yml)
-[![Publish NPM packages](https://github.com/scriptin/jmdict-simplified/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/scriptin/jmdict-simplified/actions/workflows/npm-publish.yml)
-
 - Releases are automatically scheduled for every Monday. See [release.yml](.github/workflows/release.yml)
 - Found a bug? Need a new feature? See [CONTRIBUTING.md](CONTRIBUTING.md)
 
@@ -157,9 +154,8 @@ The copyright of the RADKFILE2 and KRADFILE2 files is held by Jim Rose.
 
 ### NPM packages
 
-NPM packages `@scriptin/jmdict-simplified-types` and `@scriptin/jmdict-simplified-loader`
-are available under [MIT license][MIT]. This license is specifically chosen to be the most
-permissive and simple to use.
+NPM packages [`@scriptin/jmdict-simplified-types`][npm-types] and
+[`@scriptin/jmdict-simplified-loader`][npm-loader] are available under [MIT license][MIT].
 
 ### Other files
 
