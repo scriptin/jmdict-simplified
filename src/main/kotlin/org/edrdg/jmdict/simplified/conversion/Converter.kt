@@ -17,8 +17,10 @@ abstract class Converter<I : InputDictionaryEntry, O : OutputDictionaryEntry<O>,
         )
     )
 
+    private val centerDot = "・"
+
     fun xref(text: String, tagName: String, entSeq: String): CommonJsonElement.Xref {
-        val parts = text.split("・").map { it.trim() }
+        val parts = text.split(centerDot).map { it.trim() }
         return when (parts.size) {
             1 -> CommonJsonElement.Xref(parts[0], null, null)
             2 ->
@@ -26,7 +28,27 @@ abstract class Converter<I : InputDictionaryEntry, O : OutputDictionaryEntry<O>,
                     CommonJsonElement.Xref(parts[0], null, parts[1].toInt())
                 else
                     CommonJsonElement.Xref(parts[0], parts[1], null)
-            3 -> CommonJsonElement.Xref(parts[0], parts[1], parts[2].toInt())
+            // Abbreviations which use center-dot in violation of the rules:
+            in 3..10 -> {
+                // Special invalid cases in the source like this: <xref>ＯＢ・オー・ビー・1</xref>
+                // The doc says, "The target keb or reb must not contain a centre-dot."
+                // This rule is clearly broken by this example, as "オー・ビー" is
+                // a Japanese spelling for "O" and "B" which uses a center-dot.
+                // Such cases may or may not end with an index
+                if (parts.last().toIntOrNull() != null) {
+                    CommonJsonElement.Xref(
+                        parts.first(),
+                        parts.subList(1, parts.size).joinToString(centerDot),
+                        parts.last().toInt(),
+                    )
+                } else {
+                    CommonJsonElement.Xref(
+                        parts.first(),
+                        parts.drop(1).joinToString(centerDot),
+                        null,
+                    )
+                }
+            }
             else -> throw ConversionException(
                 entSeq,
                 "Unexpected number of parts (${parts.size}, expected 1-3) in <$tagName>: $text"

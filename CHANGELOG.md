@@ -2,6 +2,7 @@
 
 - Added [KRADFILE/RADKFILE](https://www.edrdg.org/krad/kradinf.html)
 - Minor fixes in documentation
+- Bugfix/workaround for invalid format of cross-references in JMdict
 
 # Version 3.4.0
 
