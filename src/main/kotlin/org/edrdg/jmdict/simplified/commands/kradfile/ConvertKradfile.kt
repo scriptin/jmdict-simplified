@@ -38,9 +38,12 @@ class ConvertKradfile() : CliktCommand(help = "Convert KRADFILE and KRADFILE2 in
 
     private val outputDirectory by argument().path(canBeFile = false, mustBeWritable = true)
 
+    private val outputFileName by lazy {
+        "kradfile-$version.json"
+    }
+
     private val output by lazy {
-        val fileName = "kradfile-$version.json"
-        outputDirectory.resolve(fileName).toFile().writer()
+        outputDirectory.resolve(outputFileName).toFile().writer()
     }
 
     private fun covertLine(line: String): KanjiDecomposition {
@@ -86,6 +89,13 @@ class ConvertKradfile() : CliktCommand(help = "Convert KRADFILE and KRADFILE2 in
     }
 
     override fun run() {
+        println("Input files:")
+        println(" - $kradfile")
+        println(" - $kradfile2")
+        println()
+        println("Output file: $outputFileName")
+        println()
+
         val kradfileDecompositions = convertFile(kradfile)
         val kradfile2Decompositions = convertFile(kradfile2)
 

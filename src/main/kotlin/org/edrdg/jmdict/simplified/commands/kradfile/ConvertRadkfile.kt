@@ -31,9 +31,12 @@ class ConvertRadkfile() : CliktCommand(help = "Convert RADKFILE into JSON") {
 
     private val outputDirectory by argument().path(canBeFile = false, mustBeWritable = true)
 
+    private val outputFileName by lazy {
+        "radkfile-$version.json"
+    }
+
     private val output by lazy {
-        val fileName = "radkfile-$version.json"
-        outputDirectory.resolve(fileName).toFile().writer()
+        outputDirectory.resolve(outputFileName).toFile().writer()
     }
 
     private fun convertFile(file: File): List<RadicalInfo> {
@@ -82,6 +85,11 @@ class ConvertRadkfile() : CliktCommand(help = "Convert RADKFILE into JSON") {
     }
 
     override fun run() {
+        println("Input file: $radkfile")
+        println()
+        println("Output file: $outputFileName")
+        println()
+
         val radicals = convertFile(radkfile)
 
         validate(radicals)
