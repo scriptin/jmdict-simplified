@@ -1,6 +1,12 @@
+# Version 3.5.0
+
+- Added [KRADFILE/RADKFILE](https://www.edrdg.org/krad/kradinf.html)
+- Minor fixes in documentation
+
 # Version 3.4.0
 
 - Added [Kanjidic](https://www.edrdg.org/wiki/index.php/KANJIDIC_Project)
+- Publishing NPM packages: `@scriptin/jmdict-simplified-types`, `@scriptin/jmdict-simplified-loader`
 
 # Version 3.3.1
 
