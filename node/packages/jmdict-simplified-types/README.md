@@ -1,4 +1,4 @@
-# TypeScript types for [jmdict-simplified](https://github.com/scriptin/jmdict-simplified)
+# TypeScript types for [jmdict-simplified][]
 
 [![Download JSON files](https://img.shields.io/static/v1?label=Download&message=JSON%20files&color=blue&style=for-the-badge)](https://github.com/scriptin/jmdict-simplified/releases/latest)
 [![Format documentation](https://img.shields.io/static/v1?label=Read&message=Format%20docs&color=blue&style=for-the-badge)](https://scriptin.github.io/jmdict-simplified/)
@@ -6,6 +6,13 @@
 ```shell
 npm install --save-dev @scriptin/jmdict-simplified-types
 ```
+
+Includes types for JSON files in [jmdict-simplified][]:
+
+- JMdict
+- JMnedict
+- Kanjidic
+- KRADFILE/RADKFILE
 
 ## Usage
 
@@ -31,8 +38,8 @@ const json = JSON.parse(
 ```
 
 > **Note** Some JSON files can be large and won't fit into memory,
-> but it should work fine for Kanjidic, JMnedict and filtered
-> (by language or "common-only") versions of JMdict
+> but it should work fine for Kanjidic, JMnedict, KRADFILE/RADKFILE,
+> and filtered (by language or "common-only") versions of JMdict
 
 With bundlers (e.g. Webpack, Vite) which support importing JSON via loaders/plugins:
 
@@ -44,7 +51,7 @@ import kanjidicJson from "path/to/kanjidic2-1.2.3.json";
 const kanjidic = kanjidicJson as Kanjidic2;
 ```
 
-### Option 2: using @scriptin/jmdict-simplified-loader
+### Option 2: using [@scriptin/jmdict-simplified-loader](https://www.npmjs.com/package/@scriptin/jmdict-simplified-loader)
 
 This method works with server only, and allows you to import JSON files
 (e.g. load into a database) using a streaming JSON parser,
@@ -84,3 +91,5 @@ loader.parser.on('error', (error) => {
   console.error(error);
 });
 ```
+
+[jmdict-simplified]: https://github.com/scriptin/jmdict-simplified

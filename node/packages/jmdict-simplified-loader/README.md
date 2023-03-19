@@ -14,7 +14,8 @@ This library handles JMdict, JMnedict and Kanjidic dictionary JSON files.
 There are also JSON files for Kradfile and Radkfile, but those are small
 enough to be fully loaded into memory, thus don't need a streaming parser.
 
-You can also install the TypeScript types:
+You can also install the TypeScript types from
+[`@scriptin/jmdict-simplified-types`](https://www.npmjs.com/package/@scriptin/jmdict-simplified-types):
 
 ```shell
 npm install --save-dev @scriptin/jmdict-simplified-types
