@@ -135,30 +135,30 @@ jobs:
           # collect assets
           assets=()
           for asset in ./build/distributions/*.zip; do
-            assets+=("-a" "$asset")
+            assets+=("$asset")
           done
           for asset in ./build/distributions/*.tgz; do
-            assets+=("-a" "$asset")
+            assets+=("$asset")
           done
 
-          message_file=./build/distributions/release-${BUILD_TAG}.md
-          touch $message_file
+          release_notes=./build/distributions/release-${BUILD_TAG}.md
+          touch $release_notes
 
           # create release message
-          echo -e "${BUILD_VERSION_NUMBER}, update ${BUILD_TIME}" > $message_file
-          echo -e "\n\n${RELEASE_NOTES}" >> $message_file
+          echo -e "${BUILD_VERSION_NUMBER}, update ${BUILD_TIME}" > $release_notes
+          echo -e "\n\n${RELEASE_NOTES}" >> $release_notes
 
-          echo -e "\n\n## JMdict\n\n" >> $message_file
-          cat ./build/dict-json/jmdict-release-info.md >> $message_file
+          echo -e "\n\n## JMdict\n\n" >> $release_notes
+          cat ./build/dict-json/jmdict-release-info.md >> $release_notes
 
-          echo -e "\n\n## JMnedict\n\n" >> $message_file
-          cat ./build/dict-json/jmnedict-release-info.md >> $message_file
+          echo -e "\n\n## JMnedict\n\n" >> $release_notes
+          cat ./build/dict-json/jmnedict-release-info.md >> $release_notes
 
-          echo -e "\n\n## Kanjidic\n\n" >> $message_file
-          cat ./build/dict-json/kanjidic-release-info.md >> $message_file
+          echo -e "\n\n## Kanjidic\n\n" >> $release_notes
+          cat ./build/dict-json/kanjidic-release-info.md >> $release_notes
 
           # create a release
-          hub release create "${assets[@]}" --file $message_file $BUILD_TAG
+          gh release create $BUILD_TAG --notes-file $release_notes "${assets[@]}"
       - name: Update checksums
         if: env.SOMETHING_UPDATED == 'YES'
         run: ./gradlew updateChecksums
