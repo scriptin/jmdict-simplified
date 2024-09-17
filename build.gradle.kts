@@ -13,6 +13,8 @@ val jmdictLanguages = listOf( // ISO 639-2, 3-letter codes
 )
 val jmdictReportFile = "jmdict-release-info.md"
 
+val jmdictExamplesReportFile = "jmdict-examples-release-info.md"
+
 val jmnedictLanguages = listOf("all") // There is only English
 val jmnedictReportFile = "jmnedict-release-info.md"
 
@@ -358,6 +360,26 @@ val jmdictConvert: Task by tasks.creating(Exec::class) {
     )
 }
 
+val jmdictExamplesConvert: Task by tasks.creating(Exec::class) {
+  group = "Convert"
+  description = "Convert JMdict with examples"
+  dependsOn(createDictJsonDir, tasks.getByName("uberJar"))
+  val dictJsonDir: String by createDictJsonDir.extra
+  val jmdictExamplesPath: String by jmdictExamplesExtract.extra
+  commandLine = listOf(
+    "java",
+    "-Djdk.xml.entityExpansionLimit=0", // To avoid errors about # of entities in XML files
+    "-jar",
+    (tasks.getByName("uberJar") as Jar).archiveFile.get().asFile.path,
+    "convert-jmdict",
+    "--version=$version",
+    "--languages=eng", // in this task, the source file is English-only
+    "--report=$dictJsonDir${File.separator}$jmdictExamplesReportFile",
+    jmdictExamplesPath,
+    dictJsonDir,
+  )
+}
+
 val jmnedictConvert: Task by tasks.creating(Exec::class) {
     group = "Convert"
     description = "Convert JMnedict"
@@ -439,7 +461,14 @@ val radkfileConvert by tasks.creating(Exec::class) {
 val convert: Task by tasks.creating {
     group = "Convert"
     description = "Convert all dictionaries"
-    dependsOn(jmdictConvert, jmnedictConvert, kanjidicConvert, kradfileConvert, radkfileConvert)
+    dependsOn(
+      jmdictConvert,
+      jmdictExamplesConvert,
+      jmnedictConvert,
+      kanjidicConvert,
+      kradfileConvert,
+      radkfileConvert,
+    )
 }
 
 val zipAll: Task by tasks.creating {

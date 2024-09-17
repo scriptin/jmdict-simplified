@@ -96,7 +96,24 @@ class JMdictConverter : Converter<JMdictXmlElement.Entry, JMdictJsonElement.Word
                         // This is a quick fix for that, but <gloss> tags should never be empty.
                         text = it.text ?: "",
                     )
-                }
+                },
+                examples = sense.example.map {
+                    JMdictJsonElement.Example(
+                        source = JMdictJsonElement.ExampleSource(
+                            type = when (it.source.type) {
+                                JMdictXmlElement.ExampleSourceType.TAT -> JMdictJsonElement.ExampleSourceType.TATOEBA
+                            },
+                            value = it.source.value,
+                        ),
+                        text = it.text,
+                        sentences = it.sentences.map {
+                            JMdictJsonElement.ExampleSentence(
+                                land = it.lang,
+                                text = it.text,
+                            )
+                        },
+                    )
+                },
             )
         }
     }

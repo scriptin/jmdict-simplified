@@ -65,6 +65,7 @@ sealed class JMdictJsonElement : CommonJsonElement() {
         val info: List<String>,
         val languageSource: List<LanguageSource>,
         val gloss: List<Gloss>,
+        val examples: List<Example>,
     )
 
     @Serializable
@@ -97,4 +98,28 @@ sealed class JMdictJsonElement : CommonJsonElement() {
         @SerialName("explanation") EXPLANATION("explanation"),
         @SerialName("trademark") TRADEMARK("trademark");
     }
+
+    @Serializable
+    data class Example(
+        val source: ExampleSource,
+        val text: String,
+        val sentences: List<ExampleSentence>,
+    )
+
+    @Serializable
+    data class ExampleSource(
+        val type: ExampleSourceType,
+        val value: String,
+    )
+
+    @Serializable
+    enum class ExampleSourceType(val value: String) {
+        @SerialName("tatoeba") TATOEBA("tatoeba"),
+    }
+
+    @Serializable
+    data class ExampleSentence(
+        val land: String,
+        val text: String,
+    )
 }
