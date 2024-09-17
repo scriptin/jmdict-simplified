@@ -122,6 +122,9 @@ object JMdictParser : Parser<JMdictXmlElement.Entry, JMdictMetadata> {
             gloss = eventReader.simpleTagList(QName("gloss"), "gloss") {
                 gloss(it, eventReader)
             },
+            example = eventReader.simpleTagList(QName("example"), "example") {
+                example(it, eventReader)
+            },
         )
     }
 
@@ -151,5 +154,40 @@ object JMdictParser : Parser<JMdictXmlElement.Entry, JMdictMetadata> {
             JMdictXmlElement.GType.Companion::fromString
         ),
         text = eventReader.maybeText(it),
+    )
+
+    private fun example(
+        it: StartElement,
+        eventReader: XMLEventReader
+    ) = JMdictXmlElement.Example(
+        source = eventReader.tag(QName("ex_srce"), "Example source") {
+            exampleSource(it, eventReader)
+        },
+        text = eventReader.tag(QName("ex_text"), "Example text") {
+            eventReader.text(it).trim()
+        },
+        sentences = eventReader.nonEmptyTagList(it, QName("ex_sent"), "Example sentences") {
+            exampleSentence(it, eventReader)
+        },
+    )
+
+    private fun exampleSource(
+        it: StartElement,
+        eventReader: XMLEventReader
+    ) = JMdictXmlElement.ExampleSource(
+        type = it.attrEnum(
+            QName("exsrc_type"),
+            JMdictXmlElement.ExampleSourceType.values(),
+            JMdictXmlElement.ExampleSourceType.Companion::fromString
+        ) ?: throw ParsingException.MissingRequiredAttribute(it, QName("exsrc_type")),
+        value = eventReader.text(it),
+    )
+
+    private fun exampleSentence(
+        it: StartElement,
+        eventReader: XMLEventReader
+    ) = JMdictXmlElement.ExampleSentence(
+        lang = it.attrString(QName(XMLConstants.XML_NS_URI, "lang", "xml"))?.trim() ?: "eng",
+        text = eventReader.text(it).trim(),
     )
 }

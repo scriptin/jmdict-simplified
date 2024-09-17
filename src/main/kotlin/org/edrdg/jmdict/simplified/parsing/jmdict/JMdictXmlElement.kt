@@ -236,6 +236,7 @@ sealed class JMdictXmlElement(open val name: String) {
         val lsource: List<Lsource>,
         val dial: List<Dial>,
         val gloss: List<Gloss>,
+        val example: List<Example>,
     ) : JMdictXmlElement("sense")
 
     /**
@@ -456,4 +457,105 @@ sealed class JMdictXmlElement(open val name: String) {
         val gType: GType?,
         val text: String?,
     ) : JMdictXmlElement("gloss")
+
+    /**
+     * ~~~xml
+     * <!ATTLIST ex_srce exsrc_type CDATA #IMPLIED>
+     * ~~~
+     *
+     * Possible values:
+     *
+     * - 'tat' - Tatoeba.org
+     */
+    enum class ExampleSourceType(val value: String) {
+        TAT("tat"); // Tatoeba.org™
+
+        companion object {
+            fun fromString(s: String): ExampleSourceType {
+                return ExampleSourceType.values().find { it.value == s } ?:
+                throw IllegalArgumentException("Value $s is not one of: ${ExampleSourceType.values()}")
+            }
+        }
+    }
+
+    /**
+     * ~~~xml
+     * <!ATTLIST ex_srce exsrc_type CDATA #IMPLIED>
+     * ~~~
+     *
+     * Example source information: type and identifier.
+     */
+    data class ExampleSource(
+        /**
+         * Source type of this example. Currently, the only possible value is "tat" (Tatoeba.org).
+         */
+        val type: ExampleSourceType,
+        /**
+         * Value is some kind an identifier within the source.
+         */
+        val value: String,
+    ) : JMdictXmlElement("ex_srce")
+
+    /**
+     * ~~~xml
+     * <!ELEMENT ex_sent (#PCDATA)>
+     * ~~~
+     *
+     * Example sentence, i.e. a translation of the example.
+     */
+    data class ExampleSentence(
+        /**
+         * ~~~xml
+         * <!ATTLIST ex_sent xml:lang CDATA "eng">
+         * ~~~
+         *
+         * The xml:lang attribute defines the target language of the
+         * gloss. It will be coded using the three-letter language code from
+         * the ISO 639 standard. When absent, the value "eng" (i.e. English)
+         * is the default value.
+         */
+        val lang: String,
+        val text: String,
+    ) : JMdictXmlElement("ex_sent")
+
+    /**
+     * ~~~xml
+     * <!ELEMENT example (ex_srce,ex_text,ex_sent+)>
+     *     <!-- The example elements contain a Japanese sentence using the term
+     *     associated with the entry, and one or more translations of that sentence.
+     *     Within the element, the ex_srce element will indicate the source of the
+     *     sentences (typically the sequence number in the Tatoeba Project), the
+     *     ex_text element will contain the form of the term in the Japanese
+     *     sentence, and the ex_sent elements contain the example sentences.
+     *     -->
+     * ~~~
+     *
+     * Examples are provided only in one specific version of JMdict_e_examp.xml
+     */
+    data class Example(
+        /**
+         * ~~~xml
+         * <!ELEMENT ex_srce (#PCDATA)>
+         * ~~~
+         *
+         * Source type of this example. Currently, the only possible value is "tat" (Tatoeba.org).
+         */
+        val source: ExampleSource,
+        /**
+         * ~~~xml
+         * <!ELEMENT ex_text (#PCDATA)>
+         * ~~~
+         *
+         * A text version of this entry, which can be found in the example sentences.
+         * This text is given exactly as it is in the Japanese example,
+         * and is meant to indicate which exact spelling of a given entry appears in its example.
+         * It is intended for purposes such as text highlighting.
+         *
+         * For example, the entry for the pronoun "you" contains several ways to write the word: 貴方, あなた, etc.
+         * If this example element contains a sentence where this pronoun is spelled as "あなた",
+         * then this field will also contain "あなた."
+         */
+        val text: String,
+        val sentences: List<ExampleSentence>,
+    ) : JMdictXmlElement("example")
 }
