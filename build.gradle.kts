@@ -98,6 +98,31 @@ val jmdictExtract: Task by tasks.creating {
     }
 }
 
+val jmdictExamplesDownload by tasks.creating(Download::class) {
+  group = "Download"
+  description = "Download JMdict with examples source XML archive"
+  val dictXmlDir: String by createDictXmlDir.extra
+  val filePath = "$dictXmlDir/JMdict_e_examp.gz"
+  src("http://ftp.edrdg.org/pub/Nihongo/JMdict_e_examp.gz")
+  dest(filePath)
+  extra["archivePath"] = filePath
+  overwrite(true)
+  onlyIfModified(true)
+}
+
+val jmdictExamplesExtract by tasks.creating {
+  group = "Extract"
+  description = "Extract JMdict with examples source XML from an archive"
+  dependsOn(jmdictExamplesDownload)
+  val dictXmlDir: String by createDictXmlDir.extra
+  val archivePath: String by jmdictExamplesDownload.extra
+  val filePath = "$dictXmlDir/JMdict_e_examp.xml"
+  extra["jmdictExamplesPath"] = filePath
+  doLast {
+    resources.gzip(archivePath).read().copyTo(file(filePath).outputStream())
+  }
+}
+
 val jmnedictDownload by tasks.creating(Download::class) {
     group = "Download"
     description = "Download JMnedict source XML archive"
@@ -184,7 +209,7 @@ val kradfileExtract by tasks.creating(Copy::class) {
 val download: Task by tasks.creating {
     group = "Download"
     description = "Download and unpack all dictionaries"
-    dependsOn(jmdictExtract, jmnedictExtract, kanjidicExtract, kradfileExtract)
+    dependsOn(jmdictExtract, jmdictExamplesExtract, jmnedictExtract, kanjidicExtract, kradfileExtract)
 }
 
 fun getFileHash(inputFilePath: String): String {
@@ -206,6 +231,17 @@ val jmdictUpdateChecksumFile: Task by tasks.creating {
     doLast {
         file(jmdictChecksumPath).writeText(getFileHash(jmdictPath))
     }
+}
+
+val jmdictExamplesUpdateChecksumFile: Task by tasks.creating {
+  group = "Checksum"
+  description = "Generate a checksum of JMdict with examples XML file and write it into a checksum file"
+  val jmdictExamplesPath: String by jmdictExamplesExtract.extra
+  val jmdictExamplesChecksumPath = "$projectDir/checksums/JMdict_e_examp.xml.sha256"
+  extra["jmdictExamplesChecksumPath"] = jmdictExamplesChecksumPath
+  doLast {
+    file(jmdictExamplesChecksumPath).writeText(getFileHash(jmdictExamplesPath))
+  }
 }
 
 val jmnedictUpdateChecksumFile: Task by tasks.creating {
@@ -238,7 +274,12 @@ val kanjidicUpdateChecksumFile: Task by tasks.creating {
 val updateChecksums: Task by tasks.creating {
     group = "Checksum"
     description = "Generate checksums of all dictionaries and write into checksum files"
-    dependsOn(jmdictUpdateChecksumFile, jmnedictUpdateChecksumFile, kanjidicUpdateChecksumFile)
+    dependsOn(
+      jmdictUpdateChecksumFile,
+      jmdictExamplesUpdateChecksumFile,
+      jmnedictUpdateChecksumFile,
+      kanjidicUpdateChecksumFile,
+    )
 }
 
 val jmdictHasChanged: Task by tasks.creating {
@@ -251,6 +292,18 @@ val jmdictHasChanged: Task by tasks.creating {
         val newChecksum = getFileHash(jmdictPath).trim()
         println(if (previousChecksum == newChecksum) "NO" else "YES")
     }
+}
+
+val jmdictExamplesHasChanged: Task by tasks.creating {
+  group = "Checksum"
+  description = "Check if a checksum of JMdict with examples XML file has changed"
+  val jmdictExamplesPath: String by jmdictExamplesExtract.extra
+  val jmdictExamplesChecksumPath: String by jmdictExamplesUpdateChecksumFile.extra
+  doLast {
+    val previousChecksum = file(jmdictExamplesChecksumPath).readText().trim()
+    val newChecksum = getFileHash(jmdictExamplesPath).trim()
+    println(if (previousChecksum == newChecksum) "NO" else "YES")
+  }
 }
 
 val jmnedictHasChanged: Task by tasks.creating {

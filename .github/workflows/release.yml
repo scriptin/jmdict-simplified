@@ -41,18 +41,25 @@ jobs:
         shell: bash
         run: |
           jmdict_updated=$(./gradlew --quiet jmdictHasChanged)
+          jmdict_examples_updated=$(./gradlew --quiet jmdictExamplesHasChanged)
           jmnedict_updated=$(./gradlew --quiet jmnedictHasChanged)
           kanjidic_updated=$(./gradlew --quiet kanjidicHasChanged)
           echo "JMDICT_UPDATED=$jmdict_updated" >> $GITHUB_ENV
+          echo "JMDICT_EXAMPLES_UPDATED=$jmdict_examples_updated" >> $GITHUB_ENV
           echo "JMNEDICT_UPDATED=$jmnedict_updated" >> $GITHUB_ENV
           echo "KANJIDIC_UPDATED=$kanjidic_updated" >> $GITHUB_ENV
-          if [[ "$jmdict_updated" = "YES" ]] || [[ "$jmnedict_updated" = "YES" ]] || [[ "$kanjidic_updated" = "YES" ]]; then
+          'if [[ "$jmdict_updated" = "YES" ]] || \
+             [[ "$jmdict_examples_updated" = "YES" ]] || \
+             [[ "$jmnedict_updated" = "YES" ]] || \
+             [[ "$kanjidic_updated" = "YES" ]]
+          then
             echo "SOMETHING_UPDATED=YES" >> $GITHUB_ENV
-          fi
+          fi'
       - name: Set force update variables
         if: ${{ inputs.force }}
         run: |
           echo "JMDICT_UPDATED=YES" >> $GITHUB_ENV
+          echo "JMDICT_EXAMPLES_UPDATED=YES" >> $GITHUB_ENV
           echo "JMNEDICT_UPDATED=YES" >> $GITHUB_ENV
           echo "KANJIDIC_UPDATED=YES" >> $GITHUB_ENV
           echo "SOMETHING_UPDATED=YES" >> $GITHUB_ENV
