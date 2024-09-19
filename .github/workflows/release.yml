@@ -110,6 +110,9 @@ jobs:
           if [[ "$JMDICT_UPDATED" = "YES" ]]; then
             RELEASE_NOTES="${RELEASE_NOTES}- JMdict\n"
           fi
+          if [[ "$JMDICT_EXAMPLES_UPDATED" = "YES" ]]; then
+            RELEASE_NOTES="${RELEASE_NOTES}- JMdict with examples\n"
+          fi
           if [[ "$JMNEDICT_UPDATED" = "YES" ]]; then
             RELEASE_NOTES="${RELEASE_NOTES}- JMnedict\n"
           fi
@@ -157,6 +160,9 @@ jobs:
 
           echo -e "\n\n## JMdict\n\n" >> $release_notes
           cat ./build/dict-json/jmdict-release-info.md >> $release_notes
+
+          echo -e "\n\n## JMdict with examples\n\n" >> $release_notes
+          cat ./build/dict-json/jmdict-examples-release-info.md >> $release_notes
 
           echo -e "\n\n## JMnedict\n\n" >> $release_notes
           cat ./build/dict-json/jmnedict-release-info.md >> $release_notes
