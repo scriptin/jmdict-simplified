@@ -11,6 +11,7 @@ import org.edrdg.jmdict.simplified.commands.kradfile.ConvertRadkfile
 fun main(args: Array<String>) = JMdictSimplified().subcommands(
     AnalyzeJMdict(),
     ConvertJMdict(),
+    ConvertJMdictExamples(),
     AnalyzeJMnedict(),
     ConvertJMnedict(),
     AnalyzeKanjidic(),

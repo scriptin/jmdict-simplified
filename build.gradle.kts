@@ -371,7 +371,7 @@ val jmdictExamplesConvert: Task by tasks.creating(Exec::class) {
     "-Djdk.xml.entityExpansionLimit=0", // To avoid errors about # of entities in XML files
     "-jar",
     (tasks.getByName("uberJar") as Jar).archiveFile.get().asFile.path,
-    "convert-jmdict",
+    "convert-jmdict-examples",
     "--version=$version",
     "--languages=eng", // in this task, the source file is English-only
     "--report=$dictJsonDir${File.separator}$jmdictExamplesReportFile",

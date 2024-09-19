@@ -38,6 +38,25 @@ sealed class JMdictJsonElement : CommonJsonElement() {
     }
 
     @Serializable
+    data class WordWithExamples(
+        val id: String,
+        val kanji: List<Kanji>,
+        val kana: List<Kana>,
+        val sense: List<SenseWithExamples>,
+    ) : OutputDictionaryEntry<WordWithExamples> {
+        override val allLanguages: Set<String>
+            get() = setOf("eng") // Only English version with examples
+
+        // Only English version with examples, so a simple copy() is enough
+        override fun onlyWithLanguages(languages: Set<String>): WordWithExamples = copy()
+
+        override val isCommon: Boolean
+            get() = kanji.any { it.common } || kana.any { it.common }
+
+        override fun toJsonString() = Json.encodeToString(this)
+    }
+
+    @Serializable
     data class Kanji(
         val common: Boolean,
         val text: String,
@@ -54,6 +73,21 @@ sealed class JMdictJsonElement : CommonJsonElement() {
 
     @Serializable
     data class Sense(
+        val partOfSpeech: List<Tag>,
+        val appliesToKanji: List<String>,
+        val appliesToKana: List<String>,
+        val related: List<Xref>,
+        val antonym: List<Xref>,
+        val field: List<Tag>,
+        val dialect: List<Tag>,
+        val misc: List<Tag>,
+        val info: List<String>,
+        val languageSource: List<LanguageSource>,
+        val gloss: List<Gloss>,
+    )
+
+    @Serializable
+    data class SenseWithExamples(
         val partOfSpeech: List<Tag>,
         val appliesToKanji: List<String>,
         val appliesToKana: List<String>,
