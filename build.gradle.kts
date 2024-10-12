@@ -4,7 +4,7 @@ import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
 group = "org.edrdg.jmdict.simplified"
-version = "3.5.1"
+version = "3.6.1"
 
 val jmdictLanguages = listOf( // ISO 639-2, 3-letter codes
     "all", "eng", "eng-common",

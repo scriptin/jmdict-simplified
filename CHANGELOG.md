@@ -1,3 +1,7 @@
+# Version 3.6.1
+
+- Fix version (mistakenly set as `3.5.1`)
+
 # Version 3.6.0
 
 - Feature #31: Added a version of JMdict with examples (from JMdict_e_examp.xml).
