@@ -241,12 +241,13 @@ async function validateAll(baseDir) {
   const files = readdirSync(baseDir).filter((f) => f.endsWith('.json'));
   for (const file of files) {
     const isJMdict = file.startsWith('jmdict');
+    const isWithExamples = file.includes('examples'); // Do not validate JMdict with examples
     const isJMnedict = file.startsWith('jmnedict');
     const isKanjidic = file.startsWith('kanjidic2');
     const isKradfile = file.startsWith('kradfile');
     const isRadkfile = file.startsWith('radkfile');
     const isValidFile =
-      isJMdict || isJMnedict || isKanjidic || isKradfile || isRadkfile;
+      (isJMdict && !isWithExamples) || isJMnedict || isKanjidic || isKradfile || isRadkfile;
     if (!isValidFile) continue;
     console.log(`Validating ${file}...`);
     try {
