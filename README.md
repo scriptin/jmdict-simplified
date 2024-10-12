@@ -99,7 +99,7 @@ You don't need to install Gradle, just use the Gradle wrapper provided in this r
 
 NOTE: You can grab the pre-built JSON files in the [latest release][latest-release]
 
-Use included scripts: `gradlew` (for Linux/Mac OS) or `gradlew.bat` (for Windows).
+Use included scripts: `gradlew` (for Linux/macOS) or `gradlew.bat` (for Windows).
 
 Tasks to convert dictionary files and create distribution archives:
 
