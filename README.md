@@ -53,9 +53,9 @@ There are also Kotlin types, although they contain some methods and annotations 
 - [JMnedictJsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/jmnedict/JMnedictJsonElement.kt)
 - [Kanjidic2JsonElement.kt](src/main/kotlin/org/edrdg/jmdict/simplified/conversion/kanjidic/Kanjidic2JsonElement.kt)
 
-## Full, "common-only", and language-specific versions
+## Full, "common-only", with examples, and language-specific versions
 
-There are two main types of JSON files for the JMdict dictionary:
+There are three main types of JSON files for the JMdict dictionary:
 
 - full - same as original files, with no omissions of entries
 - "common-only" - containing only dictionary entries considered "common" -
@@ -65,6 +65,10 @@ There are two main types of JSON files for the JMdict dictionary:
   This corresponds to how online dictionaries such as <https://jisho.org>
   classify words as "common". Common-only distributions are much smaller.
   They are marked with "common" keyword in file names, see the [latest release][latest-release]
+- with example sentences (built from JMdict_e_examp.xml source file) - English-only version
+  with example sentences from Tanaka corpus maintained by <https://tatoeba.org>.
+  This version doesn't have a full support in this project: NPM libraries do not provide
+  parsers and type definitions
 
 Also, JMdict and Kanjidic have language-specific versions with language codes
 (3-letter [ISO 639-2](https://en.wikipedia.org/wiki/ISO_639-2) codes for JMdict,
@@ -81,8 +85,8 @@ Also, JMdict and Kanjidic have language-specific versions with language codes
 - `swe`/`sv` - Swedish
 - `slv`/`sl` - Slovenian
 
-JMnedict has only one version, since it's (currently) English-only,
-and has no "common" indicators on entries.
+JMnedict and JMdict with examples have only one respective version each,
+since they are both English-only, and JMnedict has no "common" indicators on entries.
 
 ## Requirements for running the conversion script
 
@@ -131,7 +135,7 @@ For the full list of available tasks, run `./gradlew tasks`
 
 ### JMdict and JMnedict
 
-The original XML files - **JMdict.xml**, **JMdict_e.xml**, and **JMnedict.xml** -
+The original XML files - **JMdict.xml**, **JMdict_e.xml**, **JMdict_e_examp.xml**,and **JMnedict.xml** -
 are the property of the Electronic Dictionary Research and Development Group,
 and are used in conformance with the Group's [license][EDRDG-license].
 Project started in 1991 by Jim Breen.
