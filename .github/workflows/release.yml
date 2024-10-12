@@ -48,13 +48,13 @@ jobs:
           echo "JMDICT_EXAMPLES_UPDATED=$jmdict_examples_updated" >> $GITHUB_ENV
           echo "JMNEDICT_UPDATED=$jmnedict_updated" >> $GITHUB_ENV
           echo "KANJIDIC_UPDATED=$kanjidic_updated" >> $GITHUB_ENV
-          'if [[ "$jmdict_updated" = "YES" ]] || \
+          if [[ "$jmdict_updated" = "YES" ]] || \
              [[ "$jmdict_examples_updated" = "YES" ]] || \
              [[ "$jmnedict_updated" = "YES" ]] || \
              [[ "$kanjidic_updated" = "YES" ]]
           then
             echo "SOMETHING_UPDATED=YES" >> $GITHUB_ENV
-          fi'
+          fi
       - name: Set force update variables
         if: ${{ inputs.force }}
         run: |
