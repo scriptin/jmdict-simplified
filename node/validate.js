@@ -246,7 +246,7 @@ async function validateAll(baseDir) {
     const isKradfile = file.startsWith('kradfile');
     const isRadkfile = file.startsWith('radkfile');
     const isValidFile =
-      isJMdict || !isJMnedict || isKanjidic || isKradfile || isRadkfile;
+      isJMdict || isJMnedict || isKanjidic || isKradfile || isRadkfile;
     if (!isValidFile) continue;
     console.log(`Validating ${file}...`);
     try {
