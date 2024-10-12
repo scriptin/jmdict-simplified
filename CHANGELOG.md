@@ -1,3 +1,8 @@
+# Version 3.6.0
+
+- Feature #31: Added a version of JMdict with examples (from JMdict_e_examp.xml).
+  Note that it doesn't affect any other files (except the version) or NPM libraries (not updated)
+
 # Version 3.5.0
 
 - Added [KRADFILE/RADKFILE](https://www.edrdg.org/krad/kradinf.html)
