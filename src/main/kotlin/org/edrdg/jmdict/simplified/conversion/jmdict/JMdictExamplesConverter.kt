@@ -38,7 +38,7 @@ class JMdictExamplesConverter : JMdictBaseConverter<JMdictJsonElement.WordWithEx
                         text = it.text,
                         sentences = it.sentences.map {
                             JMdictJsonElement.ExampleSentence(
-                                land = it.lang,
+                                lang = it.lang,
                                 text = it.text,
                             )
                         },
