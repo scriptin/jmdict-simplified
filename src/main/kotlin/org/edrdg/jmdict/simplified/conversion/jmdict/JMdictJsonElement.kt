@@ -153,7 +153,7 @@ sealed class JMdictJsonElement : CommonJsonElement() {
 
     @Serializable
     data class ExampleSentence(
-        val land: String,
+        val lang: String,
         val text: String,
     )
 }
