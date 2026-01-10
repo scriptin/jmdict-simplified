@@ -48,6 +48,8 @@ class ConvertRadkfile() : CliktCommand(help = "Convert RADKFILE into JSON") {
         file.forEachLine(Charset.forName("EUC-JP")) { line ->
             if (line.startsWith("#")) return@forEachLine
             if (line.startsWith('$')) { // new radical
+                // Add the previous record to the result, and reset everything to collect the new record.
+                // This cannot be done in the `else` branch below because kanji list is split across multiple lines.
                 if (radical.isNotEmpty()) {
                     result.add(RadicalInfo(radical, strokeCount, otherInfo, kanji.toList()))
                 }
@@ -70,9 +72,18 @@ class ConvertRadkfile() : CliktCommand(help = "Convert RADKFILE into JSON") {
                     }
                 }
             } else { // kanji list
+                // Kanji are spread across multiple lines and there is no marker to distinguish it,
+                // so we have to accumulate kanji in a list this way.
                 kanji.addAll(line.toCharArray().map { it.toString() })
             }
         }
+
+        // Don't forget to add the last record because the last line in the file is a line with kanji,
+        // so the loop above will not execute the branch where records are added.
+        if (radical.isNotEmpty()) {
+            result.add(RadicalInfo(radical, strokeCount, otherInfo, kanji.toList()))
+        }
+
         return result.toList()
     }
 
