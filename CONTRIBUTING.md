@@ -21,7 +21,7 @@ If you need help with setting up Gradle and/or Java/JVM/OpenJDK, please refer to
 - [Gradle User Manual](https://docs.gradle.org/current/userguide/userguide.html) - remember that
   this project comes with a bundled Gradle wrapper, so you don't have to install Gradle yourself
 - Azul OpenJDK installation:
-  [Mac OS](https://docs.azul.com/core/zulu-openjdk/install/macos),
+  [macOS](https://docs.azul.com/core/zulu-openjdk/install/macos),
   [Windows](https://docs.azul.com/core/zulu-openjdk/install/windows),
   [Debian-based Linux](https://docs.azul.com/core/zulu-openjdk/install/debian),
   [RPM-based Linux](https://docs.azul.com/core/zulu-openjdk/install/rpm-based-linux), etc.

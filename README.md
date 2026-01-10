@@ -153,7 +153,7 @@ All derived files are distributed under the same license, as the original licens
 
 ### RADKFILE/KRADFILE
 
-The RADKFILE and KRADFILE files are copyright and available under the [EDRDG Licence][EDRDG-license].
+The RADKFILE and KRADFILE files are copyright and available under the [EDRDG License][EDRDG-license].
 The copyright of the RADKFILE2 and KRADFILE2 files is held by Jim Rose.
 
 ### NPM packages
