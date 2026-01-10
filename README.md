@@ -88,6 +88,11 @@ Also, JMdict and Kanjidic have language-specific versions with language codes
 JMnedict and JMdict with examples have only one respective version each,
 since they are both English-only, and JMnedict has no "common" indicators on entries.
 
+> [!NOTE]
+> You can configure the conversion scripts to produce more language-specific versions of JSON files
+> for JMDict and Kanjidic files by editing `jmdictLanguages` and `kanjidicLanguages` variables in `build.gradle.kts`,
+> see [issue #33](https://github.com/scriptin/jmdict-simplified/issues/33) for a Kanjidic example.
+
 ## Requirements for running the conversion script
 
 - Java 17 (JRE only, JDK is not necessary) - you can use [Azul Zulu OpenJDK][AzulJava17]
