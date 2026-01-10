@@ -1,3 +1,8 @@
+# Version 3.6.2
+
+- Bugfix #34: Typo in JMDict with examples: "land" -> "lang"
+- Bugfix #35: Last kanji record is not added in Radkfile
+
 # Version 3.6.1
 
 - Fix version (mistakenly set as `3.5.1`)
